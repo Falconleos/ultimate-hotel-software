@@ -20,8 +20,6 @@ public class DatosPersonales {
     private String apellido;
     private String dni;
     private String email;
-
     private String telefono;
-
     private LocalDate fechaAlta;
 }
