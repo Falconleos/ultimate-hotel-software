@@ -2,10 +2,7 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.models;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoHabitacion;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.TipoHabitacion;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @NoArgsConstructor
@@ -14,6 +11,7 @@ import lombok.*;
 @Setter
 @Builder
 @Entity
+@Table(name = "habitaciones")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Habitacion {
 
@@ -21,10 +19,21 @@ public class Habitacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
+    @Column(nullable = false, unique = true)
     private Integer numero;
-    private TipoHabitacion tipoHabitacion;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoHabitacion tipo;
+
+    @Column(nullable = false)
     private Integer capacidad;
+
+    @Column(nullable = false)
     private Double precioPorNoche;
-    private EstadoHabitacion estadoHabitacion;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EstadoHabitacion estado;
 
 }
