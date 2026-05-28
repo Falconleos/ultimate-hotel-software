@@ -21,5 +21,7 @@ public class DatosPersonales {
     private String dni;
     private String email;
     private String telefono;
+
+
     private LocalDate fechaAlta;
 }
