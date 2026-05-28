@@ -1,9 +1,9 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.service;
 
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.Empleado;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 
 public interface EmpleadoService {
 
-    Empleado findEntityById(Long id);
+    EmpleadoEntity findEntityById(Long id);
 
 }
