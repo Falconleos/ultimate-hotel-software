@@ -6,6 +6,8 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -19,7 +21,7 @@ public class Empleado {
     private DatosPersonales persona;
     private Turno turno;
     private Cargo cargo;
-
     private String usuario;
     private String password;
+    private LocalDate fechaAlta;
 }

@@ -23,5 +23,5 @@ public class DatosPersonales {
 
     private String telefono;
 
-    private LocalDate fechaAlta;
+
 }
