@@ -13,9 +13,9 @@ import java.util.List;
 @Builder
 @Entity
 
-public class Pasajero {
+public class PasajeroEntity {
     @Embedded
-    private DatosPersonales datosPersona;
+    private DatosPersonalesEntity datosPersona;
     private List<String> comentarios;
 
 }
