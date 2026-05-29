@@ -15,10 +15,10 @@ import java.time.LocalDate;
 @Builder
 @Entity
 
-public class Empleado {
+public class EmpleadoEntity {
 
     @Embedded
-    private DatosPersonales persona;
+    private DatosPersonalesEntity persona;
     private Turno turno;
     private Cargo cargo;
     private String usuario;

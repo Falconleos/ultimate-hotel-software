@@ -1,7 +1,7 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.models;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoReserva;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.Empleado;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,7 +33,7 @@ public class Reserva {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "empleado_id")
-    private Empleado empleado;
+    private EmpleadoEntity empleadoEntity;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "habitacion_id")

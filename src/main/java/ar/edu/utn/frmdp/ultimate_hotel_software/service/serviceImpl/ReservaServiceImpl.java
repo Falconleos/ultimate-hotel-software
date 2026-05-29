@@ -5,7 +5,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.Habitacion;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.Reserva;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ReservaDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ReservaDTOResponse;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.Empleado;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.ReservaRepository;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EmpleadoService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.HabitacionService;
@@ -49,7 +49,7 @@ public class ReservaServiceImpl implements ReservaService {
             throw new IllegalArgumentException("La fecha de check-out debe ser posterior a la de check-in");
         }
 
-        Empleado empleado = empleadoService.findEntityById(request.getEmpleado_id());
+        EmpleadoEntity empleadoEntity = empleadoService.findEntityById(request.getEmpleado_id());
         Habitacion habitacion = habitacionService.findEntityById(request.getHabitacion_id());
 
         if(! habitacionesDisponibles(request.getCheckIn(),request.getCheckOut(),request.getCantidadPax()).contains(habitacion)){
@@ -57,7 +57,7 @@ public class ReservaServiceImpl implements ReservaService {
         }
 
         Reserva reserva = reservaMapper.toEntity(request);
-            reserva.setEmpleado(empleado);
+            reserva.setEmpleado(empleadoEntity);
             reserva.setHabitacion(habitacion);
 
             reservaRepository.save(reserva);
