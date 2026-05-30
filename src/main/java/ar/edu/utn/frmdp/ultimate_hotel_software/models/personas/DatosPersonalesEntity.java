@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -13,7 +15,6 @@ import lombok.Setter;
 @Embeddable
 public class DatosPersonalesEntity {
 
-    private Long id;
     private String nombre;
     private String apellido;
     private String dni;
