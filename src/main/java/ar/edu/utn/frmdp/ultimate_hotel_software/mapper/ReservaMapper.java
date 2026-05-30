@@ -1,6 +1,6 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.mapper;
 
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.Reserva;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.ReservaEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ReservaDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ReservaDTOResponse;
 import org.mapstruct.Mapper;
@@ -12,10 +12,10 @@ public interface ReservaMapper {
 
     @Mapping(target = "empleado", ignore = true)
     @Mapping(target = "habitacion", ignore = true)
-    Reserva toEntity(ReservaDTORequest request);
+    ReservaEntity toEntity(ReservaDTORequest request);
 
     @Mapping(target = "empleadoReservaDTOResponse", source = "empleado")
     @Mapping(target = "habitacionReservaDTOResponse", source = "habitacion")
-    ReservaDTOResponse toDto(Reserva reserva);
+    ReservaDTOResponse toDto(ReservaEntity reserva);
 
 }
