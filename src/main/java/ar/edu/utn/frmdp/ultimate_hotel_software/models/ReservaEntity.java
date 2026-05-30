@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Setter
 @Builder
 @Entity
-public class Reserva {
+public class ReservaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,7 @@ public class Reserva {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "habitacion_id")
-    private Habitacion habitacion;
+    private HabitacionEntity habitacionEntity;
 
     @PrePersist
     public void onCreate(){

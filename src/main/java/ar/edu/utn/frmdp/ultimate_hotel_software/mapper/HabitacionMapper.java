@@ -1,6 +1,6 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.mapper;
 
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.Habitacion;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.HabitacionEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.HabitacionDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.HabitacionUpdateDTO;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.HabitacionDTOResponse;
@@ -10,11 +10,11 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface HabitacionMapper {
 
-    Habitacion toEntity(HabitacionDTORequest dto);
+    HabitacionEntity toEntity(HabitacionDTORequest dto);
 
-    HabitacionDTOResponse toResponse(Habitacion habitacion);
+    HabitacionDTOResponse toResponse(HabitacionEntity habitacion);
 
-    HabitacionReservaDTOResponse toDtoReserva(Habitacion habitacion);
+    HabitacionReservaDTOResponse toDtoReserva(HabitacionEntity habitacion);
 
     @BeanMapping(
             nullValuePropertyMappingStrategy =
@@ -25,7 +25,7 @@ public interface HabitacionMapper {
 
     void updateHabitacionFromDto(
             HabitacionUpdateDTO dto,
-            @MappingTarget Habitacion habitacion
+            @MappingTarget HabitacionEntity habitacion
     );
 
 }
