@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Setter
 @Builder
 @Entity
+@Table(name = "empleados")
 
 public class EmpleadoEntity {
 
@@ -20,9 +21,24 @@ public class EmpleadoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Embedded
-    private DatosPersonalesEntity persona;
+    private DatosPersonalesEntity datosPersona;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Turno turno;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Cargo cargo;
+
+    @Column(nullable = false, unique = true, length = 50)
     private String usuario;
+
+    @Column(nullable = false, length = 50)
     private String password;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDate fechaIngreso;
+
+    @Column(nullable = false)
+    private boolean activo;
 }
