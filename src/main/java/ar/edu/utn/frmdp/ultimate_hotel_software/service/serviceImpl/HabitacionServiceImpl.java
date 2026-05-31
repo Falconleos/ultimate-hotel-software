@@ -3,7 +3,7 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoHabitacion;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.HabitacionMapper;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.Habitacion;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.HabitacionEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.HabitacionDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.HabitacionUpdateDTO;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.HabitacionDTOResponse;
@@ -28,11 +28,11 @@ public class HabitacionServiceImpl implements HabitacionService {
             throw new RuntimeException("Ya existe una habitación con ese número");
         }
 
-        Habitacion habitacion = habitacionMapper.toEntity(dto);
+        HabitacionEntity habitacion = habitacionMapper.toEntity(dto);
 
         habitacion.setEstado(EstadoHabitacion.DISPONIBLE);
 
-        Habitacion guardada = habitacionRepository.save(habitacion);
+        HabitacionEntity guardada = habitacionRepository.save(habitacion);
 
         return habitacionMapper.toResponse(guardada);
     }
@@ -40,7 +40,7 @@ public class HabitacionServiceImpl implements HabitacionService {
     @Override
     public HabitacionDTOResponse findById(Long id) {
 
-        Habitacion habitacion = habitacionRepository.findById(id)
+        HabitacionEntity habitacion = habitacionRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Habitación no encontrada"));
 
@@ -50,7 +50,7 @@ public class HabitacionServiceImpl implements HabitacionService {
     @Override
     public void delete(Long id) {
 
-        Habitacion habitacion = habitacionRepository.findById(id)
+        HabitacionEntity habitacion = habitacionRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Habitación no encontrada"));
 
@@ -60,13 +60,13 @@ public class HabitacionServiceImpl implements HabitacionService {
     @Override
     public HabitacionDTOResponse update(Long id, HabitacionUpdateDTO dto) {
 
-        Habitacion habitacion = habitacionRepository.findById(id)
+        HabitacionEntity habitacion = habitacionRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Habitación no encontrada"));
 
         habitacionMapper.updateHabitacionFromDto(dto, habitacion);
 
-        Habitacion actualizada = habitacionRepository.save(habitacion);
+        HabitacionEntity actualizada = habitacionRepository.save(habitacion);
 
         return habitacionMapper.toResponse(actualizada);
     }
@@ -74,13 +74,13 @@ public class HabitacionServiceImpl implements HabitacionService {
     @Override
     public HabitacionDTOResponse realizarMantenimiento(Long id) {
 
-        Habitacion habitacion = habitacionRepository.findById(id)
+        HabitacionEntity habitacion = habitacionRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException("Habitación no encontrada"));
 
         habitacion.setEstado(EstadoHabitacion.MANTENIMIENTO);
 
-        Habitacion actualizada =
+        HabitacionEntity actualizada =
                 habitacionRepository.save(habitacion);
 
         return habitacionMapper.toResponse(actualizada);
@@ -97,7 +97,7 @@ public class HabitacionServiceImpl implements HabitacionService {
     }
 
     @Override
-    public Habitacion findEntityById(Long id) {
+    public HabitacionEntity findEntityById(Long id) {
 
         return habitacionRepository.findById(id)
                 .orElseThrow(() ->
@@ -105,7 +105,7 @@ public class HabitacionServiceImpl implements HabitacionService {
     }
 
     @Override
-    public List<Habitacion> findByEstadoHabitacion(EstadoHabitacion estadoHabitacion) {
+    public List<HabitacionEntity> findByEstadoHabitacion(EstadoHabitacion estadoHabitacion) {
         return habitacionRepository.findByEstado(estadoHabitacion);
     }
 }

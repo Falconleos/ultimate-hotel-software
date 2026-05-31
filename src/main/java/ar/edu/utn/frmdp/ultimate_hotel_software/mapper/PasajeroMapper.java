@@ -10,4 +10,6 @@ public interface PasajeroMapper {
 
     PasajeroEntity toEntity(PasajeroDTORequest pasajeroDTORequest);
     PasajeroDTOResponse toDTO(PasajeroEntity pasajeroEntity);
+    PasajeroDTOResponse toDto(PasajeroEntity pasajeroEntity);
+
 }

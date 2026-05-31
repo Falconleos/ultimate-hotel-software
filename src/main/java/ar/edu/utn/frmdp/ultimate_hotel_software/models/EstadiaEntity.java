@@ -1,7 +1,8 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.models;
 
-import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoReserva;
+import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoEstadia;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.PasajeroEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,37 +14,40 @@ import java.time.LocalDate;
 @Setter
 @Builder
 @Entity
-public class Reserva {
+public class EstadiaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private LocalDate checkIn;
     private LocalDate checkOut;
     private Integer cantidadPax;
-
-    @Enumerated(EnumType.STRING)
-    private EstadoReserva estadoReserva;
-
-    private String nombre;
-    private String apellido;
-    private String telefono;
+    private EstadoEstadia estado;
     private String comentario;
-    private Boolean activa;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "pasajero_id")
+    private PasajeroEntity pasajeroEntity;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "empleado_id")
-    private EmpleadoEntity empleadoEntity;
+    private EmpleadoEntity empleado;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "habitacion_id")
-    private Habitacion habitacion;
+    private HabitacionEntity habitacion;
+
+    private Double total;
+    private Boolean pagada;
+    private Boolean activa;
 
     @PrePersist
-    public void onCreate(){
-        if(comentario==null || comentario.isBlank()){
-            comentario = "sin comentarios";
+    public void OnCreate(){
+        if(comentario.isBlank()){
+            comentario="sin comentarios";
         }
+        estado=EstadoEstadia.EN_CURSO;
         activa=true;
     }
 

@@ -13,7 +13,7 @@ import lombok.*;
 @Entity
 @Table(name = "habitaciones")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Habitacion {
+public class HabitacionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

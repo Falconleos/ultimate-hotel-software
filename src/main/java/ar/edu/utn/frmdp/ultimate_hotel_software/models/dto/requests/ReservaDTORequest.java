@@ -21,11 +21,11 @@ public class ReservaDTORequest {
     private String apellido;
     @NotBlank
     private String telefono;
+
     private String comentario;
     @NotNull
     private Long empleado_id;
     @NotNull
     private Long habitacion_id;
-    private Boolean activa;
 
 }
