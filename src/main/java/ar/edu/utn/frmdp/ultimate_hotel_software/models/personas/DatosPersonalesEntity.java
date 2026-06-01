@@ -32,4 +32,5 @@ public class DatosPersonalesEntity {
     @Column(length = 15)
     private String telefono;
 
+
 }

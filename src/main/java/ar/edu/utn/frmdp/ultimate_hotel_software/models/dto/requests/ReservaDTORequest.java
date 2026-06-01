@@ -24,8 +24,8 @@ public class ReservaDTORequest {
 
     private String comentario;
     @NotNull
-    private Long empleado_id;
+    private Long empleadoId;
     @NotNull
-    private Long habitacion_id;
+    private Long habitacionId;
 
 }

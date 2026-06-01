@@ -15,9 +15,6 @@ import lombok.*;
 public class PasajeroDTOResponse {
 
     private Long id;
-    private DatosPersonalesDTOResponse datosPersonalesDTOResponse;
-    private List<String> comentarios;
-   private Long id;
-   private DatosPersonalesEntity persona;
+    private DatosPersonalesEntity datosPersonalesEntity;
 
 }

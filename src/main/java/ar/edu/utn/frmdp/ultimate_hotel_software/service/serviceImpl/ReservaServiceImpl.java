@@ -52,8 +52,8 @@ public class ReservaServiceImpl implements ReservaService {
             throw new FechaInvalidaException("La fecha de check-out debe ser posterior a la de check-in");
         }
 
-        EmpleadoEntity empleadoEntity = empleadoService.findEntityById(request.getEmpleado_id());
-        HabitacionEntity habitacion = habitacionService.findEntityById(request.getHabitacion_id());
+        EmpleadoEntity empleadoEntity = empleadoService.findEntityById(request.getEmpleadoId());
+        HabitacionEntity habitacion = habitacionService.findEntityById(request.getHabitacionId());
 
         if(! habitacionesDisponibles(request.getCheckIn(),request.getCheckOut(),request.getCantidadPax()).contains(habitacion)){
             throw new HabitacionNoDisponibleException("habitacion no disponible");
