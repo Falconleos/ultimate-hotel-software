@@ -81,10 +81,10 @@ public class PasajeroServiceImpl implements PasajeroService {
 
         pasajero.setDatosPersona(datosPersonalesEntity);
 
-
         return pasajeroMapper.toDTO(pasajeroRepository.save(pasajero));
     }
 
     //5.2. Agregar comentario
+
 
 }

@@ -1,6 +1,7 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.models.personas;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.ComentarioEntity;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.EstadiaEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,11 +24,10 @@ public class PasajeroEntity {
     @Embedded
     private DatosPersonalesEntity datosPersona;
 
-
     @OneToMany(
             mappedBy = "pasajero",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<ComentarioEntity> comentarios = new ArrayList<>();
+    private List<EstadiaEntity> estadias = new ArrayList<>(); //Permite obtener todas las estadias del pasajero
 }

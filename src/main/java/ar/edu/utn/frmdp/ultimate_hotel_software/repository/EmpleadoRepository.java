@@ -1,9 +1,17 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.repository;
 
+import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Cargo;
+import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface EmpleadoRepository extends JpaRepository<EmpleadoEntity,Long> {
+    List<EmpleadoEntity> findByTurno (Turno turno);
+    List<EmpleadoEntity> findByCargo (Cargo cargo);
+    List<EmpleadoEntity> findByActivoTrue ();
+    List<EmpleadoEntity> findByActivoFalse ();
 }

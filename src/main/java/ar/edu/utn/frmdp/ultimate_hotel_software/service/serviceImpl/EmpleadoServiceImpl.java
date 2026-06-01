@@ -130,7 +130,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         EmpleadoEntity empleado = findEntityById(id);
 
         //Modificaciones
-        empleado.setActivo(!empleado.isActivo()); //Hibernate detecta cambio en el elemento y modifica la base de datos.
+        empleado.setActivo(!empleado.getActivo()); //Hibernate detecta cambio en el elemento y modifica la base de datos.
 
         //Guardado en repositorio y devolucion de DTO
         return empleadoMapper.toDTO(empleado);

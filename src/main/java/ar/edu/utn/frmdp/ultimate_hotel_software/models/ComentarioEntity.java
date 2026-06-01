@@ -25,22 +25,15 @@ public class ComentarioEntity {
     @Column(nullable = false, length = 300)
     private String texto;
 
-    @Column(nullable = false, length = 50)
-    private String autor;
-
     @Column(nullable = false, updatable = false)
-    private LocalDate fechaComentario;
+    private LocalDateTime fechaComentario;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "pasajero_id")
-    private PasajeroEntity pasajeroEntity;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "habitacion_id")
-    private Habitacion habitacion;
+    @ManyToOne(optional = false) //Permite consultar comentarios por habitacion y comentarios por pasajero
+    @JoinColumn(name = "estadia_id")
+    private EstadiaEntity estadia;
 
     @PrePersist
     public void prePersist() {
-        this.fechaComentario = LocalDate.now();
+        this.fechaComentario = LocalDateTime.now();
     }
 }
