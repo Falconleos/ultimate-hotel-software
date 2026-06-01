@@ -3,6 +3,7 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoReserva;
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.FechaInvalidaException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.HabitacionNoDisponibleException;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.InvalidIdException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.ReservaMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.HabitacionEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.ReservaEntity;
@@ -71,6 +72,12 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
+    public ReservaEntity findEntityById(Long id) {
+        return reservaRepository.findById(id)
+                .orElseThrow( ()->new InvalidIdException("Id de reserva invalido"));
+    }
+
+    @Override
     public List<HabitacionEntity> habitacionesDisponibles(LocalDate checkIn, LocalDate checkOut, Integer pax) {
 
         List<HabitacionEntity> habitacionesOcupadas = reservaRepository.findByActiva(true).stream()
@@ -85,6 +92,8 @@ public class ReservaServiceImpl implements ReservaService {
                 .toList();
     }
 
-
-
+    @Override
+    public void update(ReservaEntity reserva) {
+        reservaRepository.save(reserva);
+    }
 }

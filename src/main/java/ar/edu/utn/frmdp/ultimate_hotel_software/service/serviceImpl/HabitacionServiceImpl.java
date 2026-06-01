@@ -71,6 +71,12 @@ public class HabitacionServiceImpl implements HabitacionService {
         return habitacionMapper.toResponse(actualizada);
     }
 
+    //update
+    @Override
+    public void updateHabitacion(HabitacionEntity habitacionEntity){
+        habitacionRepository.save(habitacionEntity);
+    }
+
     @Override
     public HabitacionDTOResponse realizarMantenimiento(Long id) {
 

@@ -2,6 +2,7 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.service;
 
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.HabitacionEntity;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.ReservaEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ReservaDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ReservaDTOResponse;
 
@@ -14,5 +15,8 @@ public interface ReservaService {
     ReservaDTOResponse crearReserva(ReservaDTORequest request);
     List<HabitacionEntity>habitacionesDisponibles(LocalDate checkIn, LocalDate checkOut, Integer pax);
 
+    ReservaEntity findEntityById(Long id);
+
+    void update(ReservaEntity reserva);
 
 }

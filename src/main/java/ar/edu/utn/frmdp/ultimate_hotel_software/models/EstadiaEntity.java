@@ -20,11 +20,11 @@ public class EstadiaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate checkIn;
-    private LocalDate checkOut;
-    private Integer cantidadPax;
+    @OneToOne(optional = false)
+    @JoinColumn(name = "reserva_id")
+    private ReservaEntity reserva;
+
     private EstadoEstadia estado;
-    private String comentario;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "pasajero_id")
@@ -34,19 +34,12 @@ public class EstadiaEntity {
     @JoinColumn(name = "empleado_id")
     private EmpleadoEntity empleado;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "habitacion_id")
-    private HabitacionEntity habitacion;
-
     private Double total;
     private Boolean pagada;
     private Boolean activa;
 
     @PrePersist
     public void OnCreate(){
-        if(comentario.isBlank()){
-            comentario="sin comentarios";
-        }
         estado=EstadoEstadia.EN_CURSO;
         activa=true;
     }

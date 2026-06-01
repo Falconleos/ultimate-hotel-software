@@ -13,6 +13,8 @@ public interface HabitacionService {
 
     List<HabitacionEntity> findByEstadoHabitacion(EstadoHabitacion estadoHabitacion);
 
+    void updateHabitacion(HabitacionEntity habitacionEntity);
+
     HabitacionDTOResponse save(HabitacionDTORequest dto);
 
     HabitacionDTOResponse findById(Long id);

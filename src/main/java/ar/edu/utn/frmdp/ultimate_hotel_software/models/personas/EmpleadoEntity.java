@@ -40,5 +40,5 @@ public class EmpleadoEntity {
     private LocalDate fechaIngreso;
 
     @Column(nullable = false)
-    private boolean activo;
+    private Boolean activo;
 }
