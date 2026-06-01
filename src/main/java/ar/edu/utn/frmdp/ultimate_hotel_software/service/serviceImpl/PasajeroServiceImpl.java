@@ -2,8 +2,10 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EmpleadoMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.PasajeroMapper;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.PasajeroDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoReservaDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.PasajeroDTOResponse;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.DatosPersonalesEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.PasajeroEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.EmpleadoRepository;
@@ -11,7 +13,9 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.repository.PasajeroRepository;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.PasajeroService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -41,4 +45,46 @@ public class PasajeroServiceImpl implements PasajeroService {
                 .map(pasajeroMapper::toDTO)
                 .toList();
     }
+
+    //3. Crear pasajero
+    @Override
+    public PasajeroDTOResponse createPasajero(PasajeroDTORequest pasajeroDTORequest) {
+
+        //Mapeo a entidad
+        PasajeroEntity pasajeroEntity = pasajeroMapper.toEntity(pasajeroDTORequest);
+
+        //Guardado en base de datos
+        return pasajeroMapper.toDTO(pasajeroRepository.save(pasajeroEntity));
+    }
+
+    //4. Borrar pasajero
+    @Override
+    public void deletePasajero(Long id) {
+
+        PasajeroEntity pasajeroEntity = findEntityById(id);
+        pasajeroRepository.delete(pasajeroEntity);
+    }
+
+    //5. Actualizaciones
+    //5.1. Actualizar pasajero (completo)
+    @Override
+    @Transactional
+    public PasajeroDTOResponse updatePasajero(Long id, PasajeroDTORequest pasajeroDTORequestModificado) {
+
+        PasajeroEntity pasajero = findEntityById(id);
+        DatosPersonalesEntity datosPersonalesEntity = pasajero.getDatosPersona();
+
+        datosPersonalesEntity.setNombre(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getNombre());
+        datosPersonalesEntity.setApellido(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getApellido());
+        datosPersonalesEntity.setEmail(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getEmail());
+        datosPersonalesEntity.setTelefono(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getTelefono());
+
+        pasajero.setDatosPersona(datosPersonalesEntity);
+
+
+        return pasajeroMapper.toDTO(pasajeroRepository.save(pasajero));
+    }
+
+    //5.2. Agregar comentario
+
 }

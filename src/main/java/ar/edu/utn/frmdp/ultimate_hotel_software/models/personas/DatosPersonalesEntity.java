@@ -23,7 +23,7 @@ public class DatosPersonalesEntity {
     private String apellido;
 
     //Un empleado puede hospedarse como pasajero (unique es por tabla, no global)
-    @Column(nullable = false, unique = true, length = 15)
+    @Column(nullable = false, unique = true, updatable = false, length = 15)
     private String dni;
 
     @Column(nullable = false, length = 50)

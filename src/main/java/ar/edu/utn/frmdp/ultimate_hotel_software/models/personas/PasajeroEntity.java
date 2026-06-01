@@ -1,8 +1,10 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.models.personas;
 
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.ComentarioEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,11 +23,11 @@ public class PasajeroEntity {
     @Embedded
     private DatosPersonalesEntity datosPersona;
 
-    @ElementCollection //Indica que el siguiente atributo es una coleccion de valores simples (String)
-    @CollectionTable( //Crea una tabla de nombre pasajero_comentarios y la vincula con la tabla pasajeros mediante pasajero_id
-            name = "pasajero_comentarios",
-            joinColumns = @JoinColumn(name = "pasajero_id")
+
+    @OneToMany(
+            mappedBy = "pasajero",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
-    @Column(name = "comentario", length = 30)
-    private List<String> comentarios;
+    private List<ComentarioEntity> comentarios = new ArrayList<>();
 }
