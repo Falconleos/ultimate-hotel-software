@@ -32,6 +32,8 @@ public class ComentarioEntity {
     @JoinColumn(name = "estadia_id")
     private EstadiaEntity estadia;
 
+    //////////////////////////////////////////////////
+
     @PrePersist
     public void prePersist() {
         this.fechaComentario = LocalDateTime.now();

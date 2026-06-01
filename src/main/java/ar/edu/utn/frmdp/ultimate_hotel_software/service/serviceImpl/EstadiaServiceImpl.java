@@ -4,6 +4,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoEstadia;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoHabitacion;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoReserva;
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.EstadiaInvalidaException;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.EstadiaNoEncontradaException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EstadiaMapper;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.EstadiaEntity;
@@ -122,6 +123,6 @@ public class EstadiaServiceImpl implements EstadiaService {
     //Buscar estadia por ID
     public EstadiaEntity getEntityById (Long id) {
         return estadiaRepository.findById(id)
-                .orElseThrow( ()->new RuntimeException() );
+                .orElseThrow( ()->new EstadiaNoEncontradaException("Estadia no encontrada"));
     }
 }

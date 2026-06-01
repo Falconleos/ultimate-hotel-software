@@ -20,8 +20,10 @@ public class EmpleadoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Embedded
     private DatosPersonalesEntity datosPersona;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Turno turno;
