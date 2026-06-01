@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,6 +38,9 @@ public class EstadiaEntity {
     private Double total;
     private Boolean pagada;
     private Boolean activa;
+
+    @OneToMany(mappedBy = "estadia", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ComentarioEntity>comentarios;
 
     @PrePersist
     public void OnCreate(){

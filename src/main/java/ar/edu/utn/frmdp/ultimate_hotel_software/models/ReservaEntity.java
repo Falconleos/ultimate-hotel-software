@@ -28,7 +28,7 @@ public class ReservaEntity {
     private String nombre;
     private String apellido;
     private String telefono;
-    private String comentario;
+    private String observacion;
     private Boolean activa;
 
     @ManyToOne(optional = false)
@@ -41,8 +41,8 @@ public class ReservaEntity {
 
     @PrePersist
     public void onCreate(){
-        if(comentario==null || comentario.isBlank()){
-            comentario = "sin comentarios";
+        if(observacion==null || observacion.isBlank()){
+            observacion = "sin comentarios";
         }
         activa=true;
     }

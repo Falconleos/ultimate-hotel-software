@@ -21,8 +21,8 @@ public class ReservaDTORequest {
     private String apellido;
     @NotBlank
     private String telefono;
+    private String observacion;
 
-    private String comentario;
     @NotNull
     private Long empleadoId;
     @NotNull
