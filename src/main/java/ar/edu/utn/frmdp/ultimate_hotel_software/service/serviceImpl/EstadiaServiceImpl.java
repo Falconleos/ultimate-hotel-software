@@ -118,4 +118,10 @@ public class EstadiaServiceImpl implements EstadiaService {
         }
 
     }
+
+    //Buscar estadia por ID
+    public EstadiaEntity getEntityById (Long id) {
+        return estadiaRepository.findById(id)
+                .orElseThrow( ()->new RuntimeException() );
+    }
 }
