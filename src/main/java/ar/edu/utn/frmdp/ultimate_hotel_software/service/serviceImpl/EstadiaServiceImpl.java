@@ -66,10 +66,10 @@ public class EstadiaServiceImpl implements EstadiaService {
         validaciones(reserva,habitacion,empleadoCheckIn,pasajero);
 
         EstadiaEntity estadia = estadiaMapper.toEntity(estadiaDTORequest);
-            estadia.setReserva(reserva);
+            estadia.setReservaEntity(reserva);
             estadia.setEstado(EstadoEstadia.EN_CURSO);
             estadia.setPasajeroEntity(pasajero);
-            estadia.setEmpleado(empleadoCheckIn);
+            estadia.setEmpleadoEntity(empleadoCheckIn);
                 Long cantidadNoches = ChronoUnit.DAYS.between(
                         reserva.getCheckIn(),
                         reserva.getCheckOut()

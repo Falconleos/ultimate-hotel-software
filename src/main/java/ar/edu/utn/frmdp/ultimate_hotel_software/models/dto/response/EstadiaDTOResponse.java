@@ -14,7 +14,7 @@ public class EstadiaDTOResponse {
     private EmpleadoReservaDTOResponse empleadoReservaDTOResponse;
 
     private Double total;
-    private String comentario;
+    private String observacion;
     private Boolean pagada;
 
 }

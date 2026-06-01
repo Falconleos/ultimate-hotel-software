@@ -23,7 +23,7 @@ public class EstadiaEntity {
 
     @OneToOne(optional = false)
     @JoinColumn(name = "reserva_id")
-    private ReservaEntity reserva;
+    private ReservaEntity reservaEntity;
 
     private EstadoEstadia estado;
 
@@ -33,7 +33,7 @@ public class EstadiaEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "empleado_id")
-    private EmpleadoEntity empleado;
+    private EmpleadoEntity empleadoEntity;
 
     private Double total;
     private Boolean pagada;
