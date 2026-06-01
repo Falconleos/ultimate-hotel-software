@@ -43,6 +43,8 @@ public class ComentarioServiceImpl implements ComentarioService {
 
     @Override
     public List<ComentarioDTOResponse> getComentarioPasajero(Long pasajero_id) {
-        return List.of();
+        return comentarioRepository.findByEstadiaPasajeroEntityId(pasajero_id).stream()
+                .map(comentarioMapper::toDTO)
+                .toList();
     }
 }
