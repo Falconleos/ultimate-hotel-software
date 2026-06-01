@@ -12,5 +12,5 @@ public interface EmpleadoMapper {
     EmpleadoEntity toEntity(EmpleadoDTORequest empleadoDTORequest);
     EmpleadoDTOResponse toDTO(EmpleadoEntity empleadoEntity);
 
-    EmpleadoReservaDTOResponse toDtoReservaEmpleado(EmpleadoEntity empleadoEntity);
+    EmpleadoReservaDTOResponse toDtoReservaEmpleado(EmpleadoEntity empleadoEntity); //DTO para reservas
 }

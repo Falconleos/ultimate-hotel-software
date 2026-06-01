@@ -4,6 +4,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Cargo;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EmpleadoMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoReservaDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.DatosPersonalesEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
@@ -32,14 +33,14 @@ public class EmpleadoServiceImpl implements EmpleadoService {
                 .orElseThrow( ()->new RuntimeException() );
     }
 
-    //1.2 Devuelve ReservaDTOResponse
-    public EmpleadoReservaDTOResponse getById (Long id) {
+    //1.2 Devuelve DTOResponse
+    public EmpleadoDTOResponse getById (Long id) {
         return empleadoMapper.toDTO(findEntityById(id));
     }
 
     //2. Listar empleados
     @Override
-    public List<EmpleadoReservaDTOResponse> getAll() {
+    public List<EmpleadoDTOResponse> getAll() {
         return empleadoRepository.findAll().stream()
                 .map(empleadoMapper::toDTO)
                 .toList();
@@ -47,7 +48,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     //3. Crear empleado
     @Override
-    public EmpleadoReservaDTOResponse createEmpleado(EmpleadoDTORequest empleadoDTORequest) {
+    public EmpleadoDTOResponse createEmpleado(EmpleadoDTORequest empleadoDTORequest) {
 
         //Mapeo a entidad
         EmpleadoEntity empleadoEntity = empleadoMapper.toEntity(empleadoDTORequest);
@@ -71,7 +72,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     // 5.1. Actualizar empleado (completo)
     @Override
     @Transactional
-    public EmpleadoReservaDTOResponse updateEmpleado(Long id, EmpleadoDTORequest empleadoDTORequestModificado) {
+    public EmpleadoDTOResponse updateEmpleado(Long id, EmpleadoDTORequest empleadoDTORequestModificado) {
 
         //Buscar entidad a modificar
         EmpleadoEntity empleado = findEntityById(id);
@@ -96,7 +97,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     //5.2. Cambiar turno
     @Transactional
-    public EmpleadoReservaDTOResponse cambiarTurno(Long id, Turno turno) {
+    public EmpleadoDTOResponse cambiarTurno(Long id, Turno turno) {
 
         //Buscar entidad a modificar
         EmpleadoEntity empleado = findEntityById(id);
@@ -110,7 +111,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     //5.3. Cambiar cargo
     @Transactional
-    public EmpleadoReservaDTOResponse cambiarCargo(Long id, Cargo cargo){
+    public EmpleadoDTOResponse cambiarCargo(Long id, Cargo cargo){
 
         //Buscar entidad a modificar
         EmpleadoEntity empleado = findEntityById(id);
@@ -124,7 +125,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     //5.4. Cambiar estado
     @Transactional
-    public EmpleadoReservaDTOResponse cambiarEstado (Long id) {
+    public EmpleadoDTOResponse cambiarEstado (Long id) {
 
         //Buscar entidad a modificar
         EmpleadoEntity empleado = findEntityById(id);
