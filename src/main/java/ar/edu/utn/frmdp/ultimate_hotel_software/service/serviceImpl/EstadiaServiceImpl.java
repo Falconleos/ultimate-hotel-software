@@ -18,6 +18,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.PasajeroEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.EstadiaRepository;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EmpleadoService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EstadiaService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +51,7 @@ public class EstadiaServiceImpl implements EstadiaService {
     }
 
     @Override
+    @Transactional
     public EstadiaDTOResponse crear(EstadiaDTORequest estadiaDTORequest) {
 
         ReservaEntity reserva = reservaService

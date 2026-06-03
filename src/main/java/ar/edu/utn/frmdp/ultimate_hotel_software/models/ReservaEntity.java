@@ -39,6 +39,9 @@ public class ReservaEntity {
     @JoinColumn(name = "habitacion_id")
     private HabitacionEntity habitacionEntity;
 
+    @OneToOne(mappedBy = "reservaEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private CancelacionReservaEntity cancelacion;
+
     @PrePersist
     public void onCreate(){
         if(observacion==null || observacion.isBlank()){
