@@ -3,13 +3,17 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoEstadia;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoHabitacion;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoReserva;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.ConflictoDeEstadoException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.EstadiaInvalidaException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.EstadiaNoEncontradaException;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.InvalidIdException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EstadiaMapper;
 
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.CancelacionReservaEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.EstadiaEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.HabitacionEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.ReservaEntity;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.CancelacionReservaDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EstadiaDTORequest;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EstadiaDTOResponse;
@@ -22,6 +26,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -30,6 +35,7 @@ import java.util.List;
 public class EstadiaServiceImpl implements EstadiaService {
 
     private final EmpleadoService empleadoService;
+    private final EstadiaService estadiaService;
     private EstadiaRepository estadiaRepository;
     private EstadiaMapper estadiaMapper;
 
@@ -52,7 +58,7 @@ public class EstadiaServiceImpl implements EstadiaService {
 
     @Override
     @Transactional
-    public EstadiaDTOResponse crear(EstadiaDTORequest estadiaDTORequest) {
+    public EstadiaDTOResponse checkIn(EstadiaDTORequest estadiaDTORequest) {
 
         ReservaEntity reserva = reservaService
                 .findEntityById(estadiaDTORequest.getReservaId());
@@ -114,7 +120,7 @@ public class EstadiaServiceImpl implements EstadiaService {
         }
         if(habitacion.getEstado().equals(EstadoHabitacion.MANTENIMIENTO) ||
            habitacion.getEstado().equals(EstadoHabitacion.OCUPADA)){
-            throw new EstadiaInvalidaException("Habitacion no disponible por " + habitacion.getEstado());
+            throw new EstadiaInvalidaException("Habitacion aun no está disponible por " + habitacion.getEstado());
         }
         if(!empleado.getActivo()){
             throw new EstadiaInvalidaException("El empleado no está activo");
@@ -127,4 +133,77 @@ public class EstadiaServiceImpl implements EstadiaService {
         return estadiaRepository.findById(id)
                 .orElseThrow( ()->new EstadiaNoEncontradaException("Estadia no encontrada"));
     }
+
+    @Override
+    public EstadiaDTOResponse interrumpirEstadia(Long id,String motivo){
+
+        EstadiaEntity estadia = getEntityById(id);
+        ReservaEntity reserva = estadia.getReservaEntity();
+        HabitacionEntity habitacion = reserva.getHabitacionEntity();
+
+        validacionesInterrupcion(estadia);
+
+        estadia.setEstado(EstadoEstadia.INTERRUMPIDA);
+        estadiaRepository.save(estadia);
+
+            CancelacionReservaDTORequest request = new CancelacionReservaDTORequest();
+                request.setMotivo(motivo);
+                request.setReserva_id(reserva.getId());
+
+                reserva.setEstadoReserva(EstadoReserva.PENDIENTE);//se setea el estado para poder cancelarse
+                reservaService.cancelarReserva(request);
+                    habitacion.setEstado(EstadoHabitacion.DISPONIBLE);
+                    habitacionService.updateHabitacion(habitacion);
+                //luego de interrumpir la estadia y de cancelar la reserva se habilita la habitacion nuevamente.
+
+        return estadiaMapper.toDto(estadia);
+    }
+
+    public void validacionesInterrupcion(EstadiaEntity estadia){
+        if(estadia.getEstado().equals(EstadoEstadia.COMPLETADA)){
+            throw new ConflictoDeEstadoException("La estadía ya concluyó");
+        }else if (estadia.getPagada() == false){
+            throw new ConflictoDeEstadoException("Antes de interrumpir la estadía debe abonarse");
+        }else if(estadia.getEstado().equals(EstadoEstadia.INTERRUMPIDA)){
+            throw new ConflictoDeEstadoException("La estadía ya fue interrumpida");
+        }
+    }
+
+    public EstadiaDTOResponse pagarEstadia(Long id){
+
+        EstadiaEntity estadia = getEntityById(id);
+        LocalDate checkOut = estadia.getReservaEntity().getCheckOut();
+
+        if(checkOut.equals(LocalDate.now())){
+            if(estadia.getPagada()==true){
+                throw new ConflictoDeEstadoException("La estadia ya esta pagada");
+            }
+        }
+
+        estadia.setPagada(true);
+        return estadiaMapper.toDto(estadia);
+    }
+
+    public EstadiaDTOResponse checkOutEstadia(Long id){
+
+        EstadiaEntity estadia = getEntityById(id);
+
+        validacionesCheckOut(estadia);
+
+        estadia.setEstado(EstadoEstadia.COMPLETADA);
+            estadiaRepository.save(estadia);
+
+        return estadiaMapper.toDto(estadia);
+    }
+
+    public void validacionesCheckOut(EstadiaEntity estadia){
+        if(estadia.getReservaEntity().getCheckOut().isAfter(LocalDate.now()) ){
+            throw new ConflictoDeEstadoException("No se puede realizar el checkOut " +
+                    "solo se puede interrumpir, por ser antes de tiempo");
+        }
+        if(estadia.getPagada()==false){
+            throw new ConflictoDeEstadoException("Antes del check out debe pagar la estadia");
+        }
+    }
+
 }

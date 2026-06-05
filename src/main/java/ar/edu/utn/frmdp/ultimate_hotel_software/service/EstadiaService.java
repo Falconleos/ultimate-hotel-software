@@ -8,5 +8,8 @@ import java.util.List;
 public interface EstadiaService {
 
     List<EstadiaDTOResponse>listar(Boolean activo);
-    EstadiaDTOResponse crear(EstadiaDTORequest estadiaDTORequest);
+    EstadiaDTOResponse checkIn(EstadiaDTORequest estadiaDTORequest);
+    EstadiaDTOResponse checkOutEstadia(Long id);
+    EstadiaDTOResponse pagarEstadia(Long id);
+    EstadiaDTOResponse interrumpirEstadia(Long id,String motivo);
 }
