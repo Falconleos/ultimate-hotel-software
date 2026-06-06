@@ -10,9 +10,14 @@ import java.util.List;
 public interface CancelacionReservaService {
 
     CancelacionReservaEntity crear(CancelacionReservaEntity cancelacion);
+
     List<CancelacionReservaDTOResponse> historialCancelaciones();
-    List<CancelacionReservaDTOResponse>findPorApellido(String apellido);
+
+    List<CancelacionReservaDTOResponse> findPorApellido(String apellido);
+
     void depurarHistorialCancelaciones();
+
     CancelacionReservaDTOResponse findById(Long id);
+
     CancelacionReservaEntity findEntityById(Long id);
 }
