@@ -202,7 +202,6 @@ public class EstadiaServiceImpl implements EstadiaService {
             return estadiaMapper.toDto(estadia);
         }
 
-        @Override
         public void validacionesCheckOut(EstadiaEntity estadia){
             if(estadia.getReservaEntity().getCheckOut().isAfter(LocalDate.now()) ){
                 throw new ConflictoDeEstadoException("No se puede realizar el checkOut " +
