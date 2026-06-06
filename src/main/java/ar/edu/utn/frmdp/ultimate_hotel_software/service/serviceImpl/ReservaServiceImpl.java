@@ -164,4 +164,25 @@ public class ReservaServiceImpl implements ReservaService {
             reservaRepository.save(reserva);
         }
     }
+
+    @Override
+    public List<ReservaDTOResponse>checkIndelDia(){
+        return reservaRepository.findByActiva(true).stream()
+                .filter(r->r.getCheckIn().equals(LocalDate.now()))
+                .map(reservaMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<ReservaDTOResponse>reservasParaConfirmarAxDiasDelCheckIn(Integer x){
+        return reservaRepository.findByActiva(true).stream()
+                .filter(r->r.getEstadoReserva().equals(EstadoReserva.PENDIENTE))
+                .filter(r -> LocalDate.now().plusDays(x).isEqual(r.getCheckIn()))
+                .map(reservaMapper::toDto)
+                .toList();
+    }
+
+
+
+
 }

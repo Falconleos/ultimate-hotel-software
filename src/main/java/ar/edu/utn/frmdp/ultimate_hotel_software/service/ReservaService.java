@@ -15,11 +15,22 @@ import java.util.List;
 public interface ReservaService {
 
     List<ReservaDTOResponse> listar(Boolean activa);
+
     ReservaDTOResponse crearReserva(ReservaDTORequest request);
-    List<HabitacionEntity>habitacionesDisponibles(LocalDate checkIn, LocalDate checkOut, Integer pax);
+
     ReservaEntity findEntityById(Long id);
+
+    List<HabitacionEntity> habitacionesDisponibles(LocalDate checkIn, LocalDate checkOut, Integer pax);
+
     void update(ReservaEntity reserva);
+
     void confirmarReserva(Long id);
+
     CancelacionReservaDTOResponse cancelarReserva(CancelacionReservaDTORequest request);
+
     void procesarAusenciaDeReservas();
+
+    List<ReservaDTOResponse> checkIndelDia();
+
+    List<ReservaDTOResponse> reservasParaConfirmarAxDiasDelCheckIn(Integer x);
 }
