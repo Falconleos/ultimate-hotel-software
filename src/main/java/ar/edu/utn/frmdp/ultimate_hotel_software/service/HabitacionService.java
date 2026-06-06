@@ -27,4 +27,6 @@ public interface HabitacionService {
 
     List<HabitacionDTOResponse> habitacionesDisponibles();
 
+    Integer cantidadHabitaciones();
+
 }

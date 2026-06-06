@@ -114,4 +114,9 @@ public class HabitacionServiceImpl implements HabitacionService {
     public List<HabitacionEntity> findByEstadoHabitacion(EstadoHabitacion estadoHabitacion) {
         return habitacionRepository.findByEstado(estadoHabitacion);
     }
+
+    @Override
+    public Integer cantidadHabitaciones() {
+        return habitacionRepository.findAll().size();
+    }
 }

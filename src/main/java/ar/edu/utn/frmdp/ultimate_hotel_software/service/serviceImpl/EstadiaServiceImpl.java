@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -172,9 +173,9 @@ public class EstadiaServiceImpl implements EstadiaService {
     public EstadiaDTOResponse pagarEstadia(Long id){
 
         EstadiaEntity estadia = getEntityById(id);
-        LocalDate checkOut = estadia.getReservaEntity().getCheckOut();
+        LocalDate checkIn = estadia.getReservaEntity().getCheckOut();
 
-        if(checkOut.equals(LocalDate.now())){
+        if(!checkIn.equals(LocalDate.now())){
             if(estadia.getPagada()==true){
                 throw new ConflictoDeEstadoException("La estadia ya esta pagada");
             }
@@ -187,11 +188,15 @@ public class EstadiaServiceImpl implements EstadiaService {
     public EstadiaDTOResponse checkOutEstadia(Long id){
 
         EstadiaEntity estadia = getEntityById(id);
+            ReservaEntity reserva = estadia.getReservaEntity();
 
         validacionesCheckOut(estadia);
 
         estadia.setEstado(EstadoEstadia.COMPLETADA);
+        estadia.setActiva(false);
             estadiaRepository.save(estadia);
+            reserva.setEstadoReserva(EstadoReserva.CONCLUIDA);
+                reservaService.update(reserva);
 
         return estadiaMapper.toDto(estadia);
     }
@@ -205,5 +210,97 @@ public class EstadiaServiceImpl implements EstadiaService {
             throw new ConflictoDeEstadoException("Antes del check out debe pagar la estadia");
         }
     }
+
+    public List<EstadiaDTOResponse> checkOutdelDia(){
+
+        return estadiaRepository.findByActiva(true).stream()
+                .map(estadiaMapper::toDto)
+                .toList();
+    }
+
+    public List<EstadiaDTOResponse>findByEstado(EstadoEstadia estadoEstadia){
+        return estadiaRepository.findByEstado(estadoEstadia).stream()
+                .map(estadiaMapper::toDto)
+                .toList();
+    }
+
+    public List<EstadiaDTOResponse>estadiaPorApellido(String apellido){
+
+        List<EstadiaEntity>estadias=estadiaRepository.findAll();
+
+        return estadias.stream()
+                .filter(e -> e.getPasajeroEntity()
+                        .getDatosPersona().getApellido().contains(apellido))
+                .map(estadiaMapper::toDto)
+                .toList();
+    }
+
+    public List<EstadiaDTOResponse>estadiaPorDni(String dni){
+
+        List<EstadiaEntity>estadias=estadiaRepository.findAll();
+
+        return estadias.stream()
+                .filter(e -> e.getPasajeroEntity()
+                        .getDatosPersona().getDni().contains(dni))
+                .map(estadiaMapper::toDto)
+                .toList();
+    }
+
+
+    public List<EstadiaDTOResponse>HistorialEstadiasPorHabitacion(Integer numeroHabitacion){
+
+        List<EstadiaEntity>estadias=estadiaRepository.findAll();
+
+        return estadias.stream()
+                .filter(e -> e.getReservaEntity()
+                        .getHabitacionEntity().getNumero().equals(numeroHabitacion))
+                .sorted(Comparator.comparing((EstadiaEntity e)->e.getReservaEntity().getCheckOut()).reversed())
+                .map(estadiaMapper::toDto)
+                .toList();
+    }
+
+    public EstadiaDTOResponse findById(Long id){
+        return estadiaMapper.toDto(getEntityById(id));
+    }
+
+
+    //kpis
+
+    public Double porcentajeOcupacionPorRangoFechas(LocalDate fechaInicio,LocalDate fechaFin){
+        Integer cantidadHabitaciones = habitacionService.cantidadHabitaciones();
+        if (cantidadHabitaciones == 0) {
+            return 0.0;
+        }
+        long cantidadEstadiasRango = estadiaRepository.findAll().stream()
+                .filter(e->{
+                    LocalDate checkIn = e.getReservaEntity().getCheckIn();
+                    LocalDate checkOut = e.getReservaEntity().getCheckOut();
+                    return (checkIn.equals(fechaInicio))||(checkIn.isAfter(fechaInicio)) &&
+                            (checkOut.equals(fechaFin))||(checkOut.isBefore(fechaFin));
+                }).count();
+
+        return (cantidadEstadiasRango * 100.0) / cantidadHabitaciones;
+    }
+
+    public Integer cantidadEstadiasEnCurso(){
+        return estadiaRepository.findByEstado(EstadoEstadia.EN_CURSO).size();
+    }
+
+    /*
+    solo abonan en el checkin
+    si quieren exteneder la estadia pueden solo si su habitacion no fue reservada
+    la metodologia es finalizar la estadia (pagada en el checkin)
+    crear otra reserva y generar la estadia nueva(abonando en el nuevo checkin)
+    * */
+
+    public Double recaudacionCheckInsDelDia(){
+        return estadiaRepository.findAll().stream()
+                .filter(e ->e.getReservaEntity().getCheckIn().equals(LocalDate.now()))
+                .filter(e->e.getPagada().equals(true))
+                .map(EstadiaEntity::getTotal)
+                .reduce(0.0, Double::sum);
+    }
+
+    
 
 }
