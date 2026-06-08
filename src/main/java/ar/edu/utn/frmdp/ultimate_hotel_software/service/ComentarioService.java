@@ -11,4 +11,6 @@ public interface ComentarioService {
     ComentarioDTOResponse crearComentario(Long estadia_id, ComentarioDTORequest comentarioDTORequest);
     List<ComentarioDTOResponse> getComentariosHabitacion (Long habitacion_id);
     List<ComentarioDTOResponse> getComentarioPasajero (Long pasajero_id);
+    ComentarioDTOResponse updateComentario (Long id, ComentarioDTORequest comentarioDTORequest);
+    void deleteComentario (Long id);
 }

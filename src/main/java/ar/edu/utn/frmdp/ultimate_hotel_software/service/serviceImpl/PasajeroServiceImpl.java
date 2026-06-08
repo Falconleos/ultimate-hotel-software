@@ -1,21 +1,19 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
-import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EmpleadoMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.PasajeroMapper;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ComentarioDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.PasajeroDTORequest;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoReservaDTOResponse;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ComentarioDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.PasajeroDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.DatosPersonalesEntity;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.PasajeroEntity;
-import ar.edu.utn.frmdp.ultimate_hotel_software.repository.EmpleadoRepository;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.PasajeroRepository;
+import ar.edu.utn.frmdp.ultimate_hotel_software.service.ComentarioService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.PasajeroService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,6 +22,7 @@ public class PasajeroServiceImpl implements PasajeroService {
 
     private final PasajeroRepository pasajeroRepository;
     private final PasajeroMapper pasajeroMapper;
+    private final ComentarioService comentarioService;
 
     //1. Busqueda de pasajero
     //1.1 Devuelve entidad
@@ -84,7 +83,31 @@ public class PasajeroServiceImpl implements PasajeroService {
         return pasajeroMapper.toDTO(pasajeroRepository.save(pasajero));
     }
 
-    //5.2. Agregar comentario
+    //6. Metodos de gestion de comentarios de pasajero
+    //6.1. Crear comentario (solo pasajero)
+    public ComentarioDTOResponse crearComentario (Long id, ComentarioDTORequest comentarioDTORequest) {
+        return comentarioService.crearComentario(id, comentarioDTORequest);
+    }
+
+//    //6.2.1. Buscar comentarios por habitacion (solo administrador)
+//    public List<ComentarioDTOResponse> getComentariosHabitacion(Long habitacion_id) {
+//        return comentarioService.getComentariosHabitacion(habitacion_id);
+//    }
+
+//    //6.2.2. Buscar comentarios por pasajero (solo administrador)
+//    public List<ComentarioDTOResponse> getComentarioPasajero(Long pasajero_id) {
+//        return  comentarioService.getComentarioPasajero(pasajero_id);
+//    }
+
+    //6.3. Modificar comentario (solo pasajero)
+    public ComentarioDTOResponse updateComentario(Long id, ComentarioDTORequest comentarioDTORequest) {
+        return comentarioService.updateComentario(id, comentarioDTORequest);
+    }
+
+    //6.4. Elimnar (pasajero y administrador)
+    public void deleteComentario(Long id) {
+        comentarioService.deleteComentario(id);
+    }
 
 
 }
