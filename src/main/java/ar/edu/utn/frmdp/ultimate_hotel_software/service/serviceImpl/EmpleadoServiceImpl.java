@@ -1,20 +1,17 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
-import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Cargo;
+import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EmpleadoMapper;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ComentarioDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ComentarioDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoDTOResponse;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoReservaDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.DatosPersonalesEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.EmpleadoRepository;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.ComentarioService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EmpleadoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,7 +87,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
         empleado.setDatosPersona(datosPersonalesEntity);
         empleado.setTurno(empleadoDTORequestModificado.getTurno());
-        empleado.setCargo(empleadoDTORequestModificado.getCargo());
+        empleado.setRoleType(empleadoDTORequestModificado.getRoleType());
         empleado.setUsuario(empleadoDTORequestModificado.getUsuario());
         empleado.setPassword(empleadoDTORequestModificado.getPassword());
 
@@ -115,13 +112,13 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     //5.3. Cambiar cargo
     @Transactional
-    public EmpleadoDTOResponse cambiarCargo(Long id, Cargo cargo){
+    public EmpleadoDTOResponse cambiarCargo(Long id, RoleType roleType){
 
         //Buscar entidad a modificar
         EmpleadoEntity empleado = findEntityById(id);
 
         //Modificaciones
-        empleado.setCargo(cargo); //Hibernate detecta cambio en el elemento y modifica la base de datos.
+        empleado.setRoleType(roleType); //Hibernate detecta cambio en el elemento y modifica la base de datos.
 
         //Guardado en repositorio y devolucion de DTO
         return empleadoMapper.toDTO(empleado);
