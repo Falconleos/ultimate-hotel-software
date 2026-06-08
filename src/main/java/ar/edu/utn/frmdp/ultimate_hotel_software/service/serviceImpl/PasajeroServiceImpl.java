@@ -82,32 +82,4 @@ public class PasajeroServiceImpl implements PasajeroService {
 
         return pasajeroMapper.toDTO(pasajeroRepository.save(pasajero));
     }
-
-    //6. Metodos de gestion de comentarios de pasajero
-    //6.1. Crear comentario (solo pasajero)
-    public ComentarioDTOResponse crearComentario (Long id, ComentarioDTORequest comentarioDTORequest) {
-        return comentarioService.crearComentario(id, comentarioDTORequest);
-    }
-
-//    //6.2.1. Buscar comentarios por habitacion (solo administrador)
-//    public List<ComentarioDTOResponse> getComentariosHabitacion(Long habitacion_id) {
-//        return comentarioService.getComentariosHabitacion(habitacion_id);
-//    }
-
-//    //6.2.2. Buscar comentarios por pasajero (solo administrador)
-//    public List<ComentarioDTOResponse> getComentarioPasajero(Long pasajero_id) {
-//        return  comentarioService.getComentarioPasajero(pasajero_id);
-//    }
-
-    //6.3. Modificar comentario (solo pasajero)
-    public ComentarioDTOResponse updateComentario(Long id, ComentarioDTORequest comentarioDTORequest) {
-        return comentarioService.updateComentario(id, comentarioDTORequest);
-    }
-
-    //6.4. Elimnar (pasajero y administrador)
-    public void deleteComentario(Long id) {
-        comentarioService.deleteComentario(id);
-    }
-
-
 }
