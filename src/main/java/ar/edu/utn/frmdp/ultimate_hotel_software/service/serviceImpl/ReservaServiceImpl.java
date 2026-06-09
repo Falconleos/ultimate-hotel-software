@@ -19,6 +19,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.repository.ReservaRepository;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EmpleadoService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.HabitacionService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.ReservaService;
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -119,7 +120,8 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
-    public CancelacionReservaDTOResponse cancelarReserva(CancelacionReservaDTORequest request) {
+    @Transactional
+    public CancelacionReservaDTOResponse cancelarReserva( CancelacionReservaDTORequest request) {
 
         ReservaEntity reserva = findEntityById(request.getReserva_id());
 

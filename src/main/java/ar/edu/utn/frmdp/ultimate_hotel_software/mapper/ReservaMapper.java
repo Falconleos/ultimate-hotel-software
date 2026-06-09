@@ -7,12 +7,11 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ReservaEstad
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring",
-        uses = {EmpleadoMapper.class, HabitacionMapper.class})
+@Mapper(componentModel = "spring", uses = {EmpleadoMapper.class, HabitacionMapper.class})
 public interface ReservaMapper {
 
-    @Mapping(target = "empleado", ignore = true)
-    @Mapping(target = "habitacion", ignore = true)
+    @Mapping(target = "empleadoEntity", ignore = true)
+    @Mapping(target = "habitacionEntity", ignore = true)
     ReservaEntity toEntity(ReservaDTORequest request);
 
     @Mapping(target = "empleadoReservaDTOResponse", source = "empleadoEntity")
@@ -20,5 +19,4 @@ public interface ReservaMapper {
     ReservaDTOResponse toDto(ReservaEntity reserva);
 
     ReservaEstadiaDTOResponse toDtoReservaEstadia(ReservaEntity reserva);
-
 }

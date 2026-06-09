@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface EmpleadoRepository extends JpaRepository<EmpleadoEntity,Long> {
     List<EmpleadoEntity> findByTurno (Turno turno);
-    List<EmpleadoEntity> findByCargo (RoleType roleType);
+    List<EmpleadoEntity> findByRoleType(RoleType roleType);
     List<EmpleadoEntity> findByActivoTrue ();
     List<EmpleadoEntity> findByActivoFalse ();
 }

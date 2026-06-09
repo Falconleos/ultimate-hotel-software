@@ -1,3 +1,27 @@
 spring:
   application:
     name: ultimate-hotel-software
+
+  # 1. CONFIGURACIÓN DE LA BASE DE DATOS (MySQL)
+  datasource:
+    url: jdbc:mysql://localhost:3306/hotel_db?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # 2. CONFIGURACIÓN DE ORM / HIBERNATE
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# 3. CONFIGURACIÓN PERSONALIZADA PARA JWT (Mapea con tu @Value)
+jwt:
+  # Clave secreta segura de 256 bits codificada en Base64
+  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+  # Tiempo de vida del token (15 minutos usando formato Duration de Spring Boot 3/4)
+  expiration: PT15M

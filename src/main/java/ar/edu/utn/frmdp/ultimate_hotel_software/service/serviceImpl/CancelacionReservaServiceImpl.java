@@ -17,8 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CancelacionReservaServiceImpl implements CancelacionReservaService{
 
-    private final ReservaServiceImpl reservaService;
-
     private final CancelacionReservaRepository repository;
     private final CancelacionReservaMapper mapper;
 

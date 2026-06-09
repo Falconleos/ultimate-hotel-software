@@ -2,7 +2,9 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Getter
 public class EstadiaDTORequest {
 

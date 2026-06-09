@@ -40,7 +40,8 @@ public class EmpleadoController {
     //4. Eliminar empleado
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmpleado (@PathVariable Long id) {
-
+        empleadoService.deleteEmpleado(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 
