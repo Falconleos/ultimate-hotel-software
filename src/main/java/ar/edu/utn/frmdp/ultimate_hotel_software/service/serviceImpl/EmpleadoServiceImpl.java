@@ -3,18 +3,14 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Cargo;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EmpleadoMapper;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ComentarioDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ComentarioDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoDTOResponse;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoReservaDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.DatosPersonalesEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.EmpleadoRepository;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.ComentarioService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EmpleadoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +34,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     //1.2 Devuelve DTOResponse
+    @Override
     public EmpleadoDTOResponse getById (Long id) {
         return empleadoMapper.toDTO(findEntityById(id));
     }
@@ -100,6 +97,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     //5.2. Cambiar turno
+    @Override
     @Transactional
     public EmpleadoDTOResponse cambiarTurno(Long id, Turno turno) {
 
@@ -114,6 +112,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     //5.3. Cambiar cargo
+    @Override
     @Transactional
     public EmpleadoDTOResponse cambiarCargo(Long id, Cargo cargo){
 
@@ -128,6 +127,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     //5.4. Cambiar estado
+    @Override
     @Transactional
     public EmpleadoDTOResponse cambiarEstado (Long id) {
 

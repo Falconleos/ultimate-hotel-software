@@ -23,9 +23,37 @@ public class ComentarioServiceImpl implements ComentarioService {
     private ComentarioMapper comentarioMapper;
     private EstadiaServiceImpl estadiaService;
 
-    //1. Crear comentario
+    //1.1. Buscar comentario por id
     @Override
-    public ComentarioDTOResponse crearComentario(Long estadia_id, ComentarioDTORequest comentarioDTORequest) {
+    public ComentarioDTOResponse getById (Long id) {
+        return comentarioMapper.toDTO(findEntityById(id));
+    }
+
+    //1.2. Buscar comentario entidad por id
+    public ComentarioEntity findEntityById(Long id) {
+        return comentarioRepository.findById(id)
+                .orElseThrow( ()->new RuntimeException() );
+    }
+
+    //2.1. Listar comentarios por habitacion
+    @Override
+    public List<ComentarioDTOResponse> getComentariosHabitacion(Long habitacion_id) {
+        return comentarioRepository.findByEstadiaReservaHabitacionEntityId(habitacion_id).stream()
+                .map(comentarioMapper::toDTO)
+                .toList();
+    }
+
+    //2.2. Listar comentarios por pasajero
+    @Override
+    public List<ComentarioDTOResponse> getComentarioPasajero(Long pasajero_id) {
+        return comentarioRepository.findByEstadiaPasajeroEntityId(pasajero_id).stream()
+                .map(comentarioMapper::toDTO)
+                .toList();
+    }
+
+    //3. Crear comentario
+    @Override
+    public ComentarioDTOResponse createComentario(Long estadia_id, ComentarioDTORequest comentarioDTORequest) {
 
         //Busca estadia para agregar comentario
         EstadiaEntity estadia = estadiaService.getEntityById(estadia_id); //Lanza excepcion sino encuentra estadia
@@ -37,31 +65,14 @@ public class ComentarioServiceImpl implements ComentarioService {
         return comentarioMapper.toDTO(comentarioRepository.save(comentarioEntity));
     }
 
-    //2. Busquedas
-
-    //2.1. Buscar entidad por id
-    public ComentarioEntity findEntityById(Long id) {
-        return comentarioRepository.findById(id)
-                .orElseThrow( ()->new RuntimeException() );
-    }
-
-    //2.2. Buscar comentarios por habitacion
+    //4. Eliminar comentario
     @Override
-    public List<ComentarioDTOResponse> getComentariosHabitacion(Long habitacion_id) {
-        return comentarioRepository.findByEstadiaReservaHabitacionEntityId(habitacion_id).stream()
-                .map(comentarioMapper::toDTO)
-                .toList();
+    public void deleteComentario(Long id) {
+        ComentarioEntity comentario = findEntityById(id);
+        comentarioRepository.delete(comentario);
     }
 
-    //2.3. Buscar comentarios por pasajero
-    @Override
-    public List<ComentarioDTOResponse> getComentarioPasajero(Long pasajero_id) {
-        return comentarioRepository.findByEstadiaPasajeroEntityId(pasajero_id).stream()
-                .map(comentarioMapper::toDTO)
-                .toList();
-    }
-
-    //3. Actualizar comentario
+    //5. Actualizar comentario
     @Override
     public ComentarioDTOResponse updateComentario(Long id, ComentarioDTORequest comentarioDTORequest) {
         //Buscar entidad a modificar
@@ -72,12 +83,5 @@ public class ComentarioServiceImpl implements ComentarioService {
 
         //Guardado en repositorio y devolucion de DTO
         return comentarioMapper.toDTO(comentarioEntity);
-    }
-
-    //4. Eliminar comentario
-    @Override
-    public void deleteComentario(Long id) {
-        ComentarioEntity comentario = findEntityById(id);
-        comentarioRepository.delete(comentario);
     }
 }

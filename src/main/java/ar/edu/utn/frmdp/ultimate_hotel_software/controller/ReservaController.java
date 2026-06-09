@@ -73,5 +73,4 @@ public class ReservaController {
             @RequestParam Integer dias) {
         return ResponseEntity.ok(reservaService.reservasParaConfirmarAxDiasDelCheckIn(dias));
     }
-
 }
