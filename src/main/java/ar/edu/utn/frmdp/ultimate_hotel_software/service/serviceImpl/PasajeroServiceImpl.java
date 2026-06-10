@@ -33,6 +33,7 @@ public class PasajeroServiceImpl implements PasajeroService {
     }
 
     //1.2 Devuelve DTOResponse
+    @Override
     public PasajeroDTOResponse getById (Long id) {
         return pasajeroMapper.toDTO(findEntityById(id));
     }

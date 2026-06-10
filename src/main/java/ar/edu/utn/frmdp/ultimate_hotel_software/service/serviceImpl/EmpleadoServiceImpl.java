@@ -4,7 +4,6 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EmpleadoMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ComentarioDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.DatosPersonalesEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
@@ -35,6 +34,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     //1.2 Devuelve DTOResponse
+    @Override
     public EmpleadoDTOResponse getById (Long id) {
         return empleadoMapper.toDTO(findEntityById(id));
     }
@@ -97,6 +97,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     //5.2. Cambiar turno
+    @Override
     @Transactional
     public EmpleadoDTOResponse cambiarTurno(Long id, Turno turno) {
 
@@ -111,6 +112,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     //5.3. Cambiar cargo
+    @Override
     @Transactional
     public EmpleadoDTOResponse cambiarCargo(Long id, RoleType roleType){
 
@@ -125,6 +127,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     //5.4. Cambiar estado
+    @Override
     @Transactional
     public EmpleadoDTOResponse cambiarEstado (Long id) {
 

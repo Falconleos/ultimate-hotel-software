@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface PasajeroService {
 
+    PasajeroDTOResponse getById (Long id);
     PasajeroEntity findEntityById(Long id);
     List<PasajeroDTOResponse> getAll();
     PasajeroDTOResponse createPasajero(PasajeroDTORequest pasajeroDTORequest);

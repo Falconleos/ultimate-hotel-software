@@ -74,6 +74,7 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.reservasParaConfirmarAxDiasDelCheckIn(dias));
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>eliminarReserva(@PathVariable Long id){
         reservaService.eliminar(id);
