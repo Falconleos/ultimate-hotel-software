@@ -1,6 +1,6 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.controller;
 
-import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Cargo;
+import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoDTOResponse;
@@ -51,7 +51,6 @@ public class EmpleadoController {
     public ResponseEntity<EmpleadoDTOResponse> updateEmpleado(@PathVariable Long id, @RequestBody EmpleadoDTORequest empleadoDTORequest) {
         return ResponseEntity.ok(empleadoService.updateEmpleado(id, empleadoDTORequest)
         );
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     //5.2. Cambiar turno
@@ -62,8 +61,8 @@ public class EmpleadoController {
 
     //5.3. Cambiar cargo
     @PatchMapping("/{id}/cargo")
-    public ResponseEntity<EmpleadoDTOResponse> cambiarCargo(@PathVariable Long id, @RequestParam Cargo cargo) {
-        return ResponseEntity.ok(empleadoService.cambiarCargo(id, cargo));
+    public ResponseEntity<EmpleadoDTOResponse> cambiarCargo(@PathVariable Long id, @RequestParam RoleType roleType) {
+        return ResponseEntity.ok(empleadoService.cambiarCargo(id, roleType));
     }
 
     //5.3. Cambiar estado

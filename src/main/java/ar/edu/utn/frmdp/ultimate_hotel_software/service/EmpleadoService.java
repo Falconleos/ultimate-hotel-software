@@ -1,6 +1,7 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.service;
 
-import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Cargo;
+
+import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoDTOResponse;
@@ -18,6 +19,6 @@ public interface EmpleadoService {
     void deleteEmpleado (Long id);
     EmpleadoDTOResponse updateEmpleado(Long id, EmpleadoDTORequest empleadoDTORequest);
     EmpleadoDTOResponse cambiarTurno(Long id, Turno turno);
-    EmpleadoDTOResponse cambiarCargo(Long id, Cargo cargo);
+    EmpleadoDTOResponse cambiarCargo(Long id, RoleType roleType);
     EmpleadoDTOResponse cambiarEstado (Long id);
 }
