@@ -46,10 +46,10 @@ public class EmpleadoEntity {
     @Column(nullable = false)
     private Boolean activo;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
+            name = "empleado_roles",
+            joinColumns = @JoinColumn(name = "empleado_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;

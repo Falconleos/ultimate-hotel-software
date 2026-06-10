@@ -11,14 +11,15 @@ import java.util.List;
 @Repository
 public interface ComentarioRepository extends JpaRepository<ComentarioEntity, Long> {
 
-    // 1. Comentarios por estadía
+    // 1. Buscar comentarios directamente por el ID de la estadía
     @Query("SELECT c FROM ComentarioEntity c WHERE c.estadia.id = :estadiaId")
     List<ComentarioEntity> findByEstadiaId(@Param("estadiaId") Long estadiaId);
 
-    // 2. Comentarios por pasajero de la estadía
-    @Query("SELECT c FROM ComentarioEntity c WHERE c.estadia.pasajeroEntity.id = :pasajeroId")
+    // 2. Buscar comentarios uniendo la estadía (evita conflictos de nombres de propiedad)
+    @Query("SELECT c FROM ComentarioEntity c JOIN c.estadia e WHERE e.id = :pasajeroId")
     List<ComentarioEntity> findByEstadiaPasajeroEntityId(@Param("pasajeroId") Long pasajeroId);
 
-    // 3. Comentarios por habitación de la estadía@Query("SELECT c FROM ComentarioEntity c WHERE c.estadia.reservaEntity.id = :habitacionId")
+    // 3. Buscar comentarios uniendo la estadía para la habitación
+    @Query("SELECT c FROM ComentarioEntity c JOIN c.estadia e WHERE e.id = :habitacionId")
     List<ComentarioEntity> findByEstadiaReservaHabitacionEntityId(@Param("habitacionId") Long habitacionId);
 }
