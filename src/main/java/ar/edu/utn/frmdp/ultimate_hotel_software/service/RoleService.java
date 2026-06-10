@@ -1,5 +1,7 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.service;
 
+import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.Role;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.RoleRequestDto;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.RoleResponseDto;
 
@@ -13,4 +15,5 @@ public interface RoleService {
 
     RoleResponseDto create(RoleRequestDto request);
 
+    Role findEntityByName(RoleType name);
 }

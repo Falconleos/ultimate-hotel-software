@@ -3,19 +3,24 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EmpleadoMapper;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.Role;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.DatosPersonalesEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.EmpleadoRepository;
+import ar.edu.utn.frmdp.ultimate_hotel_software.repository.RoleRepository;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.ComentarioService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EmpleadoService;
+import ar.edu.utn.frmdp.ultimate_hotel_software.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +29,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     private final EmpleadoRepository empleadoRepository;
     private final EmpleadoMapper empleadoMapper;
     private final ComentarioService comentarioService;
+    private final RoleService roleService;
 
     //1. Busqueda de empleado
     //1.1 Devuelve entidad
@@ -53,6 +59,14 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
         //Mapeo a entidad
         EmpleadoEntity empleadoEntity = empleadoMapper.toEntity(empleadoDTORequest);
+
+        // Usamos el RoleService para obtener las entidades reales
+        Set<Role> rolesPersistentes = empleadoDTORequest.getRoles().stream()
+                .map(nombreRol -> roleService.findEntityByName(nombreRol))
+                .collect(Collectors.toSet());
+
+        // 3. Asignar los roles obtenidos (que ya tienen ID y no causarán error de duplicidad)
+        empleadoEntity.setRoles(rolesPersistentes);
 
         //Agregado de informacion
         empleadoEntity.setFechaIngreso(LocalDate.now());
