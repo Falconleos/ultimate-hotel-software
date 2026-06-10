@@ -24,10 +24,11 @@ public class PasajeroEntity {
     @Embedded
     private DatosPersonalesEntity datosPersona;
 
+    // REEMPLAZÁ ESTE BLOQUE EN PasajeroEntity.java
     @OneToMany(
-            mappedBy = "pasajero",
+            mappedBy = "pasajeroEntity", // <-- Cambiado de "pasajero" a "pasajeroEntity"
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<EstadiaEntity> estadias = new ArrayList<>(); //Permite obtener todas las estadias del pasajero
+    private List<EstadiaEntity> estadias = new ArrayList<>();
 }

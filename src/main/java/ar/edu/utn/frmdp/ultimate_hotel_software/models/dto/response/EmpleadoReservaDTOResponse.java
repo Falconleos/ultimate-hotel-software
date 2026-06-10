@@ -1,11 +1,8 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response;
 
-import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Cargo;
+import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.DatosPersonalesEntity;
 import lombok.*;
-
-import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,5 +14,5 @@ public class EmpleadoReservaDTOResponse {
     private String nombre;
     private String apellido;
     private Turno turno;
-    private Cargo cargo;
+    private RoleType roleType;
 }

@@ -51,6 +51,7 @@ public class EmpleadoController {
     public ResponseEntity<EmpleadoDTOResponse> updateEmpleado(@PathVariable Long id, @RequestBody EmpleadoDTORequest empleadoDTORequest) {
         return ResponseEntity.ok(empleadoService.updateEmpleado(id, empleadoDTORequest)
         );
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     //5.2. Cambiar turno

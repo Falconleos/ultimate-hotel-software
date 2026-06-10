@@ -22,10 +22,8 @@ public interface HabitacionMapper {
     )
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "numero", ignore = true)
-
     void updateHabitacionFromDto(
             HabitacionUpdateDTO dto,
             @MappingTarget HabitacionEntity habitacion
     );
-
 }

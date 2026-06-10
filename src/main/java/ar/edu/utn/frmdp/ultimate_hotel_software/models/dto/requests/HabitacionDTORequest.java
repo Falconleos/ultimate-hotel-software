@@ -5,7 +5,9 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.enums.TipoHabitacion;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Data
 
 public class HabitacionDTORequest {

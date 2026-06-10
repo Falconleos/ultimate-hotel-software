@@ -3,7 +3,9 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Getter
 public class ComentarioDTORequest {
 

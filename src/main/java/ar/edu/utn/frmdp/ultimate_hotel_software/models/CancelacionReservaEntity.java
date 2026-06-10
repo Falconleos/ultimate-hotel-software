@@ -20,7 +20,9 @@ public class CancelacionReservaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "reservaEntity")
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "reserva_id", referencedColumnName = "id")
     private ReservaEntity reservaEntity;
 
     private LocalDateTime fecha;

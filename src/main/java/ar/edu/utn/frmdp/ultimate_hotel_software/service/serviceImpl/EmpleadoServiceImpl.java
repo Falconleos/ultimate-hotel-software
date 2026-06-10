@@ -1,6 +1,6 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
-import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Cargo;
+import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EmpleadoMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
@@ -87,7 +87,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
         empleado.setDatosPersona(datosPersonalesEntity);
         empleado.setTurno(empleadoDTORequestModificado.getTurno());
-        empleado.setCargo(empleadoDTORequestModificado.getCargo());
+        empleado.setRoleType(empleadoDTORequestModificado.getRoleType());
         empleado.setUsuario(empleadoDTORequestModificado.getUsuario());
         empleado.setPassword(empleadoDTORequestModificado.getPassword());
 
@@ -114,13 +114,13 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     //5.3. Cambiar cargo
     @Override
     @Transactional
-    public EmpleadoDTOResponse cambiarCargo(Long id, Cargo cargo){
+    public EmpleadoDTOResponse cambiarCargo(Long id, RoleType roleType){
 
         //Buscar entidad a modificar
         EmpleadoEntity empleado = findEntityById(id);
 
         //Modificaciones
-        empleado.setCargo(cargo); //Hibernate detecta cambio en el elemento y modifica la base de datos.
+        empleado.setRoleType(roleType); //Hibernate detecta cambio en el elemento y modifica la base de datos.
 
         //Guardado en repositorio y devolucion de DTO
         return empleadoMapper.toDTO(empleado);

@@ -2,9 +2,10 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-
+@NoArgsConstructor
 @Getter
 public class ReservaDTORequest {
 
