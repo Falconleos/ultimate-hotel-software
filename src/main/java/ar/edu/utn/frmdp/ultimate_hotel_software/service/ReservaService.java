@@ -33,4 +33,6 @@ public interface ReservaService {
     List<ReservaDTOResponse> checkIndelDia();
 
     List<ReservaDTOResponse> reservasParaConfirmarAxDiasDelCheckIn(Integer x);
+
+    void eliminar(Long id);
 }

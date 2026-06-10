@@ -29,4 +29,6 @@ public interface HabitacionService {
 
     Integer cantidadHabitaciones();
 
+    List<HabitacionEntity>findAll();
+
 }

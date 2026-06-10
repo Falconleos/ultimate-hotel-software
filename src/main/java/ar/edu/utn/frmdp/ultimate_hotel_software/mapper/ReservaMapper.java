@@ -16,6 +16,7 @@ public interface ReservaMapper {
 
     @Mapping(target = "empleadoReservaDTOResponse", source = "empleadoEntity")
     @Mapping(target = "habitacionReservaDTOResponse", source = "habitacionEntity")
+    @Mapping(target = "comentario", source = "observacion")
     ReservaDTOResponse toDto(ReservaEntity reserva);
 
     ReservaEstadiaDTOResponse toDtoReservaEstadia(ReservaEntity reserva);

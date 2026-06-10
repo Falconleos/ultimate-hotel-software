@@ -96,7 +96,7 @@ public class ReservaServiceImpl implements ReservaService {
                 .map(ReservaEntity::getHabitacionEntity)
                 .toList();//encuentra las habitaciones con reservas en ese rango de fecha
 
-        return habitacionService.findByEstadoHabitacion(null).stream()//devuelve todas las habitaciones activas
+        return habitacionService.findAll().stream()//devuelve todas las habitaciones
                 .filter(h -> h.getCapacidad() >= pax)//filtra solo donde haya capacidad
                 .filter(h -> !habitacionesOcupadas.contains(h))//quita las habitaciones ocupadas
                 .sorted(Comparator.comparingDouble(HabitacionEntity::getPrecioPorNoche))//las ordena de menor a mayor por precio
@@ -185,6 +185,8 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
 
-
-
+    @Override
+    public void eliminar(Long id) {
+        reservaRepository.deleteById(id);
+    }
 }

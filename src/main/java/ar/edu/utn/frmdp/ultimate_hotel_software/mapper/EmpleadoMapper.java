@@ -26,6 +26,8 @@ public interface EmpleadoMapper {
     EmpleadoDTOResponse toDTO(EmpleadoEntity empleadoEntity);
 
     // Mapeo secundario para reservas
+    @Mapping(source = "datosPersona.nombre", target = "nombre")
+    @Mapping(source = "datosPersona.apellido", target = "apellido")
     EmpleadoReservaDTOResponse toDtoReservaEmpleado(EmpleadoEntity empleadoEntity);
 
 

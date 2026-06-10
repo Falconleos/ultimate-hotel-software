@@ -116,6 +116,11 @@ public class HabitacionServiceImpl implements HabitacionService {
     }
 
     @Override
+    public List<HabitacionEntity> findAll() {
+        return habitacionRepository.findAll();
+    }
+
+    @Override
     public Integer cantidadHabitaciones() {
         return habitacionRepository.findAll().size();
     }

@@ -14,6 +14,7 @@ public interface HabitacionMapper {
 
     HabitacionDTOResponse toResponse(HabitacionEntity habitacion);
 
+    @Mapping(source = "tipo", target = "tipoHabitacion")
     HabitacionReservaDTOResponse toDtoReserva(HabitacionEntity habitacion);
 
     @BeanMapping(
