@@ -25,13 +25,13 @@ public class ComentarioController {
     }
 
     //2.1. Listar comentarios por habitacion
-    @GetMapping("/{id}")
+    @GetMapping("/habitacion/{habitacionId}")
     public ResponseEntity<List<ComentarioDTOResponse>> getComentariosHabitacion(@PathVariable Long id) {
         return ResponseEntity.ok(comentarioService.getComentariosHabitacion(id));
     }
 
     //2.2. Listar comentarios por pasajero
-    @GetMapping("/{id}")
+    @GetMapping("/pasajero/{pasajeroId}")
     public ResponseEntity<List<ComentarioDTOResponse>> getComentariosPasajero(@PathVariable Long id) {
         return ResponseEntity.ok(comentarioService.getComentarioPasajero(id));
     }
