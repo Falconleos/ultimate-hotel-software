@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorDTOResponse> handleValidation(MethodArgumentNotValidException ex, WebRequest webRequest){
+    public ResponseEntity<ErrorDTOResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, WebRequest webRequest){
 
         String errores = ex.getBindingResult().getFieldErrors().stream()
                 .map(e -> e.getField() + ": " + e.getDefaultMessage())
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidIdException.class)
-    public ResponseEntity<ErrorDTOResponse>handleInvalidId(InvalidIdException ex,WebRequest webRequest){
+    public ResponseEntity<ErrorDTOResponse>handleInvalidIdException(InvalidIdException ex,WebRequest webRequest){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ConflictoDeEstadoException.class)
-    public ResponseEntity<ErrorDTOResponse>handleInvalidId(ConflictoDeEstadoException ex,WebRequest webRequest){
+    public ResponseEntity<ErrorDTOResponse>handleConflictoDeEstadoException(ConflictoDeEstadoException ex,WebRequest webRequest){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmpleadoNoEncontradoException.class)
-    public ResponseEntity<ErrorDTOResponse>handleInvalidId(EmpleadoNoEncontradoException ex,WebRequest webRequest){
+    public ResponseEntity<ErrorDTOResponse>handleEmpleadoNoEncontradoException(EmpleadoNoEncontradoException ex,WebRequest webRequest){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EstadiaInvalidaException.class)
-    public ResponseEntity<ErrorDTOResponse>handleInvalidId(EstadiaInvalidaException ex,WebRequest webRequest){
+    public ResponseEntity<ErrorDTOResponse>handleEstadiaInvalidaException(EstadiaInvalidaException ex,WebRequest webRequest){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(EstadiaNoEncontradaException.class)
-    public ResponseEntity<ErrorDTOResponse>handleInvalidId(EstadiaNoEncontradaException ex,WebRequest webRequest){
+    public ResponseEntity<ErrorDTOResponse>handleEstadiaNoEncontradaException(EstadiaNoEncontradaException ex,WebRequest webRequest){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(FechaInvalidaException.class)
-    public ResponseEntity<ErrorDTOResponse>handleInvalidId(FechaInvalidaException ex,WebRequest webRequest){
+    public ResponseEntity<ErrorDTOResponse>handleFechaInvalidaException(FechaInvalidaException ex,WebRequest webRequest){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
@@ -75,17 +75,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HabitacionNoDisponibleException.class)
-    public ResponseEntity<ErrorDTOResponse>handleInvalidId(HabitacionNoDisponibleException ex,WebRequest webRequest){
-        log.warn("la habitacion ya esta reservada para esa fecha");
-        ErrorDTOResponse error = new ErrorDTOResponse("la habitacion ya esta reservada para esa fecha", webRequest.getDescription(false));
-        log.warn("error {}, {}", error.getMensaje(),error.getDescripcion());
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body( error);
+    public ResponseEntity<ErrorDTOResponse>handleHabitacionNoDisponibleException(HabitacionNoDisponibleException ex,WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
 
     }
 
     @ExceptionHandler(PasajeroNoEncontradoException.class)
-    public ResponseEntity<ErrorDTOResponse>handleInvalidId(PasajeroNoEncontradoException ex,WebRequest webRequest){
+    public ResponseEntity<ErrorDTOResponse>handlePasajeroNoEncontradoException(PasajeroNoEncontradoException ex,WebRequest webRequest){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
@@ -93,13 +91,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RoleDuplicadoException.class)
-    public ResponseEntity<ErrorDTOResponse>handleInvalidId(RoleDuplicadoException ex,WebRequest webRequest){
+    public ResponseEntity<ErrorDTOResponse>handleRoleDuplicadoException(RoleDuplicadoException ex,WebRequest webRequest){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
 
     }
-
-
-
 }
