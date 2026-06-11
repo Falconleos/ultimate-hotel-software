@@ -91,15 +91,28 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public List<HabitacionEntity> habitacionesDisponibles(LocalDate checkIn, LocalDate checkOut, Integer pax) {
-        List<HabitacionEntity> habitacionesOcupadas = reservaRepository.findByActiva(true).stream()
-                .filter(r -> checkOut.isAfter(r.getCheckIn()) && checkIn.isBefore(r.getCheckOut()))
-                .map(ReservaEntity::getHabitacionEntity)
-                .toList();//encuentra las habitaciones con reservas en ese rango de fecha
+        // 1. Traemos todas las reservas
+        List<ReservaEntity> todasLasReservas = reservaRepository.findAll();
 
-        return habitacionService.findAll().stream()//devuelve todas las habitaciones
-                .filter(h -> h.getCapacidad() >= pax)//filtra solo donde haya capacidad
-                .filter(h -> !habitacionesOcupadas.contains(h))//quita las habitaciones ocupadas
-                .sorted(Comparator.comparingDouble(HabitacionEntity::getPrecioPorNoche))//las ordena de menor a mayor por precio
+        // 2. Definimos cuáles estados liberan la habitación
+        List<Long> idsOcupadas = todasLasReservas.stream()
+                // Filtramos solo las que tienen activa = true y NO están en los estados finales
+                .filter(r -> Boolean.TRUE.equals(r.getActiva()))
+                // Esto es redundante si el estado ya es correcto, pero es una capa extra de seguridad:
+                .filter(r -> r.getEstadoReserva() != EstadoReserva.CANCELADA &&
+                        r.getEstadoReserva() != EstadoReserva.AUSENTE &&
+                        r.getEstadoReserva() != EstadoReserva.INTERRUMPIDA &&
+                        r.getEstadoReserva() != EstadoReserva.CONCLUIDA)
+                // Filtro de fechas solapadas
+                .filter(r -> checkIn.isBefore(r.getCheckOut()) && checkOut.isAfter(r.getCheckIn()))
+                .map(r -> r.getHabitacionEntity().getId())
+                .distinct()
+                .toList();
+
+        // 3. Retornamos las habitaciones que cumplen capacidad y NO están en la lista de ocupadas
+        return habitacionService.findAll().stream()
+                .filter(h -> h.getCapacidad() >= pax)
+                .filter(h -> !idsOcupadas.contains(h.getId()))
                 .toList();
     }
 
