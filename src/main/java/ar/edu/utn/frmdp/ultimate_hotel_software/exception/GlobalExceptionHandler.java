@@ -75,10 +75,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HabitacionNoDisponibleException.class)
+<<<<<<< HEAD
     public ResponseEntity<ErrorDTOResponse>handleHabitacionNoDisponibleException(HabitacionNoDisponibleException ex,WebRequest webRequest){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+=======
+    public ResponseEntity<ErrorDTOResponse>handleInvalidId(HabitacionNoDisponibleException ex,WebRequest webRequest){
+        log.warn("la habitacion ya esta reservada para esa fecha");
+        ErrorDTOResponse error = new ErrorDTOResponse("la habitacion ya esta reservada para esa fecha", webRequest.getDescription(false));
+        log.warn("error {}, {}", error.getMensaje(),error.getDescripcion());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body( error);
+>>>>>>> feature-correcciones-excepciones
 
     }
 

@@ -1,15 +1,18 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
 
 import java.time.LocalDateTime;
+
+import lombok.*;
+
+
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
 @Builder
 @Schema(description = "DTO utilizado para mostrar informacion de los errores")
+@Getter
 public class ErrorDTOResponse {
     @Schema(description = "Sello de tiempo del error")
     private LocalDateTime timeStamp;
