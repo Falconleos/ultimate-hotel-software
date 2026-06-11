@@ -1,7 +1,10 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public class ErrorDTOResponse {
 
     private LocalDateTime timeStamp;

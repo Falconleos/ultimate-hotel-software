@@ -118,7 +118,7 @@ public class EstadiaServiceImpl implements EstadiaService {
             }
             if(habitacion.getEstado().equals(EstadoHabitacion.MANTENIMIENTO) ||
                habitacion.getEstado().equals(EstadoHabitacion.OCUPADA)){
-                throw new EstadiaInvalidaException("Habitacion aun no está disponible por " + habitacion.getEstado());
+                throw new EstadiaInvalidaException("check in imposible porque la habitacion "+ habitacion.getNumero() +" está "+ habitacion.getEstado());
             }
             if(!empleado.getActivo()){
                 throw new EstadiaInvalidaException("El empleado no está activo");

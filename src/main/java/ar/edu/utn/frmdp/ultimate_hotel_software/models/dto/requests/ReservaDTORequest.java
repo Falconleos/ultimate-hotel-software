@@ -3,6 +3,7 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 @NoArgsConstructor

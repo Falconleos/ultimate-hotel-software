@@ -4,9 +4,9 @@ spring:
 
   # 1. CONFIGURACIÓN DE LA BASE DE DATOS (MySQL)
   datasource:
-    url: jdbc:mysql://localhost:3306/hotel_db?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=true
-    username: root
-    password: root
+    url: jdbc:mysql://172.16.1.64:3306/hotel_db?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false
+    username: bdd1
+    password: bdd1
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   # 2. CONFIGURACIÓN DE ORM / HIBERNATE
