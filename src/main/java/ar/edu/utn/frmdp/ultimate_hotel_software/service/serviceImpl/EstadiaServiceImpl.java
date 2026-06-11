@@ -34,12 +34,12 @@ import java.util.stream.Collectors;
 public class EstadiaServiceImpl implements EstadiaService {
 
         private final EmpleadoService empleadoService;
-        private EstadiaRepository estadiaRepository;
-        private EstadiaMapper estadiaMapper;
+        private final EstadiaRepository estadiaRepository;
+        private final EstadiaMapper estadiaMapper;
 
-        private ReservaServiceImpl reservaService;
-        private HabitacionServiceImpl habitacionService;
-        private PasajeroServiceImpl pasajeroService;
+        private final ReservaServiceImpl reservaService;
+        private final HabitacionServiceImpl habitacionService;
+        private final PasajeroServiceImpl pasajeroService;
 
         @Override
         public List<EstadiaDTOResponse> listar(Boolean activo) {

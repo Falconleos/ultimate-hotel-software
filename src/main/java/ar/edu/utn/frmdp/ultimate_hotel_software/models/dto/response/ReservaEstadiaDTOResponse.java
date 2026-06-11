@@ -17,5 +17,5 @@ public class ReservaEstadiaDTOResponse {
     private LocalDate checkOut;
     private Integer cantidadPax;
     private String comentario;
-
+    private Integer numeroHabitacion;
 }
