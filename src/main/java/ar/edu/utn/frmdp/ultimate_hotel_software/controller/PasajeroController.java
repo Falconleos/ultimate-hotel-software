@@ -31,7 +31,7 @@ public class PasajeroController {
 
     //3. Crear pasajero
     @PostMapping
-    public ResponseEntity<PasajeroDTOResponse> createPasajero(@RequestParam PasajeroDTORequest pasajeroDTORequest) {
+    public ResponseEntity<PasajeroDTOResponse> createPasajero(@RequestBody PasajeroDTORequest pasajeroDTORequest) {
         return ResponseEntity.ok(pasajeroService.createPasajero(pasajeroDTORequest));
     }
 
@@ -44,7 +44,7 @@ public class PasajeroController {
     
     //5. Actualizar pasajero
     @PutMapping
-    public ResponseEntity<PasajeroDTOResponse> updatePasajero(@PathVariable Long id,@RequestParam PasajeroDTORequest pasajeroDTORequest) {
+    public ResponseEntity<PasajeroDTOResponse> updatePasajero(@PathVariable Long id,@RequestBody PasajeroDTORequest pasajeroDTORequest) {
         return ResponseEntity.ok(pasajeroService.updatePasajero(id, pasajeroDTORequest));
     }
 }
