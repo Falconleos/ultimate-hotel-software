@@ -22,7 +22,6 @@ public class PasajeroServiceImpl implements PasajeroService {
 
     private final PasajeroRepository pasajeroRepository;
     private final PasajeroMapper pasajeroMapper;
-    private final ComentarioService comentarioService;
 
     //1. Busqueda de pasajero
     //1.1 Devuelve entidad

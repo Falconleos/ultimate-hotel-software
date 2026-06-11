@@ -3,6 +3,7 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.controller;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ComentarioDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ComentarioDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.ComentarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,31 +27,31 @@ public class ComentarioController {
 
     //2.1. Listar comentarios por habitacion
     @GetMapping("/habitacion/{habitacionId}")
-    public ResponseEntity<List<ComentarioDTOResponse>> getComentariosHabitacion(@PathVariable Long id) {
-        return ResponseEntity.ok(comentarioService.getComentariosHabitacion(id));
+    public ResponseEntity<List<ComentarioDTOResponse>> getComentariosHabitacion(@PathVariable Long habitacionId) {
+        return ResponseEntity.ok(comentarioService.getComentariosHabitacion(habitacionId));
     }
 
     //2.2. Listar comentarios por pasajero
     @GetMapping("/pasajero/{pasajeroId}")
-    public ResponseEntity<List<ComentarioDTOResponse>> getComentariosPasajero(@PathVariable Long id) {
-        return ResponseEntity.ok(comentarioService.getComentarioPasajero(id));
+    public ResponseEntity<List<ComentarioDTOResponse>> getComentariosPasajero(@PathVariable Long pasajeroId) {
+        return ResponseEntity.ok(comentarioService.getComentarioPasajero(pasajeroId));
     }
 
     //3. Crear comentario
-    @PostMapping
-    public ResponseEntity<ComentarioDTOResponse> createComentario(@PathVariable Long id, @RequestParam ComentarioDTORequest comentarioDTORequest) {
+    @PostMapping("/{id}")
+    public ResponseEntity<ComentarioDTOResponse> createComentario(@PathVariable Long id, @RequestBody @Valid ComentarioDTORequest comentarioDTORequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(comentarioService.createComentario(id, comentarioDTORequest));
     }
 
     //4. Eliminar comentario
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComentario(@PathVariable Long id) {
         comentarioService.deleteComentario(id);
         return ResponseEntity.noContent().build();
     }
 
     //5. Actualizar comentario
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<ComentarioDTOResponse> updateComentario(@PathVariable Long id, @RequestBody ComentarioDTORequest comentarioDTORequest) {
         return ResponseEntity.ok(comentarioService.updateComentario(id, comentarioDTORequest));
     }

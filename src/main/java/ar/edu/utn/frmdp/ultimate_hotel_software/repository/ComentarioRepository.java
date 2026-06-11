@@ -15,11 +15,11 @@ public interface ComentarioRepository extends JpaRepository<ComentarioEntity, Lo
     @Query("SELECT c FROM ComentarioEntity c WHERE c.estadia.id = :estadiaId")
     List<ComentarioEntity> findByEstadiaId(@Param("estadiaId") Long estadiaId);
 
-    // 2. Buscar comentarios uniendo la estadía (evita conflictos de nombres de propiedad)
-    @Query("SELECT c FROM ComentarioEntity c JOIN c.estadia e WHERE e.id = :pasajeroId")
+    // 2. Filtrar por Pasajero (Navegación: Comentario -> Estadia -> PasajeroEntity)
+    @Query("SELECT c FROM ComentarioEntity c JOIN c.estadia e JOIN e.pasajeroEntity p WHERE p.id = :pasajeroId")
     List<ComentarioEntity> findByEstadiaPasajeroEntityId(@Param("pasajeroId") Long pasajeroId);
 
     // 3. Buscar comentarios uniendo la estadía para la habitación
-    @Query("SELECT c FROM ComentarioEntity c JOIN c.estadia e WHERE e.id = :habitacionId")
+    @Query("SELECT c FROM ComentarioEntity c JOIN c.estadia e JOIN e.reservaEntity r JOIN r.habitacionEntity h WHERE h.id = :habitacionId")
     List<ComentarioEntity> findByEstadiaReservaHabitacionEntityId(@Param("habitacionId") Long habitacionId);
 }

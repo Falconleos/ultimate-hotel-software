@@ -91,16 +91,24 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public List<HabitacionEntity> habitacionesDisponibles(LocalDate checkIn, LocalDate checkOut, Integer pax) {
-        List<HabitacionEntity> habitacionesOcupadas = reservaRepository.findByActiva(true).stream()
-                .filter(r -> checkOut.isAfter(r.getCheckIn()) && checkIn.isBefore(r.getCheckOut()))
-                .map(ReservaEntity::getHabitacionEntity)
-                .toList();//encuentra las habitaciones con reservas en ese rango de fecha
+        // 1. Obtener todas las reservas activas
+        List<ReservaEntity> reservasActivas = reservaRepository.findByActiva(true);
 
-        return habitacionService.findAll().stream()//devuelve todas las habitaciones
-                .filter(h -> h.getCapacidad() >= pax)//filtra solo donde haya capacidad
-                .filter(h -> !habitacionesOcupadas.contains(h))//quita las habitaciones ocupadas
-                .sorted(Comparator.comparingDouble(HabitacionEntity::getPrecioPorNoche))//las ordena de menor a mayor por precio
+        // 2. Filtrar solo las que BLOQUEAN la habitación (que no estén canceladas)
+        List<Long> idsOcupadas = reservasActivas.stream()
+                .filter(r -> r.getEstadoReserva() != EstadoReserva.CANCELADA) // IMPORTANTE
+                .filter(r -> checkOut.isAfter(r.getCheckIn()) && checkIn.isBefore(r.getCheckOut()))
+                .map(r -> r.getHabitacionEntity().getId())
                 .toList();
+
+        List<HabitacionEntity> todas = habitacionService.findAll();
+
+        List<HabitacionEntity> disponibles = todas.stream()
+                .filter(h -> h.getCapacidad() >= pax)
+                .filter(h -> !idsOcupadas.contains(h.getId()))
+                .toList();
+
+        return disponibles;
     }
 
     @Override

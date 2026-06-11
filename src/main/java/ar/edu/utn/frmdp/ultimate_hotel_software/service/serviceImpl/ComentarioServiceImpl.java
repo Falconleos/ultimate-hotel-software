@@ -9,6 +9,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.ComentarioRepository;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.ComentarioService;
 import jakarta.persistence.Id;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,9 @@ import java.util.List;
 
 public class ComentarioServiceImpl implements ComentarioService {
 
-    private ComentarioRepository comentarioRepository;
-    private ComentarioMapper comentarioMapper;
-    private EstadiaServiceImpl estadiaService;
+    private final ComentarioRepository comentarioRepository;
+    private final ComentarioMapper comentarioMapper;
+    private final EstadiaServiceImpl estadiaService;
 
     //1.1. Buscar comentario por id
     @Override
@@ -53,6 +54,7 @@ public class ComentarioServiceImpl implements ComentarioService {
 
     //3. Crear comentario
     @Override
+    @Transactional
     public ComentarioDTOResponse createComentario(Long estadia_id, ComentarioDTORequest comentarioDTORequest) {
 
         //Busca estadia para agregar comentario
@@ -74,6 +76,7 @@ public class ComentarioServiceImpl implements ComentarioService {
 
     //5. Actualizar comentario
     @Override
+    @Transactional
     public ComentarioDTOResponse updateComentario(Long id, ComentarioDTORequest comentarioDTORequest) {
         //Buscar entidad a modificar
         ComentarioEntity comentarioEntity = findEntityById(id);
