@@ -26,7 +26,7 @@ public class EmpleadoDTOResponse {
     @Schema(description = "DNI del empleado")
     private String dni;
     @Schema(description = "Email del empleado")
-    private String Email;
+    private String email;
     @Schema(description = "Telefono del empleado")
     private String telefono;
 

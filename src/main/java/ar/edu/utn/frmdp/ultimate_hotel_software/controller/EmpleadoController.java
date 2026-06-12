@@ -5,6 +5,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EmpleadoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/empleados")
 @RequiredArgsConstructor
+@Tag(
+        name = "Empleados",
+        description = "Operaciones relacionadas con la gestión de empleados"
+)
 
 public class EmpleadoController {
 

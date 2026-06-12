@@ -4,6 +4,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.HabitacionDT
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.HabitacionUpdateDTO;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.HabitacionDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.HabitacionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/habitaciones")
 @RequiredArgsConstructor
+@Tag(
+        name = "Habitaciones",
+        description = "Operaciones relacionadas con la gestión de habitaciones"
+)
+
 public class HabitacionController {
 
     private final HabitacionService habitacionService;

@@ -6,6 +6,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ReservaDTORe
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.CancelacionReservaDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ReservaDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.ReservaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,6 +20,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/reservas")
 @RequiredArgsConstructor
+@Tag(
+        name = "Reservas",
+        description = "Operaciones relacionadas con la gestión de reservas"
+)
 public class ReservaController {
 
     private final ReservaService reservaService;
