@@ -39,6 +39,8 @@ public class ReservaEntity {
     @JoinColumn(name = "habitacion_id")
     private HabitacionEntity habitacionEntity;
 
+    private Double total;
+
 
     @OneToOne(mappedBy = "reservaEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private CancelacionReservaEntity cancelacion;

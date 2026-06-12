@@ -1,5 +1,6 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.InvalidIdException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.ComentarioMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.ComentarioEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.EstadiaEntity;
@@ -19,9 +20,9 @@ import java.util.List;
 
 public class ComentarioServiceImpl implements ComentarioService {
 
-    private ComentarioRepository comentarioRepository;
-    private ComentarioMapper comentarioMapper;
-    private EstadiaServiceImpl estadiaService;
+    private final ComentarioRepository comentarioRepository;
+    private final ComentarioMapper comentarioMapper;
+    private final EstadiaServiceImpl estadiaService;
 
     //1.1. Buscar comentario por id
     @Override
@@ -32,7 +33,7 @@ public class ComentarioServiceImpl implements ComentarioService {
     //1.2. Buscar comentario entidad por id
     public ComentarioEntity findEntityById(Long id) {
         return comentarioRepository.findById(id)
-                .orElseThrow( ()->new RuntimeException() );
+                .orElseThrow( ()->new InvalidIdException("Id de comentario invalido") );
     }
 
     //2.1. Listar comentarios por habitacion

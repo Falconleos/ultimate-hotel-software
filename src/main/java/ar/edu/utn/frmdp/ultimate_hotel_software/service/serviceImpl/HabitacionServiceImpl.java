@@ -2,6 +2,7 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoHabitacion;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.HabitacionDuplicadaException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.InvalidIdException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.HabitacionMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.HabitacionEntity;
@@ -11,11 +12,10 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.HabitacionDT
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.HabitacionRepository;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.HabitacionService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-@Slf4j
+
 @Service
 @RequiredArgsConstructor
 public class HabitacionServiceImpl implements HabitacionService {
@@ -27,8 +27,7 @@ public class HabitacionServiceImpl implements HabitacionService {
     public HabitacionDTOResponse save(HabitacionDTORequest dto) {
 
         if (habitacionRepository.findByNumero(dto.getNumero()).isPresent()) {
-            log.warn("Habitacion duplicada con el numero {}", dto.getNumero() );
-            throw new RuntimeException("Ya existe una habitación con ese número");
+            throw new HabitacionDuplicadaException("Ya existe una habitación con ese número");
         }
 
         HabitacionEntity habitacion = habitacionMapper.toEntity(dto);
@@ -45,7 +44,7 @@ public class HabitacionServiceImpl implements HabitacionService {
 
         HabitacionEntity habitacion = habitacionRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Habitación no encontrada"));
+                        new InvalidIdException("Habitación no encontrada"));
 
         return habitacionMapper.toResponse(habitacion);
     }
@@ -55,7 +54,7 @@ public class HabitacionServiceImpl implements HabitacionService {
 
         HabitacionEntity habitacion = habitacionRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Habitación no encontrada"));
+                        new InvalidIdException("Habitación no encontrada"));
 
         habitacionRepository.delete(habitacion);
     }
@@ -65,7 +64,7 @@ public class HabitacionServiceImpl implements HabitacionService {
 
         HabitacionEntity habitacion = habitacionRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Habitación no encontrada"));
+                        new InvalidIdException("Habitación no encontrada"));
 
         habitacionMapper.updateHabitacionFromDto(dto, habitacion);
 
@@ -85,7 +84,7 @@ public class HabitacionServiceImpl implements HabitacionService {
 
         HabitacionEntity habitacion = habitacionRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Habitación no encontrada"));
+                        new InvalidIdException("Habitación no encontrada"));
 
         habitacion.setEstado(EstadoHabitacion.MANTENIMIENTO);
 
@@ -110,7 +109,7 @@ public class HabitacionServiceImpl implements HabitacionService {
 
         return habitacionRepository.findById(id)
                 .orElseThrow(() ->
-                        new InvalidIdException("id de habitacion invalido"));
+                        new InvalidIdException("Habitación no encontrada"));
     }
 
     @Override

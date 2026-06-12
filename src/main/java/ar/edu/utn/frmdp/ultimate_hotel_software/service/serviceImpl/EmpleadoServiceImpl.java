@@ -29,7 +29,6 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     private final EmpleadoRepository empleadoRepository;
     private final EmpleadoMapper empleadoMapper;
-    private final ComentarioService comentarioService;
     private final RoleService roleService;
 
     //1. Busqueda de empleado

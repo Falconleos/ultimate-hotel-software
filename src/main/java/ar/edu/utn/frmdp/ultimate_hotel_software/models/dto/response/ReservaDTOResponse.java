@@ -19,6 +19,7 @@ public class ReservaDTOResponse {
     private LocalDate checkIn;
     @Schema(description = "Fecha de checkout de la reserva")
     private LocalDate checkOut;
+    private Double total;
     @Schema(description = "Cantidad de pasajeros de la reserva", example = "4")
     private Integer cantidadPax;
     @Schema(description = "Estado de la reserva", example = "Confirmada")

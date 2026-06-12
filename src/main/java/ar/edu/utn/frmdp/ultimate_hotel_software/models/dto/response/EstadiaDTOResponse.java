@@ -10,6 +10,7 @@ import lombok.*;
 @Builder
 @Schema(description = "DTO utilizado para mostrar estadias")
 public class EstadiaDTOResponse {
+    private Long id;
 
     @Schema(description = "Informacion de la reserva realizada")
 

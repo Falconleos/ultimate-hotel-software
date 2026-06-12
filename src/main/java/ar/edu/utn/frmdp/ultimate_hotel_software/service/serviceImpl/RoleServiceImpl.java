@@ -2,6 +2,7 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.EmpleadoNoEncontradoException;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.InvalidNameException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.RoleDuplicadoException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.Role;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.RoleRequestDto;
@@ -61,6 +62,6 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findEntityByName(RoleType name) {
         return roleRepository.findByName(name)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + name));
+                .orElseThrow(() -> new InvalidNameException("Rol no encontrado: " + name));
     }
 }
