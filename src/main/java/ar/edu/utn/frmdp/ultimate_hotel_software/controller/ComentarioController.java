@@ -3,6 +3,7 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.controller;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ComentarioDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ComentarioDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.ComentarioService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/comentarios")
 @RequiredArgsConstructor
-
+@Tag(
+        name = "Comentarios",
+        description = "Operaciones relacionadas con la gestión de comentarios"
+)
 public class ComentarioController {
 
     private final ComentarioService comentarioService;
