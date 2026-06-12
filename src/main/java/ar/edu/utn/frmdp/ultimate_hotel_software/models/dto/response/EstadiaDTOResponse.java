@@ -8,6 +8,7 @@ import lombok.*;
 @Setter
 @Builder
 public class EstadiaDTOResponse {
+    private Long id;
 
     private ReservaEstadiaDTOResponse reservaEstadiaDTOResponse;
     private PasajeroDTOResponse pasajeroDTOResponse;

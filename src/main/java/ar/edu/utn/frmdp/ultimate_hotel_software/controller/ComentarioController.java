@@ -37,20 +37,20 @@ public class ComentarioController {
     }
 
     //3. Crear comentario
-    @PostMapping
-    public ResponseEntity<ComentarioDTOResponse> createComentario(@PathVariable Long id, @RequestParam ComentarioDTORequest comentarioDTORequest) {
+    @PostMapping("/{id}")
+    public ResponseEntity<ComentarioDTOResponse> createComentario(@PathVariable Long id, @RequestBody ComentarioDTORequest comentarioDTORequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(comentarioService.createComentario(id, comentarioDTORequest));
     }
 
     //4. Eliminar comentario
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComentario(@PathVariable Long id) {
         comentarioService.deleteComentario(id);
         return ResponseEntity.noContent().build();
     }
 
     //5. Actualizar comentario
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<ComentarioDTOResponse> updateComentario(@PathVariable Long id, @RequestBody ComentarioDTORequest comentarioDTORequest) {
         return ResponseEntity.ok(comentarioService.updateComentario(id, comentarioDTORequest));
     }

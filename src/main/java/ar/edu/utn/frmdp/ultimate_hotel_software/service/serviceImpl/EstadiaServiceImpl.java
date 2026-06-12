@@ -76,12 +76,7 @@ public class EstadiaServiceImpl implements EstadiaService {
                 estadia.setEstado(EstadoEstadia.EN_CURSO);
                 estadia.setPasajeroEntity(pasajero);
                 estadia.setEmpleadoEntity(empleadoCheckIn);
-                    Long cantidadNoches = ChronoUnit.DAYS.between(
-                            reserva.getCheckIn(),
-                            reserva.getCheckOut()
-                    );
-                    Double total = cantidadNoches * habitacion.getPrecioPorNoche();
-                estadia.setTotal(total);
+                estadia.setTotal(reserva.getTotal());
                 estadia.setActiva(true);
 
             EstadiaEntity estadiaGuardada = estadiaRepository.save(estadia);
@@ -122,6 +117,14 @@ public class EstadiaServiceImpl implements EstadiaService {
             }
             if(!empleado.getActivo()){
                 throw new EstadiaInvalidaException("El empleado no está activo");
+            }
+
+            if(reserva.getCheckIn().isBefore(LocalDate.now())){
+                throw new FechaInvalidaException("El ingreso solo se permite el dia del checkin reservado");
+            }
+
+            if(reserva.getCheckIn().isAfter(LocalDate.now())){
+                throw new FechaInvalidaException("El ingreso solo se permite el dia del checkin reservado");
             }
 
         }

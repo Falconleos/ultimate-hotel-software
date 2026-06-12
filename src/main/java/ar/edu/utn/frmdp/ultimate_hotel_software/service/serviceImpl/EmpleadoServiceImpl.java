@@ -2,6 +2,7 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.InvalidIdException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EmpleadoMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.Role;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
@@ -28,7 +29,6 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     private final EmpleadoRepository empleadoRepository;
     private final EmpleadoMapper empleadoMapper;
-    private final ComentarioService comentarioService;
     private final RoleService roleService;
 
     //1. Busqueda de empleado
@@ -36,7 +36,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Override
     public EmpleadoEntity findEntityById(Long id) {
         return empleadoRepository.findById(id)
-                .orElseThrow( ()->new RuntimeException() );
+                .orElseThrow( ()->new InvalidIdException("Id de empleado invalido") );
     }
 
     //1.2 Devuelve DTOResponse

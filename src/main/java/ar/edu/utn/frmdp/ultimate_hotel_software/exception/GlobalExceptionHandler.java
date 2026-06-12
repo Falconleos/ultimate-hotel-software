@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConflictoDeEstadoException.class)
     public ResponseEntity<ErrorDTOResponse>handleInvalidId(ConflictoDeEstadoException ex,WebRequest webRequest){
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
 
     }
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EstadiaInvalidaException.class)
     public ResponseEntity<ErrorDTOResponse>handleInvalidId(EstadiaInvalidaException ex,WebRequest webRequest){
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
 
     }
@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FechaInvalidaException.class)
     public ResponseEntity<ErrorDTOResponse>handleInvalidId(FechaInvalidaException ex,WebRequest webRequest){
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
 
     }
@@ -76,7 +76,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HabitacionNoDisponibleException.class)
     public ResponseEntity<ErrorDTOResponse>handleInvalidId(HabitacionNoDisponibleException ex,WebRequest webRequest){
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
 
     }
@@ -92,7 +92,31 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RoleDuplicadoException.class)
     public ResponseEntity<ErrorDTOResponse>handleInvalidId(RoleDuplicadoException ex,WebRequest webRequest){
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
+    @ExceptionHandler(InvalidNameException.class)
+    public ResponseEntity<ErrorDTOResponse>handleInvalidId(InvalidNameException ex,WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
+    @ExceptionHandler(HabitacionDuplicadaException.class)
+    public ResponseEntity<ErrorDTOResponse>handleInvalidId(HabitacionDuplicadaException ex, WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDTOResponse>handleInvalidId(Exception ex, WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
 
     }

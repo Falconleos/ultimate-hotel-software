@@ -15,6 +15,7 @@ public class ReservaDTOResponse {
     private Long id;
     private LocalDate checkIn;
     private LocalDate checkOut;
+    private Double total;
     private Integer cantidadPax;
     private EstadoReserva estadoReserva;
     private String nombre;
