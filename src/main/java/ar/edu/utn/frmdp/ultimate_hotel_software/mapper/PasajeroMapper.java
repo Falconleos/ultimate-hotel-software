@@ -11,7 +11,7 @@ public interface PasajeroMapper {
 
     @Mapping(target = "datosPersona", source = "pasajeroDTORequest.datosPersonalesDTORequest")
     PasajeroEntity toEntity(PasajeroDTORequest pasajeroDTORequest);
-    @Mapping(target = "datosPersonalesEntity", source = "datosPersona")
+    @Mapping(target = "datosPersonalesDTOResponse", source = "datosPersona")
     PasajeroDTOResponse toDTO(PasajeroEntity pasajeroEntity);
 
 

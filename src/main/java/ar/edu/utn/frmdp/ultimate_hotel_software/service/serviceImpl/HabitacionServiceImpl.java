@@ -29,6 +29,7 @@ public class HabitacionServiceImpl implements HabitacionService {
         if (habitacionRepository.findByNumero(dto.getNumero()).isPresent()) {
             log.warn("Habitacion duplicada con el numero {}", dto.getNumero() );
             throw new InvalidIdException("Ya existe una habitación con ese número");
+
         }
 
         HabitacionEntity habitacion = habitacionMapper.toEntity(dto);

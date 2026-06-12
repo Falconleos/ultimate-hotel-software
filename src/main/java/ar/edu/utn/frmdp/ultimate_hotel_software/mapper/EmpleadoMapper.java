@@ -13,6 +13,7 @@ import org.mapstruct.Mapping;
 public interface EmpleadoMapper {
 
     // 1. De DTO Request a Entidad (Hacia la Base de Datos)
+    @Mapping(target = "roles", ignore = true)
     @Mapping(target = "datosPersona", source = "empleadoDTORequest.datosPersonalesDTORequest")
     EmpleadoEntity toEntity(EmpleadoDTORequest empleadoDTORequest);
 

@@ -4,7 +4,11 @@ spring:
 
   # 1. CONFIGURACIÓN DE LA BASE DE DATOS (MySQL)
   datasource:
+<<<<<<< HEAD
     url: jdbc:mysql://172.16.1.64:3306/hotel_db?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=true
+=======
+    url: jdbc:mysql://172.16.1.64:3306/hotel_db?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false
+>>>>>>> developer
     username: bdd1
     password: bdd1
     driver-class-name: com.mysql.cj.jdbc.Driver
