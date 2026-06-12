@@ -22,7 +22,5 @@ public class PasajeroDTOResponse {
     )
     private Long id;
     @Schema(description = "Datos personales del pasajero", example = "Nombre, apellido, telefono")
-
     private DatosPersonalesDTOResponse datosPersonalesDTOResponse;
-
 }

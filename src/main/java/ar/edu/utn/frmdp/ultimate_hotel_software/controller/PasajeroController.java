@@ -3,6 +3,7 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.controller;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.PasajeroDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.PasajeroDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.PasajeroService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/pasajeros")
 @RequiredArgsConstructor
+@Tag(
+        name = "Pasajeros",
+        description = "Operaciones relacionadas con la gestión de pasajeros"
+)
 
 public class PasajeroController {
 

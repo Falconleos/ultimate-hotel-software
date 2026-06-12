@@ -5,6 +5,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EstadiaDTORe
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EstadiaDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EmpleadoService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EstadiaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,6 +20,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/estadias")
 @RequiredArgsConstructor
+@Tag(
+        name = "Estadias",
+        description = "Operaciones relacionadas con la gestión de estadias"
+)
 public class EstadiaController {
 
     private final EstadiaService estadiaService;
