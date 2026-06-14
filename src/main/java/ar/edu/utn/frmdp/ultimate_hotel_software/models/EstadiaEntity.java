@@ -40,7 +40,7 @@ public class EstadiaEntity {
     private Boolean activa;
 
     @OneToMany(mappedBy = "estadia", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ComentarioEntity>comentarios;
+    private List<ComentarioEntity>comentarios; //OK
 
     @PrePersist
     public void OnCreate(){
