@@ -41,5 +41,5 @@ public class EmpleadoDTORequest {
     @Schema(description = "Contraseña del empleado")
     private String password;
 
-    Set<RoleType> roles;
+
 }
