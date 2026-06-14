@@ -7,12 +7,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Setter
+@Builder
 @Schema(description = "DTO utilizado para crear empleados")
 public class EmpleadoDTORequest {
 
@@ -34,8 +36,8 @@ public class EmpleadoDTORequest {
     @Schema(description = "Nombre de usuario del empleado", example = "nordico94")
     private String usuario;
 
-    @NotBlank(message = "La constraseña es obligatoria")
-    @Size(min = 3, max=50, message = "La contraseña debe tener entre 3 y 50 caracteres")
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 3, max = 255, message = "La contraseña debe tener entre 3 y 255 caracteres")
     @Schema(description = "Contraseña del empleado")
     private String password;
 

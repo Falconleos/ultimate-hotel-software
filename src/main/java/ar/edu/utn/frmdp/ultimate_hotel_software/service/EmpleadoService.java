@@ -21,4 +21,5 @@ public interface EmpleadoService {
     EmpleadoDTOResponse cambiarTurno(Long id, Turno turno);
     EmpleadoDTOResponse cambiarCargo(Long id, RoleType roleType);
     EmpleadoDTOResponse cambiarEstado (Long id);
+    EmpleadoEntity findByUsuario(String usuario);
 }

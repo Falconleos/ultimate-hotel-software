@@ -2,6 +2,7 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.EmpleadoNoEncontradoException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.InvalidIdException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EmpleadoMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.Role;
@@ -10,11 +11,10 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoDTOR
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.DatosPersonalesEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.EmpleadoRepository;
-import ar.edu.utn.frmdp.ultimate_hotel_software.repository.RoleRepository;
-import ar.edu.utn.frmdp.ultimate_hotel_software.service.ComentarioService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EmpleadoService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.RoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -153,5 +153,11 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
         //Guardado en repositorio y devolucion de DTO
         return empleadoMapper.toDTO(empleado);
+    }
+
+    @Override
+    public EmpleadoEntity findByUsuario(String usuario) {
+        return empleadoRepository.findByUsuario(usuario)
+                .orElseThrow( ()->new UsernameNotFoundException("Usuario no encontrado"));
     }
 }
