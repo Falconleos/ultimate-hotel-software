@@ -41,6 +41,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Permitimos libre acceso a los endpoints de autenticación (login, registro)
                         .requestMatchers("/api/auth/**").permitAll()
+                        //swagger
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         // Cualquier otra petición al backend del hotel requerirá estar autenticado
                         .anyRequest().authenticated()
                 )
