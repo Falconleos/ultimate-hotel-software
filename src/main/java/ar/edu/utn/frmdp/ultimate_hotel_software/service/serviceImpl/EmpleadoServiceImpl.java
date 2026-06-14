@@ -60,12 +60,14 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         //Mapeo a entidad
         EmpleadoEntity empleadoEntity = empleadoMapper.toEntity(empleadoDTORequest);
 
-        // Usamos el RoleService para obtener las entidades reales
-        Set<Role> rolesPersistentes = empleadoDTORequest.getRoles().stream()
-                .map(nombreRol -> roleService.findEntityByName(nombreRol))
-                .collect(Collectors.toSet());
+        /// 2. BUSCAR EL ROL BASADO EN EL roleType UNICO
+        // Buscamos la entidad Role en la base de datos usando el RoleService
+        Role rolEncontrado = roleService.findEntityByName(empleadoDTORequest.getRoleType());
 
-        // 3. Asignar los roles obtenidos (que ya tienen ID y no causarán error de duplicidad)
+        // 3. Asignar los roles obtenidos (que ya tienen ID)
+        Set<Role> rolesPersistentes = Set.of(rolEncontrado);
+
+        // 4. Asignar los roles a la entidad
         empleadoEntity.setRoles(rolesPersistentes);
 
         //Agregado de informacion
