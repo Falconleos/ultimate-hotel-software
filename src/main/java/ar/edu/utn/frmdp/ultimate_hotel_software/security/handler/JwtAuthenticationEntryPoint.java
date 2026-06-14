@@ -23,17 +23,17 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        // 3. Escribimos a mano el cuerpo del JSON que viajará al frontend
+        // 3. Escribimos el cuerpo del JSON que viajará al frontend
         String jsonResponse = String.format(
                 "{\n" +
                         "  \"status\": 401,\n" +
-                        "  \"error\": \"Unauthorized\",\n" +
+                        "  \"error\": \"No autorizado\",\n" +
                         "  \"message\": \"%s\"\n" +
                         "}",
                 authException.getMessage()
         );
 
-        // 4. Mandamos el JSON de vuelta al auto que quiso entrar sin permiso
+        // 4. enviamos el JSON de vuelta al auto que quiso entrar sin permiso
         response.getWriter().write(jsonResponse);
     }
 

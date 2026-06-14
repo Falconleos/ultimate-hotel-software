@@ -4,11 +4,13 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ErrorDTOResp
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.Map;
 import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
@@ -111,6 +113,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
 
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Map<String, String>> handleBadCredentials(BadCredentialsException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of(
+                        "error", "Autenticación fallida",
+                        "message", "Usuario o contraseña incorrectos"
+                ));
     }
 
     @ExceptionHandler(Exception.class)
