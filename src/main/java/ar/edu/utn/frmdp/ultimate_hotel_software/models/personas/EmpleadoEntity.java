@@ -37,7 +37,7 @@ public class EmpleadoEntity {
     @Column(nullable = false, unique = true, length = 50)
     private String usuario;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 254)
     private String password;
 
     @Column(nullable = false, updatable = false)
@@ -46,7 +46,7 @@ public class EmpleadoEntity {
     @Column(nullable = false)
     private Boolean activo;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "empleado_roles",
             joinColumns = @JoinColumn(name = "empleado_id"),
