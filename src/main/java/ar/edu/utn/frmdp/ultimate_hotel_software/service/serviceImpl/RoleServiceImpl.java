@@ -64,4 +64,5 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findByName(name)
                 .orElseThrow(() -> new InvalidNameException("Rol no encontrado: " + name));
     }
+
 }

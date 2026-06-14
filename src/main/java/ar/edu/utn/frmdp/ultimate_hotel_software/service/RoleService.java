@@ -16,4 +16,5 @@ public interface RoleService {
     RoleResponseDto create(RoleRequestDto request);
 
     Role findEntityByName(RoleType name);
+
 }
