@@ -7,6 +7,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.ReservaEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.CancelacionReservaDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ReservaDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.CancelacionReservaDTOResponse;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.HabitacionDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ReservaDTOResponse;
 
 import java.time.LocalDate;
@@ -35,4 +36,7 @@ public interface ReservaService {
     List<ReservaDTOResponse> reservasParaConfirmarAxDiasDelCheckIn(Integer x);
 
     void eliminar(Long id);
-}
+
+    List<HabitacionDTOResponse>mostrarHabitacionesDisponibles(LocalDate checkIn, LocalDate checkOut, Integer pax);
+
+    }

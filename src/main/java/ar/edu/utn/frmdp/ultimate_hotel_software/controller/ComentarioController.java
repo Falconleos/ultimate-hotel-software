@@ -30,14 +30,14 @@ public class ComentarioController {
 
     //2.1. Listar comentarios por habitacion
     @GetMapping("/habitacion/{habitacionId}")
-    public ResponseEntity<List<ComentarioDTOResponse>> getComentariosHabitacion(@PathVariable Long id) {
-        return ResponseEntity.ok(comentarioService.getComentariosHabitacion(id));
+    public ResponseEntity<List<ComentarioDTOResponse>> getComentariosHabitacion(@PathVariable Long habitacionId) {
+        return ResponseEntity.ok(comentarioService.getComentariosHabitacion(habitacionId));
     }
 
     //2.2. Listar comentarios por pasajero
     @GetMapping("/pasajero/{pasajeroId}")
-    public ResponseEntity<List<ComentarioDTOResponse>> getComentariosPasajero(@PathVariable Long id) {
-        return ResponseEntity.ok(comentarioService.getComentarioPasajero(id));
+    public ResponseEntity<List<ComentarioDTOResponse>> getComentariosPasajero(@PathVariable Long pasajeroId) {
+        return ResponseEntity.ok(comentarioService.getComentarioPasajero(pasajeroId));
     }
 
     //3. Crear comentario

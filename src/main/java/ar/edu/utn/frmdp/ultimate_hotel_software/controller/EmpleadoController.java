@@ -60,7 +60,7 @@ public class EmpleadoController {
 
     //5.2. Cambiar turno
     @PatchMapping("/{id}/turno")
-    public ResponseEntity<EmpleadoDTOResponse> cambairTurno(@PathVariable Long id, @RequestParam Turno turno) {
+    public ResponseEntity<EmpleadoDTOResponse> cambiarTurno(@PathVariable Long id, @RequestParam Turno turno) {
         return ResponseEntity.ok(empleadoService.cambiarTurno(id, turno));
     }
 

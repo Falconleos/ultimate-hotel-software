@@ -4,13 +4,16 @@ spring:
 
   # 1. CONFIGURACIÓN DE LA BASE DE DATOS (MySQL)
   datasource:
-    url: jdbc:mysql://localhost:3306/hotel_db?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false
+    # Agregamos allowPublicKeyRetrieval=true para evitar el error de autenticación
+    url: jdbc:mysql://localhost:3306/hotel_db?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   # 2. CONFIGURACIÓN DE ORM / HIBERNATE
   jpa:
+    # Nota: En versiones recientes de Hibernate, 'MySQLDialect' suele ser detectado automáticamente.
+    # Si notas errores, puedes intentar quitar esta línea para que Spring la autodetecte.
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
@@ -18,18 +21,21 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        # Optimización importante para versiones modernas de Hibernate
+        jdbc:
+          lob:
+            non_contextual_creation: true
 
-# 3. CONFIGURACIÓN PERSONALIZADA PARA JWT (Mapea con tu @Value)
+# 3. CONFIGURACIÓN PERSONALIZADA PARA JWT
 jwt:
-  # Clave secreta segura de 256 bits codificada en Base64
   secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-  # Tiempo de vida del token (15 minutos usando formato Duration de Spring Boot 3/4)
   expiration: PT60M
 
-  # 4. CONFIGURACIÓN DE OPENAPI / SWAGGER
-  springdoc:
-    api-docs:
-      path: /v3/api-docs
-    swagger-ui:
-      path: /swagger-ui.html
-      enabled: true
+# 4. CONFIGURACIÓN DE OPENAPI / SWAGGER
+# Nota: La indentación debe estar alineada a la raíz, no dentro de 'spring'
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true

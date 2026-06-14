@@ -60,14 +60,14 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         //Mapeo a entidad
         EmpleadoEntity empleadoEntity = empleadoMapper.toEntity(empleadoDTORequest);
 
-        /// 2. BUSCAR EL ROL BASADO EN EL roleType UNICO
-        // Buscamos la entidad Role en la base de datos usando el RoleService
+        // 2. BUSCAR EL ROL BASADO EN EL ROLETYPE DEL REQUEST
+        // Obtenemos el RoleType del DTO y buscamos la entidad Role correspondiente
         Role rolEncontrado = roleService.findEntityByName(empleadoDTORequest.getRoleType());
 
-        // 3. Asignar los roles obtenidos (que ya tienen ID)
+        // 3. Crear el Set y agregar el rol encontrado
         Set<Role> rolesPersistentes = Set.of(rolEncontrado);
 
-        // 4. Asignar los roles a la entidad
+        // 4. Asignar el Set a la entidad
         empleadoEntity.setRoles(rolesPersistentes);
 
         //Agregado de informacion

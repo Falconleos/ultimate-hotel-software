@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Schema(description = "Informacion necesaria para modificar una habitacion")
 public class HabitacionUpdateDTO {
-    @Schema(description = "Numero de habitacion dentro del hotel", example = "203")
+    @Schema(description = "Tipo de habitacion dentro del hotel", example = "DOBLE")
     private TipoHabitacion tipo;
 
     @Positive(message = "La capacidad debe ser positiva")

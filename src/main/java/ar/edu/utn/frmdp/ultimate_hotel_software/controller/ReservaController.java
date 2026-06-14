@@ -4,6 +4,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.HabitacionEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.CancelacionReservaDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ReservaDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.CancelacionReservaDTOResponse;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.HabitacionDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ReservaDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.ReservaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,11 +42,11 @@ public class ReservaController {
     }
 
     @GetMapping("/disponibilidad")
-    public ResponseEntity<List<HabitacionEntity>> habitacionesDisponibles(
+    public ResponseEntity<List<HabitacionDTOResponse>> habitacionesDisponibles(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkIn,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOut,
             @RequestParam Integer pax) {
-        List<HabitacionEntity> disponibles = reservaService.habitacionesDisponibles(checkIn, checkOut, pax);
+        List<HabitacionDTOResponse> disponibles = reservaService.mostrarHabitacionesDisponibles(checkIn, checkOut, pax);
         return ResponseEntity.ok(disponibles);
     }
 

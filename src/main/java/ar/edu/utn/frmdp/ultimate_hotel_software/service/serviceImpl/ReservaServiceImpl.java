@@ -6,6 +6,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.exception.FechaInvalidaException
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.HabitacionNoDisponibleException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.InvalidIdException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.CancelacionReservaMapper;
+import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.HabitacionMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.ReservaMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.CancelacionReservaEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.HabitacionEntity;
@@ -13,6 +14,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.ReservaEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.CancelacionReservaDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ReservaDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.CancelacionReservaDTOResponse;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.HabitacionDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ReservaDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.ReservaRepository;
@@ -41,6 +43,7 @@ public class ReservaServiceImpl implements ReservaService {
 
     private final CancelacionReservaServiceImpl cancelacionReservaService;
     private final HabitacionService habitacionService;
+    private final HabitacionMapper habitacionMapper;
     private final EmpleadoService empleadoService;
 
 
@@ -113,11 +116,18 @@ public class ReservaServiceImpl implements ReservaService {
                 .map(r -> r.getHabitacionEntity().getId())
                 .distinct()
                 .toList();
-
         // 3. Retornamos las habitaciones que cumplen capacidad y NO están en la lista de ocupadas
         return habitacionService.findAll().stream()
                 .filter(h -> h.getCapacidad() >= pax)
                 .filter(h -> !idsOcupadas.contains(h.getId()))
+                .toList();
+    }
+
+    @Override
+    public List<HabitacionDTOResponse>mostrarHabitacionesDisponibles(LocalDate checkIn,LocalDate checkOut,Integer pax){
+        List<HabitacionEntity>habitaciones = habitacionesDisponibles(checkIn,checkOut,pax);
+        return habitaciones.stream()
+                .map(habitacionMapper::toResponse)
                 .toList();
     }
 
