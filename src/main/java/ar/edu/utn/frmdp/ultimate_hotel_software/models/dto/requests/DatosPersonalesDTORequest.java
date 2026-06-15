@@ -37,6 +37,13 @@ public class DatosPersonalesDTORequest {
     private String email;
 
     @NotBlank(message = "El telefono es obligatorio")
-    @Schema(description = "Telefono del la persona")
+    @Pattern(
+            regexp = "^[0-9]{10}$",
+            message = "El telefono debe contener 10 digitos numericos"
+    )
+    @Schema(
+            description = "Telefono de la persona",
+            example = "2235123456"
+    )
     private String telefono;
 }

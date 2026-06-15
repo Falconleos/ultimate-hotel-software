@@ -1,6 +1,8 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.InvalidIdException;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.PasajeroDuplicadoException;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.PasajeroNoEncontradoException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.PasajeroMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ComentarioDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.PasajeroDTORequest;
@@ -29,12 +31,13 @@ public class PasajeroServiceImpl implements PasajeroService {
     @Override
     public PasajeroEntity findEntityById(Long id) {
         return pasajeroRepository.findById(id)
-                .orElseThrow( ()->new InvalidIdException("Id de pasajero invalido") );
+                .orElseThrow( ()->new PasajeroNoEncontradoException("Pasajero no encontrado") );
     }
 
     //1.2 Devuelve DTOResponse
     @Override
     public PasajeroDTOResponse getById (Long id) {
+
         return pasajeroMapper.toDTO(findEntityById(id));
     }
 
@@ -50,6 +53,18 @@ public class PasajeroServiceImpl implements PasajeroService {
     @Override
     public PasajeroDTOResponse createPasajero(PasajeroDTORequest pasajeroDTORequest) {
 
+        if (pasajeroRepository.existsByDatosPersonaEmail(
+                pasajeroDTORequest.getDatosPersonalesDTORequest().getEmail())) {
+            throw new PasajeroDuplicadoException("Ya existe un pasajero con ese email");
+        }
+        if (pasajeroRepository.existsByDatosPersonaDni(pasajeroDTORequest.getDatosPersonalesDTORequest().getDni())) {
+            throw new PasajeroDuplicadoException("Ya existe un pasajero con ese email");
+        }
+        if (pasajeroRepository.existsByDatosPersonaTelefono(
+                pasajeroDTORequest.getDatosPersonalesDTORequest().getTelefono())) {
+
+            throw new PasajeroDuplicadoException("Ya existe un pasajero con ese telefono");
+        }
         //Mapeo a entidad
         PasajeroEntity pasajeroEntity = pasajeroMapper.toEntity(pasajeroDTORequest);
 
@@ -74,6 +89,23 @@ public class PasajeroServiceImpl implements PasajeroService {
         PasajeroEntity pasajero = findEntityById(id);
         DatosPersonalesEntity datosPersonalesEntity = pasajero.getDatosPersona();
 
+        //Validaciones solo contra otros registros, nunca contra sí mismo
+        if (!datosPersonalesEntity.getDni().equals(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getDni()) &&
+                pasajeroRepository.existsByDatosPersonaDni(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getDni())) {
+            throw new PasajeroDuplicadoException("DNI ya en uso");
+        }
+
+        if (!datosPersonalesEntity.getEmail().equals(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getEmail()) &&
+                pasajeroRepository.existsByDatosPersonaEmail(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getEmail())) {
+            throw new PasajeroDuplicadoException("Email ya en uso");
+        }
+
+        if (!datosPersonalesEntity.getTelefono().equals(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getTelefono()) &&
+                pasajeroRepository.existsByDatosPersonaTelefono(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getTelefono())) {
+            throw new PasajeroDuplicadoException("Telefono ya en uso");
+        }
+
+        //Modificaciones
         datosPersonalesEntity.setNombre(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getNombre());
         datosPersonalesEntity.setApellido(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getApellido());
         datosPersonalesEntity.setEmail(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getEmail());
