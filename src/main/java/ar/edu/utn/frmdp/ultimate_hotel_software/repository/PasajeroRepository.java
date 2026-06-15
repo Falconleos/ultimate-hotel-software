@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface PasajeroRepository extends JpaRepository <PasajeroEntity, Long> {
 
     Optional<PasajeroEntity> findByDatosPersonaDni(String dni); //Buscar pasajero por DNI
-    boolean existsByDatosPersonalesDni(String dni);
-    boolean existsByDatosPersonalesEmail(String email);
-    boolean existsByDatosPersonalesTelefono(String telefono);
+    boolean existsByDatosPersonaDni(String dni);
+    boolean existsByDatosPersonaEmail(String email);
+    boolean existsByDatosPersonaTelefono(String telefono);
 }

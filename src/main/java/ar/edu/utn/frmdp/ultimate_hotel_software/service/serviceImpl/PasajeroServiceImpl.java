@@ -53,14 +53,14 @@ public class PasajeroServiceImpl implements PasajeroService {
     @Override
     public PasajeroDTOResponse createPasajero(PasajeroDTORequest pasajeroDTORequest) {
 
-        if (pasajeroRepository.existsByDatosPersonalesEmail(
+        if (pasajeroRepository.existsByDatosPersonaEmail(
                 pasajeroDTORequest.getDatosPersonalesDTORequest().getEmail())) {
             throw new PasajeroDuplicadoException("Ya existe un pasajero con ese email");
         }
-        if (pasajeroRepository.existsByDatosPersonalesDni(pasajeroDTORequest.getDatosPersonalesDTORequest().getDni())) {
+        if (pasajeroRepository.existsByDatosPersonaDni(pasajeroDTORequest.getDatosPersonalesDTORequest().getDni())) {
             throw new PasajeroDuplicadoException("Ya existe un pasajero con ese email");
         }
-        if (pasajeroRepository.existsByDatosPersonalesTelefono(
+        if (pasajeroRepository.existsByDatosPersonaTelefono(
                 pasajeroDTORequest.getDatosPersonalesDTORequest().getTelefono())) {
 
             throw new PasajeroDuplicadoException("Ya existe un pasajero con ese telefono");
@@ -91,17 +91,17 @@ public class PasajeroServiceImpl implements PasajeroService {
 
         //Validaciones solo contra otros registros, nunca contra sí mismo
         if (!datosPersonalesEntity.getDni().equals(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getDni()) &&
-                pasajeroRepository.existsByDatosPersonalesDni(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getDni())) {
+                pasajeroRepository.existsByDatosPersonaDni(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getDni())) {
             throw new PasajeroDuplicadoException("DNI ya en uso");
         }
 
         if (!datosPersonalesEntity.getEmail().equals(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getEmail()) &&
-                pasajeroRepository.existsByDatosPersonalesEmail(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getEmail())) {
+                pasajeroRepository.existsByDatosPersonaEmail(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getEmail())) {
             throw new PasajeroDuplicadoException("Email ya en uso");
         }
 
         if (!datosPersonalesEntity.getTelefono().equals(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getTelefono()) &&
-                pasajeroRepository.existsByDatosPersonalesTelefono(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getTelefono())) {
+                pasajeroRepository.existsByDatosPersonaTelefono(pasajeroDTORequestModificado.getDatosPersonalesDTORequest().getTelefono())) {
             throw new PasajeroDuplicadoException("Telefono ya en uso");
         }
 
