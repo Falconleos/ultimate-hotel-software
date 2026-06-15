@@ -43,8 +43,6 @@ public class GlobalExceptionHandler {
 
     }
 
-
-
     @ExceptionHandler(EstadiaInvalidaException.class)
     public ResponseEntity<ErrorDTOResponse>handleEstadiaInvalidaException(EstadiaInvalidaException ex,WebRequest webRequest){
 
@@ -143,7 +141,6 @@ public class GlobalExceptionHandler {
     }
 
 
-
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleBadCredentials(BadCredentialsException ex) {
         return ResponseEntity
@@ -154,6 +151,15 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    @ExceptionHandler(ComentarioNoEncontradoException.class)
+    public ResponseEntity<ErrorDTOResponse>handleComentarioNoEncontradoException(ComentarioNoEncontradoException ex, WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
+    /// /////////////////////
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDTOResponse>handleInvalidId(Exception ex, WebRequest webRequest){
 
@@ -161,4 +167,6 @@ public class GlobalExceptionHandler {
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
 
     }
+
+
 }

@@ -1,6 +1,7 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.InvalidIdException;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.PasajeroNoEncontradoException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.PasajeroMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.ComentarioDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.PasajeroDTORequest;
@@ -29,12 +30,13 @@ public class PasajeroServiceImpl implements PasajeroService {
     @Override
     public PasajeroEntity findEntityById(Long id) {
         return pasajeroRepository.findById(id)
-                .orElseThrow( ()->new InvalidIdException("Id de pasajero invalido") );
+                .orElseThrow( ()->new PasajeroNoEncontradoException("Pasajero no encontrado") );
     }
 
     //1.2 Devuelve DTOResponse
     @Override
     public PasajeroDTOResponse getById (Long id) {
+
         return pasajeroMapper.toDTO(findEntityById(id));
     }
 

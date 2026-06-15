@@ -1,6 +1,8 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.ComentarioNoEncontradoException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.exception.InvalidIdException;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.PasajeroNoEncontradoException;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.ComentarioMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.ComentarioEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.EstadiaEntity;
@@ -9,6 +11,7 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.ComentarioDT
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.ComentarioRepository;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.ComentarioService;
+import ar.edu.utn.frmdp.ultimate_hotel_software.service.PasajeroService;
 import jakarta.persistence.Id;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ public class ComentarioServiceImpl implements ComentarioService {
     private final ComentarioRepository comentarioRepository;
     private final ComentarioMapper comentarioMapper;
     private final EstadiaServiceImpl estadiaService;
+    private final PasajeroService pasajeroService;
 
     //1.1. Buscar comentario por id
     @Override
@@ -33,12 +37,15 @@ public class ComentarioServiceImpl implements ComentarioService {
     //1.2. Buscar comentario entidad por id
     public ComentarioEntity findEntityById(Long id) {
         return comentarioRepository.findById(id)
-                .orElseThrow( ()->new InvalidIdException("Id de comentario invalido") );
+                .orElseThrow( ()->new ComentarioNoEncontradoException("Comentario") );
     }
 
     //2.1. Listar comentarios por habitacion
     @Override
     public List<ComentarioDTOResponse> getComentariosHabitacion(Long habitacion_id) {
+
+//       estadiaService..findById(habitacion_id)
+//                .orElseThrow(() -> new PasajeroNoEncontradoException("Habitacion no encontrada exception");
         return comentarioRepository.findByEstadiaReservaHabitacionEntityId(habitacion_id).stream()
                 .map(comentarioMapper::toDTO)
                 .toList();
@@ -47,6 +54,9 @@ public class ComentarioServiceImpl implements ComentarioService {
     //2.2. Listar comentarios por pasajero
     @Override
     public List<ComentarioDTOResponse> getComentarioPasajero(Long pasajero_id) {
+
+        pasajeroService.findEntityById(pasajero_id); //Valida existencia de pasajero
+
         return comentarioRepository.findByEstadiaPasajeroEntityId(pasajero_id).stream()
                 .map(comentarioMapper::toDTO)
                 .toList();
