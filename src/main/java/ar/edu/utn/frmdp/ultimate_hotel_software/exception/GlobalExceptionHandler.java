@@ -43,13 +43,7 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(EmpleadoNoEncontradoException.class)
-    public ResponseEntity<ErrorDTOResponse>handleEmpleadoNoEncontradoException(EmpleadoNoEncontradoException ex,WebRequest webRequest){
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
-
-    }
 
     @ExceptionHandler(EstadiaInvalidaException.class)
     public ResponseEntity<ErrorDTOResponse>handleEstadiaInvalidaException(EstadiaInvalidaException ex,WebRequest webRequest){
@@ -76,6 +70,14 @@ public class GlobalExceptionHandler {
 
     }
 
+    //Excepciones de habitaciones
+    @ExceptionHandler(HabitacionNoEncontradaException.class)
+    public ResponseEntity<ErrorDTOResponse>handleHabitacionNoEncontradaException(HabitacionNoEncontradaException ex,WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+    }
+
     @ExceptionHandler(HabitacionNoDisponibleException.class)
     public ResponseEntity<ErrorDTOResponse>handleHabitacionNoDisponibleException(HabitacionNoDisponibleException ex,WebRequest webRequest){
 
@@ -83,8 +85,41 @@ public class GlobalExceptionHandler {
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
     }
 
+    @ExceptionHandler(HabitacionEnUsoException.class)
+    public ResponseEntity<ErrorDTOResponse>handleHabitacionEnUsoException(HabitacionEnUsoException ex,WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+    }
+
+    @ExceptionHandler(HabitacionDuplicadaException.class)
+    public ResponseEntity<ErrorDTOResponse>handleInvalidId(HabitacionDuplicadaException ex, WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
+    @ExceptionHandler(HabitacionYaEnMantenimientoException.class)
+    public ResponseEntity<ErrorDTOResponse>handleHabitacionYaEnMantenimientoException(HabitacionYaEnMantenimientoException ex,WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+    }
+
+
+
+    //Excepciones de personas
     @ExceptionHandler(PasajeroNoEncontradoException.class)
     public ResponseEntity<ErrorDTOResponse>handlePasajeroNoEncontradoException(PasajeroNoEncontradoException ex,WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
+    @ExceptionHandler(EmpleadoNoEncontradoException.class)
+    public ResponseEntity<ErrorDTOResponse>handleEmpleadoNoEncontradoException(EmpleadoNoEncontradoException ex,WebRequest webRequest){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
@@ -107,13 +142,7 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(HabitacionDuplicadaException.class)
-    public ResponseEntity<ErrorDTOResponse>handleInvalidId(HabitacionDuplicadaException ex, WebRequest webRequest){
 
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
-
-    }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleBadCredentials(BadCredentialsException ex) {

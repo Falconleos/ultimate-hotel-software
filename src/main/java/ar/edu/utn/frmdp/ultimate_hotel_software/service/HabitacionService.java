@@ -5,11 +5,14 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.HabitacionEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.HabitacionDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.HabitacionUpdateDTO;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.HabitacionDTOResponse;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface HabitacionService {
     HabitacionEntity findEntityById(Long id);
+
+    List<HabitacionDTOResponse> getAll();
 
     List<HabitacionEntity> findByEstadoHabitacion(EstadoHabitacion estadoHabitacion);
 
