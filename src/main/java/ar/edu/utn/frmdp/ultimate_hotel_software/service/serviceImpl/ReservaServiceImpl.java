@@ -1,10 +1,7 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoReserva;
-import ar.edu.utn.frmdp.ultimate_hotel_software.exception.ConflictoDeEstadoException;
-import ar.edu.utn.frmdp.ultimate_hotel_software.exception.FechaInvalidaException;
-import ar.edu.utn.frmdp.ultimate_hotel_software.exception.HabitacionNoDisponibleException;
-import ar.edu.utn.frmdp.ultimate_hotel_software.exception.InvalidIdException;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.*;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.CancelacionReservaMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.HabitacionMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.ReservaMapper;
@@ -27,9 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -37,16 +32,27 @@ import java.util.List;
 public class ReservaServiceImpl implements ReservaService {
 
     private final ReservaRepository reservaRepository;
-
     private final ReservaMapper reservaMapper;
-    private final CancelacionReservaMapper cancelacionReservaMapper;
 
+    private final CancelacionReservaMapper cancelacionReservaMapper;
     private final CancelacionReservaServiceImpl cancelacionReservaService;
+
     private final HabitacionService habitacionService;
     private final HabitacionMapper habitacionMapper;
+
     private final EmpleadoService empleadoService;
 
 
+
+    //1. Busqueda por ID
+    //1.1. Devuelve entidad
+    @Override
+    public ReservaEntity findEntityById(Long id) {
+        return reservaRepository.findById(id)
+                .orElseThrow( ()->new ReservaNoEncontradaException("Reserva no encontrada"));
+    }
+
+    //2. Listar reservas activas y listar todas las reservas
     @Override
     public List<ReservaDTOResponse> listar(Boolean activa) {
         List<ReservaEntity>reservas;
@@ -61,6 +67,7 @@ public class ReservaServiceImpl implements ReservaService {
                 .toList();
     }
 
+    //3. Crear reserva
     @Override
     @Transactional
     public ReservaDTOResponse crearReserva(ReservaDTORequest request) {
@@ -91,12 +98,72 @@ public class ReservaServiceImpl implements ReservaService {
         return reservaMapper.toDto(reservaAlmacenada);
     }
 
+    //3.2. Crear cancelacion de reserva
     @Override
-    public ReservaEntity findEntityById(Long id) {
-        return reservaRepository.findById(id)
-                .orElseThrow( ()->new InvalidIdException("Id de reserva invalido"));
+    @Transactional
+    public CancelacionReservaDTOResponse cancelarReserva( CancelacionReservaDTORequest request) {
+
+        //1. Busco reserva existente
+        ReservaEntity reserva = findEntityById(request.getReserva_id());
+
+        //2. Valido estado de reserva existente
+        if (reserva.getEstadoReserva() == EstadoReserva.INGRESADA) {
+            throw new ConflictoDeEstadoReservaException("La reserva ya fue ingresada, solo puede interrumpir la estadía.");
+        }
+        if (reserva.getEstadoReserva() == EstadoReserva.AUSENTE) {
+            throw new ConflictoDeEstadoReservaException("No hace falta cancelar, ya se encuentra inactiva por ausencia.");
+        }
+        if (reserva.getEstadoReserva() == EstadoReserva.CONCLUIDA) {
+            throw new ConflictoDeEstadoReservaException("No se puede cancelar. Al concluir la estadía la reserva ya no está activa.");
+        }
+        if (reserva.getEstadoReserva() == EstadoReserva.CANCELADA) {
+            throw new ConflictoDeEstadoReservaException("No se puede cancelar. La reserva ya se encuentra cancelada.");
+        }
+
+        //3. Actualizo estado de reserva existente
+        reserva.setEstadoReserva(EstadoReserva.CANCELADA);
+        reserva.setActiva(false);
+        reservaRepository.save(reserva);
+
+        //4. Crear cancelacion de reserva
+        CancelacionReservaEntity cancelacion = new CancelacionReservaEntity();
+        cancelacion.setReservaEntity(reserva);
+        cancelacion.setMotivo(request.getMotivo());
+
+        CancelacionReservaEntity cancelacionGuardada = cancelacionReservaService.crear(cancelacion);
+
+        return cancelacionReservaMapper.toDto(cancelacionGuardada);
     }
 
+    //4. Eliminar reserva
+    @Override
+    public void eliminar(Long id) {
+
+        ReservaEntity reserva = findEntityById(id);
+        reservaRepository.delete(reserva);
+    }
+
+    //5. Actualizar reserva
+    //5.1. Actualizar reserva completa en repositorio
+    @Override
+    public void update(ReservaEntity reserva) {
+        reservaRepository.save(reserva);
+    }
+
+    //5.2. Actualizar estado de reserva de PENDIENTE a CONFIRMADA
+    @Override
+    @Transactional
+    public void confirmarReserva(Long id) {
+        ReservaEntity reserva = findEntityById(id);
+        if(reserva.getEstadoReserva() != EstadoReserva.PENDIENTE){
+            throw new ConflictoDeEstadoReservaException("Estado actual de reserva: " + reserva.getEstadoReserva() + ". Para confirmar el estado debe ser PENDIENTE");
+        }
+        reserva.setEstadoReserva(EstadoReserva.CONFIRMADA);
+        reservaRepository.save(reserva);
+    }
+
+    //6. Otras busquedas y listados
+    //6.1.1. Listar entidades de habitaciones disponibles segun fechas de CHECK-IN, CHECK-OUT y cantidad de pasajeros
     @Override
     public List<HabitacionEntity> habitacionesDisponibles(LocalDate checkIn, LocalDate checkOut, Integer pax) {
         // 1. Traemos todas las reservas
@@ -123,6 +190,7 @@ public class ReservaServiceImpl implements ReservaService {
                 .toList();
     }
 
+    //6.1.2. Listar DTOResponse de habitaciones disponibles segun fechas de CHECK-IN, CHECK-OUT y cantidad de pasajeros
     @Override
     public List<HabitacionDTOResponse>mostrarHabitacionesDisponibles(LocalDate checkIn,LocalDate checkOut,Integer pax){
         List<HabitacionEntity>habitaciones = habitacionesDisponibles(checkIn,checkOut,pax);
@@ -131,54 +199,27 @@ public class ReservaServiceImpl implements ReservaService {
                 .toList();
     }
 
+    //6.2. Listar reservas con CHECK-IN para el dia de hoy
     @Override
-    public void update(ReservaEntity reserva) {
-        reservaRepository.save(reserva);
+    public List<ReservaDTOResponse>checkIndelDia(){
+        return reservaRepository.findByActiva(true).stream()
+                .filter(r->r.getCheckIn().equals(LocalDate.now()))
+                .map(reservaMapper::toDto)
+                .toList();
     }
 
+    //6.3. Listar reservar ACTIVAS con estado PENDIENTE a X dias del CHECK-IN
     @Override
-    @Transactional
-    public void confirmarReserva(Long id) {
-        ReservaEntity reserva = findEntityById(id);
-        if(reserva.getEstadoReserva() != EstadoReserva.PENDIENTE){
-            throw new ConflictoDeEstadoException("No se puede confirmar ya que la reserva está " + reserva.getEstadoReserva());
-        }
-        reserva.setEstadoReserva(EstadoReserva.CONFIRMADA);
-        reservaRepository.save(reserva);
+    public List<ReservaDTOResponse>reservasParaConfirmarAxDiasDelCheckIn(Integer x){
+        return reservaRepository.findByActiva(true).stream()
+                .filter(r->r.getEstadoReserva().equals(EstadoReserva.PENDIENTE))
+                .filter(r -> LocalDate.now().plusDays(x).isEqual(r.getCheckIn()))
+                .map(reservaMapper::toDto)
+                .toList();
     }
 
-    @Override
-    @Transactional
-    public CancelacionReservaDTOResponse cancelarReserva( CancelacionReservaDTORequest request) {
-
-        ReservaEntity reserva = findEntityById(request.getReserva_id());
-
-        if (reserva.getEstadoReserva() == EstadoReserva.INGRESADA) {
-            throw new ConflictoDeEstadoException("La reserva ya fue ingresada, solo puede interrumpir la estadía.");
-        }
-        if (reserva.getEstadoReserva() == EstadoReserva.AUSENTE) {
-            throw new ConflictoDeEstadoException("No hace falta cancelar, ya se encuentra inactiva por ausencia.");
-        }
-        if (reserva.getEstadoReserva() == EstadoReserva.CONCLUIDA) {
-            throw new ConflictoDeEstadoException("Al concluir la estadía la reserva ya no está activa.");
-        }
-        if (reserva.getEstadoReserva() == EstadoReserva.CANCELADA) {
-            throw new ConflictoDeEstadoException("La reserva ya se encuentra cancelada.");
-        }
-
-        reserva.setEstadoReserva(EstadoReserva.CANCELADA);
-        reserva.setActiva(false);
-        reservaRepository.save(reserva);
-
-        CancelacionReservaEntity cancelacion = new CancelacionReservaEntity();
-            cancelacion.setReservaEntity(reserva);
-            cancelacion.setMotivo(request.getMotivo());
-
-        CancelacionReservaEntity cancelacionGuardada = cancelacionReservaService.crear(cancelacion);
-
-        return cancelacionReservaMapper.toDto(cancelacionGuardada);
-    }
-
+    //7. Procesamiento
+    //7.1. Determinar ausencia de reserva. Actualzia el estado de la reserva a AUSENTE y la pasa a reserva no activa
     @Override
     public void procesarAusenciaDeReservas() {
         LocalDate hoy = LocalDate.now();
@@ -193,28 +234,5 @@ public class ReservaServiceImpl implements ReservaService {
             reserva.setActiva(false);
             reservaRepository.save(reserva);
         }
-    }
-
-    @Override
-    public List<ReservaDTOResponse>checkIndelDia(){
-        return reservaRepository.findByActiva(true).stream()
-                .filter(r->r.getCheckIn().equals(LocalDate.now()))
-                .map(reservaMapper::toDto)
-                .toList();
-    }
-
-    @Override
-    public List<ReservaDTOResponse>reservasParaConfirmarAxDiasDelCheckIn(Integer x){
-        return reservaRepository.findByActiva(true).stream()
-                .filter(r->r.getEstadoReserva().equals(EstadoReserva.PENDIENTE))
-                .filter(r -> LocalDate.now().plusDays(x).isEqual(r.getCheckIn()))
-                .map(reservaMapper::toDto)
-                .toList();
-    }
-
-
-    @Override
-    public void eliminar(Long id) {
-        reservaRepository.deleteById(id);
     }
 }

@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -164,11 +163,11 @@ public class EstadiaServiceImpl implements EstadiaService {
 
         public void validacionesInterrupcion(EstadiaEntity estadia){
             if(estadia.getEstado().equals(EstadoEstadia.COMPLETADA)){
-                throw new ConflictoDeEstadoException("La estadía ya concluyó");
+                throw new ConflictoDeEstadoReservaException("La estadía ya concluyó");
             }else if (estadia.getPagada() == false){
-                throw new ConflictoDeEstadoException("Antes de interrumpir la estadía debe abonarse");
+                throw new ConflictoDeEstadoReservaException("Antes de interrumpir la estadía debe abonarse");
             }else if(estadia.getEstado().equals(EstadoEstadia.INTERRUMPIDA)){
-                throw new ConflictoDeEstadoException("La estadía ya fue interrumpida");
+                throw new ConflictoDeEstadoReservaException("La estadía ya fue interrumpida");
             }
         }
 
@@ -180,7 +179,7 @@ public class EstadiaServiceImpl implements EstadiaService {
 
             if(!checkIn.equals(LocalDate.now())){
                 if(estadia.getPagada()==true){
-                    throw new ConflictoDeEstadoException("La estadia ya esta pagada");
+                    throw new ConflictoDeEstadoReservaException("La estadia ya esta pagada");
                 }
             }
 
@@ -207,11 +206,11 @@ public class EstadiaServiceImpl implements EstadiaService {
 
         public void validacionesCheckOut(EstadiaEntity estadia){
             if(estadia.getReservaEntity().getCheckOut().isAfter(LocalDate.now()) ){
-                throw new ConflictoDeEstadoException("No se puede realizar el checkOut " +
+                throw new ConflictoDeEstadoReservaException("No se puede realizar el checkOut " +
                         "solo se puede interrumpir, por ser antes de tiempo");
             }
             if(estadia.getPagada()==false){
-                throw new ConflictoDeEstadoException("Antes del check out debe pagar la estadia");
+                throw new ConflictoDeEstadoReservaException("Antes del check out debe pagar la estadia");
             }
         }
 

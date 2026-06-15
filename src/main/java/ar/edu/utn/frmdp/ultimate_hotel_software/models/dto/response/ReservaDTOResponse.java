@@ -19,7 +19,6 @@ public class ReservaDTOResponse {
     private LocalDate checkIn;
     @Schema(description = "Fecha de checkout de la reserva")
     private LocalDate checkOut;
-    private Double total;
     @Schema(description = "Cantidad de pasajeros de la reserva", example = "4")
     private Integer cantidadPax;
     @Schema(description = "Estado de la reserva", example = "Confirmada")
@@ -31,13 +30,14 @@ public class ReservaDTOResponse {
     @Schema(description = "Telefono del pasajero que realizo la reserva")
     private String telefono;
     @Schema(description = "Observacion/comentario aclarando solicitudes del pasajero", example = "EL cliente solicita servicio de cantina")
-    private String comentario;
+    private String observacion;
 
     @Schema(description = "Informacion del empleado asignado a la reserva")
-
     private EmpleadoReservaDTOResponse empleadoReservaDTOResponse;
     @Schema(description = "Habitacion asignada a la reserva")
-
     private HabitacionReservaDTOResponse habitacionReservaDTOResponse;
+
+    @Schema(description = "Precio total de la reserva")
+    private Double total;
 
 }

@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Setter
 @Builder
 @Entity
+@Table(name = "reservas")
 public class ReservaEntity {
 
     @Id
@@ -40,7 +41,6 @@ public class ReservaEntity {
     private HabitacionEntity habitacionEntity;
 
     private Double total;
-
 
     @OneToOne(mappedBy = "reservaEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private CancelacionReservaEntity cancelacion;

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Schema(description = "DTO utilizado para mostrar los datos basicos de la reserva ")
 
 public class ReservaEstadiaDTOResponse {
-    @Schema(description = "Identificador unico de ", example = "1")
+    @Schema(description = "Identificador unico de la reserva ", example = "1")
     private Long id;
     @Schema(description = "Fecha de checkin de la reserva")
     private LocalDate checkIn;
@@ -23,7 +23,7 @@ public class ReservaEstadiaDTOResponse {
     @Schema(description = "Cantidad de pasajeros de la reserva", example = "4")
     private Integer cantidadPax;
     @Schema(description = "Observacion/comentario aclarando solicitudes del pasajero", example = "EL cliente solicita servicio de cantina")
-    private String comentario;
+    private String observacion;
     @Schema(description = "Numero de habitacion dentro del hotel", example = "203")
     private Integer numeroHabitacion;
 }
