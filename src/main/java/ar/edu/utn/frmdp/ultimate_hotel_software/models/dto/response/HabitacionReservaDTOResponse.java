@@ -12,9 +12,9 @@ import lombok.*;
 @Schema(description = "DTO utilizado para mostrar informacion basica de la habitacion")
 public class HabitacionReservaDTOResponse {
     @Schema(description = "Numero de habitacion dentro del hotel", example = "203")
-
     private Integer numero;
-    @Schema(description = "Tipo de habitacion", example = "Doble")
+    @Schema(description = "Tipo de habitacion", example = "DOBLE",
+            allowableValues = {"SIMPLE: Habitación individual", "DOBLE: Cama doble", "TRIPLE: Tres camas", "SUITE: Habitación Premium"})
     private TipoHabitacion tipoHabitacion;
 
 }

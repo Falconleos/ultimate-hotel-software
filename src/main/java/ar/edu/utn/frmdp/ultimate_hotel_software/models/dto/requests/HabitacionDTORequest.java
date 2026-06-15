@@ -19,16 +19,17 @@ public class HabitacionDTORequest {
     private Integer numero;
 
     @NotNull(message = "El tipo de la habitacion es obligatorio")
-    @Schema(description = "Tipo de habitacion", example = "Doble")
+    @Schema(description = "Tipo de habitacion", example = "DOBLE",
+    allowableValues = {"SIMPLE: Habitación individual", "DOBLE: Cama doble", "TRIPLE: Tres camas", "SUITE: Habitación Premium"})
     private TipoHabitacion tipo;
 
     @NotNull(message = "La capacidad es obligatoria")
     @Positive(message = "La capacidad debe ser positiva")
-    @Schema(description = "Cantidad de pasajeros por habitacion", example = "2 pasajeros")
+    @Schema(description = "Cantidad de pasajeros por habitacion", example = "2")
     private Integer capacidad;
 
     @NotNull(message = "El precio es obligatorio")
     @Positive(message = "El precio debe ser positivo")
-    @Schema(description = "Precio de la habitacion por noche", example = "USD$50")
+    @Schema(description = "Precio de la habitacion por noche", example = "50.0")
     private Double precioPorNoche;
 }

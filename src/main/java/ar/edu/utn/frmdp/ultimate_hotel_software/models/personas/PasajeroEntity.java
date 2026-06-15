@@ -24,9 +24,9 @@ public class PasajeroEntity {
     @Embedded
     private DatosPersonalesEntity datosPersona;
 
-    // REEMPLAZÁ ESTE BLOQUE EN PasajeroEntity.java
+
     @OneToMany(
-            mappedBy = "pasajeroEntity", // <-- Cambiado de "pasajero" a "pasajeroEntity"
+            mappedBy = "pasajeroEntity",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )

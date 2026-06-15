@@ -12,17 +12,19 @@ import lombok.NoArgsConstructor;
 @Getter
 @Schema(description = "Informacion necesaria para modificar una habitacion")
 public class HabitacionUpdateDTO {
-    @Schema(description = "Tipo de habitacion dentro del hotel", example = "DOBLE")
+    @Schema(description = "Tipo de habitacion", example = "DOBLE",
+            allowableValues = {"SIMPLE: Habitación individual", "DOBLE: Cama doble", "TRIPLE: Tres camas", "SUITE: Habitación Premium"})
     private TipoHabitacion tipo;
 
     @Positive(message = "La capacidad debe ser positiva")
-    @Schema(description = "Cantidad de pasajeros por habitacion", example = "2 pasajeros")
+    @Schema(description = "Cantidad de pasajeros por habitacion", example = "2")
     private Integer capacidad;
 
     @Positive(message = "El precio debe ser positivo")
-    @Schema(description = "Precio de la habitacion por noche", example = "USD$50")
+    @Schema(description = "Precio de la habitacion por noche", example = "50.0")
     private Double precioPorNoche;
 
-    @Schema(description = "Estado de la habitacion", example = "Ocupado")
+    @Schema(description = "Estado de la habitacion", example = "OCUPADA",
+            allowableValues = {"DISPONIBLE, OCUPADA, MANTENIMIENTO"})
     private EstadoHabitacion estado;
 }

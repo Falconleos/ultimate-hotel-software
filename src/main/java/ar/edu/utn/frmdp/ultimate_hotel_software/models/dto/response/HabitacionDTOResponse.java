@@ -16,12 +16,14 @@ public class HabitacionDTOResponse {
     private Long id;
     @Schema(description = "Numero de habitacion dentro del hotel", example = "203")
     private Integer numero;
-    @Schema(description = "Tipo de habitacion", example = "Doble")
+    @Schema(description = "Tipo de habitacion", example = "DOBLE",
+            allowableValues = {"SIMPLE: Habitación individual", "DOBLE: Cama doble", "TRIPLE: Tres camas", "SUITE: Habitación Premium"})
     private TipoHabitacion tipo;
-    @Schema(description = "Cantidad de pasajeros por habitacion", example = "2 pasajeros")
+    @Schema(description = "Cantidad de pasajeros por habitacion", example = "2")
     private Integer capacidad;
-    @Schema(description = "Precio de la habitacion por noche", example = "USD$50")
+    @Schema(description = "Precio de la habitacion por noche", example = "50.0")
     private Double precioPorNoche;
-    @Schema(description = "Estado de la habitacion", example = "Ocupado")
+    @Schema(description = "Estado de la habitacion", example = "OCUPADA",
+            allowableValues = {"DISPONIBLE, OCUPADA, MANTENIMIENTO"})
     private EstadoHabitacion estado;
 }

@@ -157,6 +157,8 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         return empleadoMapper.toDTO(empleado);
     }
 
+    //6. Otras busquedas
+    //6.1. Busqueda por atributo usuario
     @Override
     public EmpleadoEntity findByUsuario(String usuario) {
         return empleadoRepository.findByUsuario(usuario)
