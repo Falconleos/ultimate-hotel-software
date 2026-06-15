@@ -26,10 +26,10 @@ public class DatosPersonalesEntity {
     @Column(nullable = false, unique = true, updatable = false, length = 15)
     private String dni;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String email;
 
-    @Column(length = 15)
+    @Column(length = 15, unique = true)
     private String telefono;
 
 

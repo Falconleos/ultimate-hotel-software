@@ -116,6 +116,14 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(PasajeroDuplicadoException.class)
+    public ResponseEntity<ErrorDTOResponse>handlePasajeroDuplicadoException(PasajeroDuplicadoException ex,WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
     @ExceptionHandler(EmpleadoNoEncontradoException.class)
     public ResponseEntity<ErrorDTOResponse>handleEmpleadoNoEncontradoException(EmpleadoNoEncontradoException ex,WebRequest webRequest){
 

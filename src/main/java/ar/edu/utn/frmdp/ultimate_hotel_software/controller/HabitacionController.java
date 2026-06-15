@@ -70,7 +70,7 @@ public class HabitacionController {
             description = "Obtiene todas las habitaciones sin importar su estado"
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Listado obtenido correctamente"),
+            @ApiResponse(responseCode = "200", description = "Listado de habitaciones obtenido correctamente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @GetMapping
