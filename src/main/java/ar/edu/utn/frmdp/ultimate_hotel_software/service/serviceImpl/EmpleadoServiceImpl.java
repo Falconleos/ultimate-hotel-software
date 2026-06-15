@@ -11,10 +11,12 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoDTOR
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.DatosPersonalesEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.EmpleadoRepository;
+import ar.edu.utn.frmdp.ultimate_hotel_software.security.ApplicationConfig;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EmpleadoService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     private final EmpleadoRepository empleadoRepository;
     private final EmpleadoMapper empleadoMapper;
     private final RoleService roleService;
+    private final ApplicationConfig applicationConfig;
 
     //1. Busqueda de empleado
     //1.1 Devuelve entidad
@@ -73,6 +76,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         //Agregado de informacion
         empleadoEntity.setFechaIngreso(LocalDate.now());
         empleadoEntity.setActivo(true);
+        empleadoEntity.setPassword(applicationConfig.passwordEncoder().encode(empleadoEntity.getPassword()));
 
         //Guardado en base de datos
         return empleadoMapper.toDTO(empleadoRepository.save(empleadoEntity));

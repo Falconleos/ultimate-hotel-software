@@ -1,5 +1,6 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
+import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EmpleadoMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.LoginRequest;
@@ -10,8 +11,10 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.security.CustomUserDetails;
 import ar.edu.utn.frmdp.ultimate_hotel_software.security.jwt.JwtService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EmpleadoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,22 @@ public class AuthenticationService {
      * Lógica para registrar un nuevo usuario en el sistema del hotel.
      */
     public AuthenticationResponse register(EmpleadoDTORequest request) {
+
+        //VALIDACION SI QUIERE REGISTRAR UN ADMINISTRATIVO
+        //Y NO ES ADMINISTRATIVO LANZA UNA EXCEPCION
+
+        // Verificación de rol si el nuevo usuario es ADMINISTRATIVO
+        if (RoleType.ADMINISTRATIVO.equals(request.getRoleType())) {
+            var auth = SecurityContextHolder.getContext().getAuthentication();
+
+            // Verificamos si el usuario actual tiene el rol necesario
+            boolean isAdmin = auth.getAuthorities().stream()
+                    .anyMatch(r -> r.getAuthority().equals("ROLE_ADMINISTRATIVO"));
+
+            if (!isAdmin) {
+                throw new AccessDeniedException("Solo un administrador puede crear otro administrador.");
+            }
+        }
 
         request.setPassword(passwordEncoder.encode(request.getPassword()));
 
