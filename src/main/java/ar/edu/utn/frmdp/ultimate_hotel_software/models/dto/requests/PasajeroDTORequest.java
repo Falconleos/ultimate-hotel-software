@@ -5,9 +5,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Schema(description = "DTO utilizado para crear pasajeros")
 public class PasajeroDTORequest {
 
