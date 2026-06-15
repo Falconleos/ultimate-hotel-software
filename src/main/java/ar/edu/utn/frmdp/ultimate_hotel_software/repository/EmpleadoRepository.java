@@ -16,5 +16,7 @@ public interface EmpleadoRepository extends JpaRepository<EmpleadoEntity,Long> {
     List<EmpleadoEntity> findByActivoTrue ();
     List<EmpleadoEntity> findByActivoFalse ();
     Optional<EmpleadoEntity> findByUsuario(String usuario);
-
+    boolean existsByDatosPersonaDni(String dni);
+    boolean existsByDatosPersonaEmail(String email);
+    boolean existsByDatosPersonaTelefono(String telefono);
 }

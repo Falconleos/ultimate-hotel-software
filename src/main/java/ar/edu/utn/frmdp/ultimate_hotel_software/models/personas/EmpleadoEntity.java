@@ -32,7 +32,7 @@ public class EmpleadoEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RoleType roleType;
+    private RoleType roleType;  //Rol principal operativo
 
     @Column(nullable = false, unique = true, length = 50)
     private String usuario;
@@ -52,5 +52,5 @@ public class EmpleadoEntity {
             joinColumns = @JoinColumn(name = "empleado_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    private Set<Role> roles; //Permisso totales del empleado
 }
