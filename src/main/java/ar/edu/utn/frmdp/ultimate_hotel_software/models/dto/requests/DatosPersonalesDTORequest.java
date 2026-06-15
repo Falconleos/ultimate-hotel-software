@@ -2,11 +2,13 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Schema(description = "DTO utilizado para crear datos personales de las personas")
 public class DatosPersonalesDTORequest {

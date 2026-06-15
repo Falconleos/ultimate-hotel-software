@@ -46,7 +46,7 @@ public class EmpleadoEntity {
     @Column(nullable = false)
     private Boolean activo;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "empleado_roles",
             joinColumns = @JoinColumn(name = "empleado_id"),

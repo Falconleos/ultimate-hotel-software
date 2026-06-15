@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -86,6 +87,7 @@ public class EmpleadoController {
             @ApiResponse(responseCode = "409", description = "Empleado con datos duplicados en base de datos"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @PostMapping
     public ResponseEntity<EmpleadoDTOResponse> createEmpleado (@RequestBody EmpleadoDTORequest empleadoDTORequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(empleadoService.createEmpleado(empleadoDTORequest));
