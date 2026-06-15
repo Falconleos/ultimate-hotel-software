@@ -132,6 +132,32 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(EmpleadoDuplicadoExcepcion.class)
+    public ResponseEntity<ErrorDTOResponse>handleEmpleadoDuplicadoExcepcion(EmpleadoDuplicadoExcepcion ex,WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
+    @ExceptionHandler(ActualizacionEmpleadoInvalidaExcepcion.class)
+    public ResponseEntity<ErrorDTOResponse>handleEmpleadoDuplicadoExcepcion(ActualizacionEmpleadoInvalidaExcepcion ex,WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
+
+    @ExceptionHandler(RolNoEncontradoException.class)
+    public ResponseEntity<ErrorDTOResponse>handleRolNoEncontradoException(RolNoEncontradoException ex,WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
+
     @ExceptionHandler(RoleDuplicadoException.class)
     public ResponseEntity<ErrorDTOResponse>handleRoleDuplicadoException(RoleDuplicadoException ex,WebRequest webRequest){
 

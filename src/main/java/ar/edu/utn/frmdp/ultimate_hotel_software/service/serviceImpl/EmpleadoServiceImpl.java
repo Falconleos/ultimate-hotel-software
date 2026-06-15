@@ -2,8 +2,7 @@ package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.Turno;
-import ar.edu.utn.frmdp.ultimate_hotel_software.exception.EmpleadoNoEncontradoException;
-import ar.edu.utn.frmdp.ultimate_hotel_software.exception.InvalidIdException;
+import ar.edu.utn.frmdp.ultimate_hotel_software.exception.*;
 import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EmpleadoMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.Role;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
@@ -36,12 +35,13 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Override
     public EmpleadoEntity findEntityById(Long id) {
         return empleadoRepository.findById(id)
-                .orElseThrow( ()->new InvalidIdException("Id de empleado invalido") );
+                .orElseThrow( ()->new EmpleadoNoEncontradoException("Id de empleado invalido") );
     }
 
     //1.2 Devuelve DTOResponse
     @Override
     public EmpleadoDTOResponse getById (Long id) {
+
         return empleadoMapper.toDTO(findEntityById(id));
     }
 
@@ -57,24 +57,36 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Override
     public EmpleadoDTOResponse createEmpleado(EmpleadoDTORequest empleadoDTORequest) {
 
-        //Mapeo a entidad
+        //1. Validacion de empleado repetido
+        if (empleadoRepository.existsByDatosPersonaEmail(
+                empleadoDTORequest.getDatosPersonalesDTORequest().getEmail())) {
+            throw new EmpleadoDuplicadoExcepcion("Ya existe un emplaedo con ese email");
+        }
+        if (empleadoRepository.existsByDatosPersonaDni(empleadoDTORequest.getDatosPersonalesDTORequest().getDni())) {
+            throw new EmpleadoDuplicadoExcepcion("Ya existe un empleado con ese email");
+        }
+        if (empleadoRepository.existsByDatosPersonaTelefono(
+                empleadoDTORequest.getDatosPersonalesDTORequest().getTelefono())) {
+            throw new EmpleadoDuplicadoExcepcion("Ya existe un empleado con ese telefono");
+        }
+        //2. Mapeo a entidad
         EmpleadoEntity empleadoEntity = empleadoMapper.toEntity(empleadoDTORequest);
 
-        // 2. BUSCAR EL ROL BASADO EN EL ROLETYPE DEL REQUEST
+        // 3. BUSCAR EL ROL BASADO EN EL ROLETYPE DEL REQUEST
         // Obtenemos el RoleType del DTO y buscamos la entidad Role correspondiente
         Role rolEncontrado = roleService.findEntityByName(empleadoDTORequest.getRoleType());
 
-        // 3. Crear el Set y agregar el rol encontrado
+        // 4. Crear el Set y agregar el rol encontrado a los permisos
         Set<Role> rolesPersistentes = Set.of(rolEncontrado);
 
-        // 4. Asignar el Set a la entidad
+        // 5. Asignar el Set a la entidad
         empleadoEntity.setRoles(rolesPersistentes);
 
-        //Agregado de informacion
+        //6. Agregado de informacion
         empleadoEntity.setFechaIngreso(LocalDate.now());
         empleadoEntity.setActivo(true);
 
-        //Guardado en base de datos
+        //7. Guardado en base de datos
         return empleadoMapper.toDTO(empleadoRepository.save(empleadoEntity));
     }
 
@@ -91,11 +103,27 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Transactional
     public EmpleadoDTOResponse updateEmpleado(Long id, EmpleadoDTORequest empleadoDTORequestModificado) {
 
-        //Buscar entidad a modificar
+        //1. Buscar entidad a modificar
         EmpleadoEntity empleado = findEntityById(id);
         DatosPersonalesEntity datosPersonalesEntity = empleado.getDatosPersona();
 
-        //Modificacion del empleado
+        //2. Validaciones solo contra otros registros, nunca contra sí mismo
+        if (!datosPersonalesEntity.getDni().equals(empleadoDTORequestModificado.getDatosPersonalesDTORequest().getDni()) &&
+                empleadoRepository.existsByDatosPersonaDni(empleadoDTORequestModificado.getDatosPersonalesDTORequest().getDni())) {
+            throw new EmpleadoDuplicadoExcepcion("DNI ya en uso");
+        }
+
+        if (!datosPersonalesEntity.getEmail().equals(empleadoDTORequestModificado.getDatosPersonalesDTORequest().getEmail()) &&
+                empleadoRepository.existsByDatosPersonaEmail(empleadoDTORequestModificado.getDatosPersonalesDTORequest().getEmail())) {
+            throw new EmpleadoDuplicadoExcepcion("Email ya en uso");
+        }
+
+        if (!datosPersonalesEntity.getTelefono().equals(empleadoDTORequestModificado.getDatosPersonalesDTORequest().getTelefono()) &&
+                empleadoRepository.existsByDatosPersonaTelefono(empleadoDTORequestModificado.getDatosPersonalesDTORequest().getTelefono())) {
+            throw new EmpleadoDuplicadoExcepcion("Telefono ya en uso");
+        }
+
+        //3. Modificacion del empleado
         datosPersonalesEntity.setNombre(empleadoDTORequestModificado.getDatosPersonalesDTORequest().getNombre());
         datosPersonalesEntity.setApellido(empleadoDTORequestModificado.getDatosPersonalesDTORequest().getApellido());
         datosPersonalesEntity.setEmail(empleadoDTORequestModificado.getDatosPersonalesDTORequest().getEmail());
@@ -115,13 +143,16 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     //5.2. Cambiar turno
     @Override
     @Transactional
-    public EmpleadoDTOResponse cambiarTurno(Long id, Turno turno) {
+    public EmpleadoDTOResponse cambiarTurno(Long id, Turno turnoNuevo) {
 
         //Buscar entidad a modificar
         EmpleadoEntity empleado = findEntityById(id);
 
+        //2. Validacion de estado actual
+        if (empleado.getTurno().equals(turnoNuevo)) throw new ActualizacionEmpleadoInvalidaExcepcion("El empleado ya esta en ese turno");
+
         //Modificaciones
-        empleado.setTurno(turno); //Hibernate detecta cambio en el elemento y modifica la base de datos.
+        empleado.setTurno(turnoNuevo); //Hibernate detecta cambio en el elemento y modifica la base de datos.
 
         //Guardado en repositorio y devolucion de DTO
         return empleadoMapper.toDTO(empleado);
@@ -132,10 +163,13 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Transactional
     public EmpleadoDTOResponse cambiarCargo(Long id, RoleType roleType){
 
-        //Buscar entidad a modificar
+        //1. Buscar entidad a modificar
         EmpleadoEntity empleado = findEntityById(id);
 
-        //Modificaciones
+        //2. Validiacion cargoActual igual a cambioFuturo
+        if (empleado.getRoleType().equals(roleType)) throw  new ActualizacionEmpleadoInvalidaExcepcion("El empleado ya tiene ese cargo asignado actualmente");
+
+        //3. Modificaciones
         empleado.setRoleType(roleType); //Hibernate detecta cambio en el elemento y modifica la base de datos.
 
         //Guardado en repositorio y devolucion de DTO
@@ -147,13 +181,13 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Transactional
     public EmpleadoDTOResponse cambiarEstado (Long id) {
 
-        //Buscar entidad a modificar
+        //1. Buscar entidad a modificar
         EmpleadoEntity empleado = findEntityById(id);
 
-        //Modificaciones
+        //2. Modificaciones
         empleado.setActivo(!empleado.getActivo()); //Hibernate detecta cambio en el elemento y modifica la base de datos.
 
-        //Guardado en repositorio y devolucion de DTO
+        //3. Guardado en repositorio y devolucion de DTO
         return empleadoMapper.toDTO(empleado);
     }
 
