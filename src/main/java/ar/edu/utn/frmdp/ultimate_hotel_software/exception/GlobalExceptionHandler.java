@@ -35,10 +35,27 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(ConflictoDeEstadoException.class)
-    public ResponseEntity<ErrorDTOResponse>handleConflictoDeEstadoException(ConflictoDeEstadoException ex,WebRequest webRequest){
+    //Excepciones de reservas
+    @ExceptionHandler(ReservaNoEncontradaException.class)
+    public ResponseEntity<ErrorDTOResponse>handleReservaNoEncontradaException(ReservaNoEncontradaException ex,WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
+    @ExceptionHandler(ConflictoDeEstadoReservaException.class)
+    public ResponseEntity<ErrorDTOResponse>handleConflictoDeEstadoReservaException(ConflictoDeEstadoReservaException ex,WebRequest webRequest){
 
         return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
+    @ExceptionHandler(EstadiaNoEncontradaException.class)
+    public ResponseEntity<ErrorDTOResponse>handleEstadiaNoEncontradaException(EstadiaNoEncontradaException ex,WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
 
     }
@@ -47,15 +64,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDTOResponse>handleEstadiaInvalidaException(EstadiaInvalidaException ex,WebRequest webRequest){
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
-
-    }
-
-
-    @ExceptionHandler(EstadiaNoEncontradaException.class)
-    public ResponseEntity<ErrorDTOResponse>handleEstadiaNoEncontradaException(EstadiaNoEncontradaException ex,WebRequest webRequest){
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
 
     }
