@@ -5,11 +5,13 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @Schema(description = "DTO utilizado para crear datos personales de las personas")
 public class DatosPersonalesDTORequest {
 
