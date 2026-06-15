@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -34,6 +35,7 @@ public class EstadiaController {
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
 
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PostMapping("/check-in")
     public ResponseEntity<EstadiaDTOResponse> checkIn(@RequestBody @Valid EstadiaDTORequest request) {
         EstadiaDTOResponse nuevaEstadia = estadiaService.checkIn(request);
@@ -46,6 +48,7 @@ public class EstadiaController {
         return ResponseEntity.status(HttpStatus.OK).body(estadia);
     }
 
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PostMapping("/{id}/interrumpir")
     public ResponseEntity<EstadiaDTOResponse> interrumpirEstadia(
             @PathVariable Long id,
@@ -54,18 +57,21 @@ public class EstadiaController {
         return ResponseEntity.status(HttpStatus.OK).body(estadiaInterrumpida);
     }
 
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PatchMapping("/{id}/pagar")
     public ResponseEntity<EstadiaDTOResponse> pagarEstadia(@PathVariable Long id) {
         EstadiaDTOResponse estadiaPagada = estadiaService.pagarEstadia(id);
         return ResponseEntity.status(HttpStatus.OK).body(estadiaPagada);
     }
 
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PostMapping("/{id}/check-out")
     public ResponseEntity<EstadiaDTOResponse> checkOutEstadia(@PathVariable Long id) {
         EstadiaDTOResponse estadiaConcluida = estadiaService.checkOutEstadia(id);
         return ResponseEntity.status(HttpStatus.OK).body(estadiaConcluida);
     }
 
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @GetMapping("/check-outs-hoy")
     public ResponseEntity<List<EstadiaDTOResponse>> checkOutdelDia() {
         List<EstadiaDTOResponse> lista = estadiaService.checkOutdelDia();
@@ -113,12 +119,14 @@ public class EstadiaController {
         return ResponseEntity.status(HttpStatus.OK).body(cantidad);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @GetMapping("/kpi/recaudacion/hoy")
     public ResponseEntity<Double> recaudacionCheckInsDelDia() {
         Double recaudacion = estadiaService.recaudacionCheckInsDelDia();
         return ResponseEntity.status(HttpStatus.OK).body(recaudacion);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @GetMapping("/kpi/recaudacion/mensual")
     public ResponseEntity<Map<String, Double>> recaudacionEstadiasPorMesAnio(
             @RequestParam Integer year) {

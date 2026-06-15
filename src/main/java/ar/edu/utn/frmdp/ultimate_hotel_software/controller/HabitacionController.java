@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -92,6 +93,7 @@ public class HabitacionController {
             @ApiResponse(responseCode = "409", description = "Habitacion con nro existente"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @PostMapping
     public ResponseEntity<HabitacionDTOResponse> save(@Valid @RequestBody HabitacionDTORequest dto) {
         HabitacionDTOResponse response = habitacionService.save(dto);
@@ -111,6 +113,7 @@ public class HabitacionController {
             @ApiResponse(responseCode = "409", description = "Habitación ocupada"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(
             @PathVariable Long id) {
@@ -131,6 +134,7 @@ public class HabitacionController {
             @ApiResponse(responseCode = "404", description = "Habitación no encontrada"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @PutMapping("/{id}")
     public ResponseEntity<HabitacionDTOResponse> update(
             @PathVariable Long id,

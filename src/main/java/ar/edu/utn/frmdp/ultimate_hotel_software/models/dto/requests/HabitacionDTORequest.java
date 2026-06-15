@@ -8,9 +8,11 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Schema(description = "DTO utilizado para crear habitaciones")
 
 public class HabitacionDTORequest {

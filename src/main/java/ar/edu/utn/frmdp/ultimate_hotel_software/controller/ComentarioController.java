@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -147,6 +148,7 @@ public class ComentarioController {
                     )
             )
     })
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PostMapping("/{id}")
     public ResponseEntity<ComentarioDTOResponse> createComentario(@PathVariable Long id, @RequestBody ComentarioDTORequest comentarioDTORequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(comentarioService.createComentario(id, comentarioDTORequest));
@@ -176,6 +178,7 @@ public class ComentarioController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComentario(@PathVariable Long id) {
         comentarioService.deleteComentario(id);
@@ -214,6 +217,7 @@ public class ComentarioController {
                     )
             )
     })
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @PutMapping("/{id}")
     public ResponseEntity<ComentarioDTOResponse> updateComentario(@PathVariable Long id, @RequestBody ComentarioDTORequest comentarioDTORequest) {
         return ResponseEntity.ok(comentarioService.updateComentario(id, comentarioDTORequest));
