@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -35,6 +36,7 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.listar(activa));
     }
 
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PostMapping
     public ResponseEntity<ReservaDTOResponse> crearReserva(@RequestBody @Valid ReservaDTORequest request) {
         ReservaDTOResponse nuevaReserva = reservaService.crearReserva(request);
@@ -50,12 +52,14 @@ public class ReservaController {
         return ResponseEntity.ok(disponibles);
     }
 
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PatchMapping("/{id}/confirmar")
     public ResponseEntity<Void> confirmarReserva(@PathVariable Long id) {
         reservaService.confirmarReserva(id);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PostMapping("/cancelar")
     public ResponseEntity<CancelacionReservaDTOResponse> cancelarReserva(
             @RequestBody @Valid CancelacionReservaDTORequest request) {
@@ -63,24 +67,27 @@ public class ReservaController {
         return ResponseEntity.ok(cancelacion);
     }
 
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PostMapping("/procesar-ausencias")
     public ResponseEntity<Void> procesarAusenciaDeReservas() {
         reservaService.procesarAusenciaDeReservas();
         return ResponseEntity.noContent().build();
     }
 
+
     @GetMapping("/check-ins-hoy")
     public ResponseEntity<List<ReservaDTOResponse>> checkIndelDia() {
         return ResponseEntity.ok(reservaService.checkIndelDia());
     }
 
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @GetMapping("/alertas-confirmacion")
     public ResponseEntity<List<ReservaDTOResponse>> reservasParaConfirmarAxDiasDelCheckIn(
             @RequestParam Integer dias) {
         return ResponseEntity.ok(reservaService.reservasParaConfirmarAxDiasDelCheckIn(dias));
     }
 
-
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void>eliminarReserva(@PathVariable Long id){
         reservaService.eliminar(id);

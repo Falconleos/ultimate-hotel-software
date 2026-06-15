@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -82,6 +83,7 @@ public class PasajeroController {
             @ApiResponse(responseCode = "409", description = "Pasajero con datos duplicados en base de datos"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PostMapping
     public ResponseEntity<PasajeroDTOResponse> createPasajero(@RequestBody PasajeroDTORequest pasajeroDTORequest) {
         return ResponseEntity.ok(pasajeroService.createPasajero(pasajeroDTORequest));
@@ -97,6 +99,7 @@ public class PasajeroController {
             @ApiResponse(responseCode = "404", description = "Pasajero no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePasajero(@PathVariable Long id) {
         pasajeroService.deletePasajero(id);
@@ -115,6 +118,7 @@ public class PasajeroController {
             @ApiResponse(responseCode = "409", description = "Pasajero con datos duplicados en base de datos"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PutMapping("/{id}")
     public ResponseEntity<PasajeroDTOResponse> updatePasajero(@PathVariable Long id,@RequestBody PasajeroDTORequest pasajeroDTORequest) {
         return ResponseEntity.ok(pasajeroService.updatePasajero(id, pasajeroDTORequest));

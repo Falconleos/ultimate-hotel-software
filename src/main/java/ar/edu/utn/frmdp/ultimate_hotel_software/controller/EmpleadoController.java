@@ -103,6 +103,7 @@ public class EmpleadoController {
             @ApiResponse(responseCode = "404", description = "Empleado no encontrado"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmpleado (@PathVariable Long id) {
         empleadoService.deleteEmpleado(id);
@@ -122,6 +123,7 @@ public class EmpleadoController {
             @ApiResponse(responseCode = "409", description = "Empleado con datos duplicados en base de datos"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @PutMapping("/{id}")
     public ResponseEntity<EmpleadoDTOResponse> updateEmpleado(@PathVariable Long id, @RequestBody EmpleadoDTORequest empleadoDTORequest) {
         return ResponseEntity.ok(empleadoService.updateEmpleado(id, empleadoDTORequest)
@@ -140,6 +142,7 @@ public class EmpleadoController {
             @ApiResponse(responseCode = "409", description = "Actualizacion invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @PatchMapping("/{id}/turno")
     public ResponseEntity<EmpleadoDTOResponse> cambiarTurno(@PathVariable Long id, @RequestParam Turno turno) {
         return ResponseEntity.ok(empleadoService.cambiarTurno(id, turno));
@@ -157,6 +160,7 @@ public class EmpleadoController {
             @ApiResponse(responseCode = "409", description = "Actualizacion invalida"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @PatchMapping("/{id}/cargo")
     public ResponseEntity<EmpleadoDTOResponse> cambiarCargo(@PathVariable Long id, @RequestParam RoleType roleType) {
         return ResponseEntity.ok(empleadoService.cambiarCargo(id, roleType));
@@ -172,6 +176,7 @@ public class EmpleadoController {
             @ApiResponse(responseCode = "404", description = "Empleado no encontrada"),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
+    @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @PatchMapping("/{id}/estado")
     public ResponseEntity<EmpleadoDTOResponse> cambiarEstado(@PathVariable Long id) {
         return ResponseEntity.ok(empleadoService.cambiarEstado(id));
