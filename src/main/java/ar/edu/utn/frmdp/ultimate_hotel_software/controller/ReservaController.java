@@ -35,6 +35,12 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.listar(activa));
     }
 
+    @Operation(summary = "Busca reserva por ID")
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservaDTOResponse> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(reservaService.findById(id));
+    }
+
     @Operation(summary = "Crear una reserva")
     @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PostMapping
@@ -54,16 +60,17 @@ public class ReservaController {
     @Operation(summary = "Confirmar reserva")
     @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PatchMapping("/{id}/confirmar")
-    public ResponseEntity<Void> confirmarReserva(@PathVariable Long id) {
-        reservaService.confirmarReserva(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ReservaDTOResponse> confirmarReserva(@PathVariable Long id) {
+        ReservaDTOResponse reservaDTOResponse = reservaService.confirmarReserva(id);
+        return ResponseEntity.status(HttpStatus.OK).body(reservaDTOResponse);
     }
 
     @Operation(summary = "Cancelar reserva")
     @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
     @PostMapping("/cancelar")
     public ResponseEntity<CancelacionReservaDTOResponse> cancelarReserva(@RequestBody @Valid CancelacionReservaDTORequest request) {
-        return ResponseEntity.ok(reservaService.cancelarReserva(request));
+        CancelacionReservaDTOResponse cancelacion = reservaService.cancelarReserva(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cancelacion);
     }
 
     @Operation(summary = "Procesar ausencias")

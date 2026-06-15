@@ -52,6 +52,11 @@ public class ReservaServiceImpl implements ReservaService {
                 .orElseThrow( ()->new ReservaNoEncontradaException("Reserva no encontrada"));
     }
 
+    @Override
+    public ReservaDTOResponse findById(Long id) {
+        return reservaMapper.toDto(findEntityById(id));
+    }
+
     //2. Listar reservas activas y listar todas las reservas
     @Override
     public List<ReservaDTOResponse> listar(Boolean activa) {
@@ -153,13 +158,14 @@ public class ReservaServiceImpl implements ReservaService {
     //5.2. Actualizar estado de reserva de PENDIENTE a CONFIRMADA
     @Override
     @Transactional
-    public void confirmarReserva(Long id) {
+    public ReservaDTOResponse confirmarReserva(Long id) {
         ReservaEntity reserva = findEntityById(id);
         if(reserva.getEstadoReserva() != EstadoReserva.PENDIENTE){
             throw new ConflictoDeEstadoReservaException("Estado actual de reserva: " + reserva.getEstadoReserva() + ". Para confirmar el estado debe ser PENDIENTE");
         }
         reserva.setEstadoReserva(EstadoReserva.CONFIRMADA);
-        reservaRepository.save(reserva);
+        ReservaDTOResponse reservaDTOResponse =  reservaMapper.toDto(reservaRepository.save(reserva));
+        return reservaDTOResponse;
     }
 
     //6. Otras busquedas y listados

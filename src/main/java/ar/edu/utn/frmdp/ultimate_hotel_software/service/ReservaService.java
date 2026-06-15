@@ -21,11 +21,13 @@ public interface ReservaService {
 
     ReservaEntity findEntityById(Long id);
 
+    ReservaDTOResponse findById(Long id);
+
     List<HabitacionEntity> habitacionesDisponibles(LocalDate checkIn, LocalDate checkOut, Integer pax);
 
     void update(ReservaEntity reserva);
 
-    void confirmarReserva(Long id);
+    ReservaDTOResponse confirmarReserva(Long id);
 
     CancelacionReservaDTOResponse cancelarReserva(CancelacionReservaDTORequest request);
 
