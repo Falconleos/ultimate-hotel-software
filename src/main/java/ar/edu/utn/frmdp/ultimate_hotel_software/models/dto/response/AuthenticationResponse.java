@@ -1,16 +1,12 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class AuthenticationResponse {
+public record AuthenticationResponse(
+        String accessToken,
+        String refreshToken
+) {
 
-    private String token;
 
 }

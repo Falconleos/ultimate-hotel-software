@@ -7,7 +7,7 @@ spring:
     # Agregamos allowPublicKeyRetrieval=true para evitar el error de autenticación
     url: jdbc:mysql://localhost:3306/hotel_db?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   # 2. CONFIGURACIÓN DE ORM / HIBERNATE
@@ -16,7 +16,7 @@ spring:
     # Si notas errores, puedes intentar quitar esta línea para que Spring la autodetecte.
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -30,6 +30,7 @@ spring:
 jwt:
   secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
   expiration: PT60M
+  refresh-expiration: PT1440M
 
 # 4. CONFIGURACIÓN DE OPENAPI / SWAGGER
 # Nota: La indentación debe estar alineada a la raíz, no dentro de 'spring'

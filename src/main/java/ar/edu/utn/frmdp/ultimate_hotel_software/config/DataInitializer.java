@@ -46,16 +46,21 @@ public class DataInitializer implements CommandLineRunner {
             }
         }
 
-        crearRegistroEmpleadoHabitacionPasajero(empleadoService,
-                                habitacionService,
-                                pasajeroService);
+        if(empleadoRepository.findAll().isEmpty() &&
+            habitacionRepository.findAll().isEmpty() &&
+            pasajeroRepository.findAll().isEmpty()){
 
-        crearEstadiaInterrumpida( reservaRepository,
-                 estadiaRepository,
-                 cancelacionReservaRepository,
-                 empleadoRepository,
-                 habitacionRepository,
-                 pasajeroRepository);
+            crearRegistroEmpleadoHabitacionPasajero(empleadoService,
+                    habitacionService,
+                    pasajeroService);
+
+            crearEstadiaInterrumpida( reservaRepository,
+                    estadiaRepository,
+                    cancelacionReservaRepository,
+                    empleadoRepository,
+                    habitacionRepository,
+                    pasajeroRepository);
+        }
 
 
     }

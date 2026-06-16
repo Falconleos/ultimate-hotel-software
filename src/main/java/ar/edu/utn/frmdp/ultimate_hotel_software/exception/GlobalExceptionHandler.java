@@ -201,6 +201,14 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorDTOResponse>handleInvalidTokenException(InvalidTokenException ex, WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
     /// /////////////////////
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDTOResponse>handleInvalidId(Exception ex, WebRequest webRequest){
