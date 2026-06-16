@@ -1,5 +1,6 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response;
 
+import ar.edu.utn.frmdp.ultimate_hotel_software.enums.EstadoEstadia;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -23,8 +24,8 @@ public class EstadiaDTOResponse {
     private EmpleadoReservaDTOResponse empleadoReservaDTOResponse;
     @Schema(description = "Costo total de la estadia", example = "USD$500")
     private Double total;
-    @Schema(description = "Observacion/comentario aclarando solicitudes del pasajero", example = "EL cliente solicita servicio de cantina")
-    private String observacion;
+
+    private EstadoEstadia estado;
 
     @Schema(description = "Estado del pago de la estadia",example = "Pagada")
     private Boolean pagada;

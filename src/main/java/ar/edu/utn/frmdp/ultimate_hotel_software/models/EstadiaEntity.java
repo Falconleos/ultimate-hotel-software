@@ -42,10 +42,6 @@ public class EstadiaEntity {
     @OneToMany(mappedBy = "estadia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ComentarioEntity>comentarios; //OK
 
-    @PrePersist
-    public void OnCreate(){
-        estado=EstadoEstadia.EN_CURSO;
-        activa=true;
-    }
+
 
 }

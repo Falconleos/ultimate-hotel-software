@@ -17,7 +17,6 @@ public interface EstadiaMapper {
     @Mapping(target = "reservaEstadiaDTOResponse", source = "reservaEntity")
     @Mapping(target = "pasajeroDTOResponse", source = "pasajeroEntity")
     @Mapping(target = "empleadoReservaDTOResponse", source = "empleadoEntity")
-    @Mapping(target = "observacion", source = "reservaEntity.observacion")
     @Mapping(target = "id", source = "id")
     EstadiaDTOResponse toDto(EstadiaEntity estadiaEntity);
 

@@ -45,12 +45,5 @@ public class ReservaEntity {
     @OneToOne(mappedBy = "reservaEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private CancelacionReservaEntity cancelacion;
 
-    @PrePersist
-    public void onCreate(){
-        if(observacion==null || observacion.isBlank()){
-            observacion = "sin comentarios";
-        }
-        activa=true;
-    }
 
 }
