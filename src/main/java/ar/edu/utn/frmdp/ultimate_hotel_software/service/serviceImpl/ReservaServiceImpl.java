@@ -84,6 +84,10 @@ public class ReservaServiceImpl implements ReservaService {
         EmpleadoEntity empleadoEntity = empleadoService.findEntityById(request.getEmpleadoId());
         HabitacionEntity habitacion = habitacionService.findEntityById(request.getHabitacionId());
 
+        if (habitacion.getCapacidad()< request.getCantidadPax()){
+            throw new CapacidadExcedidaException("capacidad de habitacion excedida");
+        }
+
         if(!habitacionesDisponibles(request.getCheckIn(),request.getCheckOut(),request.getCantidadPax()).contains(habitacion)){
             throw new HabitacionNoDisponibleException("habitacion no disponible");
         }
