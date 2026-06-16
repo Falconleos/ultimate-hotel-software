@@ -52,7 +52,8 @@ public class EstadiaController {
     @PostMapping("/{id}/interrumpir")
     public ResponseEntity<EstadiaDTOResponse> interrumpirEstadia(
             @PathVariable Long id,
-            @RequestParam String motivo) {
+            @RequestBody Map<String,String> request) {
+        String motivo = request.get("motivo");
         EstadiaDTOResponse estadiaInterrumpida = estadiaService.interrumpirEstadia(id, motivo);
         return ResponseEntity.status(HttpStatus.OK).body(estadiaInterrumpida);
     }

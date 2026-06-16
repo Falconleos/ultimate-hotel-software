@@ -60,6 +60,13 @@ public class DataInitializer implements CommandLineRunner {
                     empleadoRepository,
                     habitacionRepository,
                     pasajeroRepository);
+
+            crearEstadiaCheckOutJueves( reservaRepository,
+                    estadiaRepository,
+                    cancelacionReservaRepository,
+                    empleadoRepository,
+                    habitacionRepository,
+                    pasajeroRepository);
         }
 
 
@@ -172,6 +179,54 @@ public class DataInitializer implements CommandLineRunner {
                 .motivo("Interrupción anticipada por emergencia médica")
                 .build();
         cancelacionReservaRepository.save(cancelacion);
+    }
+
+    public void crearEstadiaCheckOutJueves(ReservaRepository reservaRepository,
+                                         EstadiaRepository estadiaRepository,
+                                         CancelacionReservaRepository cancelacionReservaRepository,
+                                         EmpleadoRepository empleadoRepository,
+                                         HabitacionRepository habitacionRepository,
+                                         PasajeroRepository pasajeroRepository) {
+
+        var empleado = empleadoRepository.findAll().stream().findFirst().orElseThrow();
+        var habitacion = habitacionRepository.findAll().stream().findFirst().orElseThrow();
+        var pasajero = pasajeroRepository.findAll().stream().findFirst().orElseThrow();
+
+        // Fechas fijas para garantizar consistencia
+        // Check-in: 1 de enero de 2026
+        LocalDate fechaCheckIn = LocalDate.of(2026, 6, 16);
+        // Check-out original: 10 de enero de 2026
+        LocalDate fechaCheckOutOriginal = LocalDate.of(2026, 6, 18);
+
+        // 1. Crear la Reserva
+        ReservaEntity reserva = ReservaEntity.builder()
+                .checkIn(fechaCheckIn)
+                .checkOut(fechaCheckOutOriginal)
+                .cantidadPax(2)
+                .estadoReserva(EstadoReserva.INGRESADA)
+                .nombre("Agus")
+                .apellido("Bonnet")
+                .telefono("115647894")
+                .observacion("Hace las mejores pizza")
+                .activa(false)
+                .empleadoEntity(empleado)
+                .habitacionEntity(habitacion)
+                .total(200.0)
+                .build();
+        reserva = reservaRepository.save(reserva);
+
+        // 2. Crear la Estadia
+        EstadiaEntity estadia = EstadiaEntity.builder()
+                .reservaEntity(reserva)
+                .estado(EstadoEstadia.EN_CURSO)
+                .pasajeroEntity(pasajero)
+                .empleadoEntity(empleado)
+                .total(200.0)
+                .pagada(true)
+                .activa(false)
+                .build();
+        estadiaRepository.save(estadia);
+
     }
 
 

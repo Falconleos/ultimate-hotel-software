@@ -208,6 +208,13 @@ public class GlobalExceptionHandler {
                 .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
 
     }
+    @ExceptionHandler(CapacidadExcedidaException.class)
+    public ResponseEntity<ErrorDTOResponse>handleInvalidTokenException(CapacidadExcedidaException ex, WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
 
     /// /////////////////////
     @ExceptionHandler(Exception.class)
