@@ -67,6 +67,20 @@ public class DataInitializer implements CommandLineRunner {
                     empleadoRepository,
                     habitacionRepository,
                     pasajeroRepository);
+
+            crearEstadiaHistorica1( reservaRepository,
+                    estadiaRepository,
+                    cancelacionReservaRepository,
+                    empleadoRepository,
+                    habitacionRepository,
+                    pasajeroRepository);
+
+            crearEstadiaHistorica2( reservaRepository,
+                    estadiaRepository,
+                    cancelacionReservaRepository,
+                    empleadoRepository,
+                    habitacionRepository,
+                    pasajeroRepository);
         }
 
 
@@ -222,6 +236,102 @@ public class DataInitializer implements CommandLineRunner {
                 .pasajeroEntity(pasajero)
                 .empleadoEntity(empleado)
                 .total(200.0)
+                .pagada(true)
+                .activa(false)
+                .build();
+        estadiaRepository.save(estadia);
+
+    }
+
+    public void crearEstadiaHistorica1(ReservaRepository reservaRepository,
+                                         EstadiaRepository estadiaRepository,
+                                         CancelacionReservaRepository cancelacionReservaRepository,
+                                         EmpleadoRepository empleadoRepository,
+                                         HabitacionRepository habitacionRepository,
+                                         PasajeroRepository pasajeroRepository) {
+
+        var empleado = empleadoRepository.findAll().stream().toList().get(2);
+        var habitacion = habitacionRepository.findAll().stream().findFirst().orElseThrow();
+        var pasajero = pasajeroRepository.findAll().stream().findFirst().orElseThrow();
+
+        // Fechas fijas para garantizar consistencia
+        // Check-in: 1 de enero de 2026
+        LocalDate fechaCheckIn = LocalDate.of(2026, 3, 3);
+        // Check-out original: 10 de enero de 2026
+        LocalDate fechaCheckOutOriginal = LocalDate.of(2026, 3, 15);
+
+        // 1. Crear la Reserva
+        ReservaEntity reserva = ReservaEntity.builder()
+                .checkIn(fechaCheckIn)
+                .checkOut(fechaCheckOutOriginal)
+                .cantidadPax(1)
+                .estadoReserva(EstadoReserva.CONCLUIDA)
+                .nombre("Carlos")
+                .apellido("Castanieda")
+                .telefono("2236467978")
+                .observacion("llega de noche")
+                .activa(false)
+                .empleadoEntity(empleado)
+                .habitacionEntity(habitacion)
+                .total(1200.0)
+                .build();
+        reserva = reservaRepository.save(reserva);
+
+        // 2. Crear la Estadia
+        EstadiaEntity estadia = EstadiaEntity.builder()
+                .reservaEntity(reserva)
+                .estado(EstadoEstadia.COMPLETADA)
+                .pasajeroEntity(pasajero)
+                .empleadoEntity(empleado)
+                .total(1200.0)
+                .pagada(true)
+                .activa(false)
+                .build();
+        estadiaRepository.save(estadia);
+
+    }
+
+    public void crearEstadiaHistorica2(ReservaRepository reservaRepository,
+                                       EstadiaRepository estadiaRepository,
+                                       CancelacionReservaRepository cancelacionReservaRepository,
+                                       EmpleadoRepository empleadoRepository,
+                                       HabitacionRepository habitacionRepository,
+                                       PasajeroRepository pasajeroRepository) {
+
+        var empleado = empleadoRepository.findAll().stream().toList().get(4);
+        var habitacion = habitacionRepository.findAll().stream().findFirst().orElseThrow();
+        var pasajero = pasajeroRepository.findAll().stream().findFirst().orElseThrow();
+
+        // Fechas fijas para garantizar consistencia
+        // Check-in: 1 de enero de 2026
+        LocalDate fechaCheckIn = LocalDate.of(2026, 3, 5);
+        // Check-out original: 10 de enero de 2026
+        LocalDate fechaCheckOutOriginal = LocalDate.of(2026, 3, 12);
+
+        // 1. Crear la Reserva
+        ReservaEntity reserva = ReservaEntity.builder()
+                .checkIn(fechaCheckIn)
+                .checkOut(fechaCheckOutOriginal)
+                .cantidadPax(2)
+                .estadoReserva(EstadoReserva.CONCLUIDA)
+                .nombre("Jorge")
+                .apellido("Borges")
+                .telefono("2262422124")
+                .observacion("pide libros de madrugada")
+                .activa(false)
+                .empleadoEntity(empleado)
+                .habitacionEntity(habitacion)
+                .total(700.0)
+                .build();
+        reserva = reservaRepository.save(reserva);
+
+        // 2. Crear la Estadia
+        EstadiaEntity estadia = EstadiaEntity.builder()
+                .reservaEntity(reserva)
+                .estado(EstadoEstadia.COMPLETADA)
+                .pasajeroEntity(pasajero)
+                .empleadoEntity(empleado)
+                .total(700.0)
                 .pagada(true)
                 .activa(false)
                 .build();
