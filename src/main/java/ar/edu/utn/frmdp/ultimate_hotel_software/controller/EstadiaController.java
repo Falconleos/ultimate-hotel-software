@@ -128,9 +128,9 @@ public class EstadiaController {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATIVO')")
-    @GetMapping("/kpi/recaudacion/mensual")
+    @GetMapping("/kpi/recaudacion/mensual/{year}")
     public ResponseEntity<Map<String, Double>> recaudacionEstadiasPorMesAnio(
-            @RequestParam Integer year) {
+            @PathVariable Integer year) {
         Map<String, Double> recaudacionMensual = estadiaService.recaudacionEstadiasPorMesAnio(year);
         return ResponseEntity.status(HttpStatus.OK).body(recaudacionMensual);
     }
