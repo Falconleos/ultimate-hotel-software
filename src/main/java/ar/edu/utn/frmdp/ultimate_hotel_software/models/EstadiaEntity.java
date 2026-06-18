@@ -38,6 +38,8 @@ public class EstadiaEntity {
     private Boolean pagada;
     private Boolean activa;
 
-    @OneToMany(mappedBy = "estadia", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ComentarioEntity>comentarios; //OK
+    @OneToMany(mappedBy = "estadia",
+            cascade = CascadeType.REMOVE, //Si borro la estadia, se borra el comentario
+            orphanRemoval = true)
+    private List<ComentarioEntity> comentarios;
 }

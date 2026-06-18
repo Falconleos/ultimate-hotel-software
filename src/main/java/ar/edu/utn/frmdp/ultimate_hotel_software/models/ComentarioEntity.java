@@ -28,9 +28,16 @@ public class ComentarioEntity {
     @Column(nullable = false, updatable = false)
     private LocalDateTime fechaComentario;
 
+    //
     @ManyToOne(optional = false) //Permite consultar comentarios por habitacion y comentarios por pasajero
     @JoinColumn(name = "estadia_id")
     private EstadiaEntity estadia;
+
+    //--------
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "pasajero_id")
+    private PasajeroEntity pasajero;
+    //-------
 
     //////////////////////////////////////////////////
 

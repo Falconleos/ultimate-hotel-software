@@ -299,6 +299,7 @@ public class EstadiaServiceImpl implements EstadiaService {
         }
 
         //kpis
+        //11.1. Determinacion del porcentaje de ocupacion del hotel
         @Override
         public Double porcentajeOcupacionPorRangoFechas(LocalDate fechaInicio, LocalDate fechaFin){
             Integer cantidadHabitaciones = habitacionService.cantidadHabitaciones();
@@ -316,6 +317,7 @@ public class EstadiaServiceImpl implements EstadiaService {
             return 100 - ((cantidadEstadiasRango * 100.0) / cantidadHabitaciones);
         }
 
+        //11.2. Cantidad de estadias en curso
         @Override
         public Integer cantidadEstadiasEnCurso(){
             return estadiaRepository.findByEstado(EstadoEstadia.EN_CURSO).size();
@@ -327,6 +329,7 @@ public class EstadiaServiceImpl implements EstadiaService {
         la metodologia es finalizar la estadia (pagada en el checkin)
         crear otra reserva y generar la estadia nueva(abonando en el nuevo checkin)
         * */
+        //11.3. Recaudacion dia del hotel
         @Override
         public Double recaudacionCheckInsDelDia(){
             return estadiaRepository.findAll().stream()
@@ -336,6 +339,7 @@ public class EstadiaServiceImpl implements EstadiaService {
                     .reduce(0.0, Double::sum);
         }
 
+        //11.4. Recaudacion por mes/anio
         @Override
         public Map<String,Double>recaudacionEstadiasPorMesAnio(Integer year){
 
