@@ -1,7 +1,6 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.service.serviceImpl;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.RoleType;
-import ar.edu.utn.frmdp.ultimate_hotel_software.mapper.EmpleadoMapper;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.LoginRequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.LogoutRequestDto;
@@ -15,21 +14,22 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.security.jwt.JwtService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.EmpleadoService;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
     private final EmpleadoService empleadoService;
-    private final EmpleadoMapper empleadoMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -102,12 +102,24 @@ public class AuthenticationService {
                 .build();
     }
 
-
+    @Transactional
     public void logout(LogoutRequestDto requestDto) {
         refreshTokenService.revokeToken(requestDto.refreshToken());
     }
 
     public AuthenticationResponse refresh(RefreshTokenRequest request) {
+
+        log.info("DEBUG: Intentando refrescar token: {}", request.refreshToken());
+
+        // Consulta la BD manualmente aquí para ver si ya está revocado
+        var tokenOpt = refreshTokenService.findByToken(request.refreshToken());
+        if (tokenOpt.isPresent()) {
+            log.info("DEBUG: Token encontrado en BD. ¿Está revocado?: {}", tokenOpt.get().isRevoked());
+        } else {
+            log.info("DEBUG: Token NO encontrado en BD.");
+        }
+
+
         String userEmail = refreshTokenService.getSubjectAndMarkAsUsed(request.refreshToken());
 
         UserDetails userDetails = userDetailService.loadUserByUsername(userEmail);

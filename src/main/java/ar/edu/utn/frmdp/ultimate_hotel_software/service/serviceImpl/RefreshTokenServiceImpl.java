@@ -16,6 +16,7 @@ import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -58,15 +59,23 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public String getSubjectAndMarkAsUsed(String token) {
-        RefreshToken refreshToken = refreshTokenRepository.findByTokenAndRevokedFalse(token)
-                .orElseThrow(() -> new InvalidTokenException("Invalid or revoked refreshToken"));
+        // 1. BUSCAR SIN FILTROS: Esto es obligatorio para saber si existe y si está revocado
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
+                .orElseThrow(() -> new InvalidTokenException("Token no encontrado"));
 
+        // 2. VALIDAR ESTADO: Ahora sí validamos la revocación manualmente
+        if (refreshToken.isRevoked()) {
+            throw new InvalidTokenException("El token ha sido revocado (Logout previo)");
+        }
+
+        // 3. VALIDAR EXPIRACIÓN
         if (refreshToken.getExpiresAt().isBefore(Instant.now())) {
             refreshToken.setRevoked(true);
             refreshTokenRepository.save(refreshToken);
-            throw new InvalidTokenException("Refresh token has expired");
+            throw new InvalidTokenException("Refresh token expirado");
         }
 
+        // 4. MARCAR COMO USADO
         refreshToken.setUsedAt(Instant.now());
         refreshToken.setRevoked(true);
         refreshTokenRepository.save(refreshToken);
@@ -75,13 +84,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     public void revokeToken(String token) {
-        refreshTokenRepository.findByTokenAndRevokedFalse(token)
+        refreshTokenRepository.findByToken(token)
                 .ifPresent(refreshToken -> {
                     refreshToken.setRevoked(true);
-                    log.debug("[RefreshTokenRepository] Calling save to revoke refreshToken");
                     refreshTokenRepository.save(refreshToken);
+                    refreshTokenRepository.flush(); // <--- Fuerza la escritura física
+                    log.info("[RefreshTokenService] Token {} revocado y guardado", token);
                 });
-        log.debug("[RefreshTokenService] Revoked refresh refreshToken");
     }
 
     // Programamos una tarea que se ocupe de borrar de la base de datos
@@ -103,4 +112,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         }
     }
 
+    @Override
+    public Optional<RefreshToken> findByToken(String token) {
+        return refreshTokenRepository.findByToken(token);
+    }
 }
