@@ -216,6 +216,14 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(EmpleadoDesactivadoException.class)
+    public ResponseEntity<ErrorDTOResponse>handleInvalidTokenException(EmpleadoDesactivadoException ex, WebRequest webRequest){
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body( new ErrorDTOResponse(ex.getMessage(), webRequest.getDescription(false)) );
+
+    }
+
     /// /////////////////////
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDTOResponse>handleInvalidId(Exception ex, WebRequest webRequest){

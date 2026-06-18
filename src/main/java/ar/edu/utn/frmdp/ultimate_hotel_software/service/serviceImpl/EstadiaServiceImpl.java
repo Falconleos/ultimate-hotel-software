@@ -183,6 +183,9 @@ public class EstadiaServiceImpl implements EstadiaService {
             if(empleado==null){
                 throw new EstadiaInvalidaException("no existe el empleado con ese id");
             }
+            if(empleado.getActivo()==false){
+                throw new EmpleadoDesactivadoException("Un empleado desactivado no puede generar una reserva");
+            }
 
             if(!reserva.getActiva()){
                 throw new EstadiaInvalidaException("estadia invalida por reserva " + reserva.getEstadoReserva());

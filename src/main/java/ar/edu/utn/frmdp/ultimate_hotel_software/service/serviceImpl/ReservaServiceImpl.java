@@ -85,6 +85,10 @@ public class ReservaServiceImpl implements ReservaService {
         EmpleadoEntity empleadoEntity = empleadoService.findEntityById(request.getEmpleadoId());
         HabitacionEntity habitacion = habitacionService.findEntityById(request.getHabitacionId());
 
+        if(empleadoEntity.getActivo()==false){
+            throw new EmpleadoDesactivadoException("Un empleado desactivado no puede generar una reserva");
+        }
+
         if (habitacion.getCapacidad()< request.getCantidadPax()){
             throw new CapacidadExcedidaException("capacidad de habitacion excedida");
         }
