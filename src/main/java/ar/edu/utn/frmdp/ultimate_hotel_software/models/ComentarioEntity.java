@@ -22,7 +22,7 @@ public class ComentarioEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 300)
+    @Column(nullable = false, length = 100)
     private String texto;
 
     @Column(nullable = false, updatable = false)

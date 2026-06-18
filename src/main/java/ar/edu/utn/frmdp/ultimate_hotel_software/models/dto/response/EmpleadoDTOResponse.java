@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-@Schema(description = "DTO utilizado para mostrar empleados")
+@Schema(description = "DTO utilizado para mostrar todos los atributos de empleados")
 public class EmpleadoDTOResponse {
 
     @Schema(description = "Identificador unico del empleado",

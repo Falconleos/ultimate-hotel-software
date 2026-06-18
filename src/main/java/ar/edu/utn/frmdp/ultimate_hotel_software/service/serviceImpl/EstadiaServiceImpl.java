@@ -32,14 +32,30 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EstadiaServiceImpl implements EstadiaService {
 
-        private final EmpleadoService empleadoService;
         private final EstadiaRepository estadiaRepository;
         private final EstadiaMapper estadiaMapper;
 
         private final ReservaServiceImpl reservaService;
         private final HabitacionServiceImpl habitacionService;
+        private final EmpleadoService empleadoService;
         private final PasajeroServiceImpl pasajeroService;
 
+
+        //1. Buscar estadia por ID
+        //1.1. Devuelve entidad
+        @Override
+        public EstadiaEntity getEntityById(Long id) {
+            return estadiaRepository.findById(id)
+                    .orElseThrow( ()->new EstadiaNoEncontradaException("Estadia no encontrada"));
+        }
+
+        //1.2. Devuelve DTOResponse
+        @Override
+        public EstadiaDTOResponse findById(Long id){
+        return estadiaMapper.toDto(getEntityById(id));
+    }
+
+        //2. Listar todas las estadias o solo las estadias ACTIVAS
         @Override
         public List<EstadiaDTOResponse> listar(Boolean activo) {
             List<EstadiaEntity>estadias;
@@ -53,12 +69,71 @@ public class EstadiaServiceImpl implements EstadiaService {
                     .toList();
         }
 
+        //6. Otras busquedas
+        //6.1. Listas estadias por estado
+        @Override
+        public List<EstadiaDTOResponse>findByEstado(EstadoEstadia estadoEstadia){
+            return estadiaRepository.findByEstado(estadoEstadia).stream()
+                    .map(estadiaMapper::toDto)
+                    .toList();
+        }
+
+        //6.2. Listar estadias por apellido
+        @Override
+        public List<EstadiaDTOResponse>estadiaPorApellido(String apellido){
+
+            List<EstadiaEntity>estadias=estadiaRepository.findAll();
+
+            return estadias.stream()
+                    .filter(e -> e.getPasajeroEntity()
+                            .getDatosPersona().getApellido().contains(apellido))
+                    .map(estadiaMapper::toDto)
+                    .toList();
+        }
+
+        //6.3. Listar estadias por DNI
+        @Override
+        public List<EstadiaDTOResponse>estadiaPorDni(String dni){
+
+            List<EstadiaEntity>estadias=estadiaRepository.findAll();
+
+            return estadias.stream()
+                    .filter(e -> e.getPasajeroEntity()
+                            .getDatosPersona().getDni().contains(dni))
+                    .map(estadiaMapper::toDto)
+                    .toList();
+        }
+
+        //6.4. Listar todas las estadias de una determinada habitacion
+        @Override
+        public List<EstadiaDTOResponse>HistorialEstadiasPorHabitacion(Integer numeroHabitacion){
+
+            List<EstadiaEntity>estadias=estadiaRepository.findAll();
+
+            return estadias.stream()
+                    .filter(e -> e.getReservaEntity()
+                            .getHabitacionEntity().getNumero().equals(numeroHabitacion))
+                    .sorted(Comparator.comparing((EstadiaEntity e)->e.getReservaEntity().getCheckOut()).reversed())
+                    .map(estadiaMapper::toDto)
+                    .toList();
+        }
+
+        //6.5. Listar estadias cuyos CHECKOUT sean el dia de hoy (falta filtrar por dia)
+        public List<EstadiaDTOResponse> checkOutdelDia(){
+
+            return estadiaRepository.findByActiva(true).stream()
+                    .map(estadiaMapper::toDto)
+                    .toList();
+        }
+
+        //7. Metodos CHECK-IN
+        //7.1. Crear estadia
         @Transactional
         @Override
         public EstadiaDTOResponse checkIn(EstadiaDTORequest estadiaDTORequest) {
 
             ReservaEntity reserva = reservaService
-                    .findEntityById(estadiaDTORequest.getReservaId());
+                    .findEntityById(estadiaDTORequest.getReservaId()); //Lanza excepcion ReservaNoEncontradaException sino encuentra reserva
 
             HabitacionEntity habitacion = reserva.getHabitacionEntity();
 
@@ -89,6 +164,7 @@ public class EstadiaServiceImpl implements EstadiaService {
             return estadiaMapper.toDto(estadiaGuardada);
         }
 
+        //7.2. Validaciones para crear estadia
         public void validaciones(ReservaEntity reserva,
                                  HabitacionEntity habitacion,
                                  EmpleadoEntity empleado,
@@ -125,16 +201,11 @@ public class EstadiaServiceImpl implements EstadiaService {
             if(reserva.getCheckIn().isAfter(LocalDate.now())){
                 throw new FechaInvalidaException("El ingreso solo se permite el dia del checkin reservado");
             }
-
         }
 
-        //Buscar estadia por ID
-        @Override
-        public EstadiaEntity getEntityById(Long id) {
-            return estadiaRepository.findById(id)
-                    .orElseThrow( ()->new EstadiaNoEncontradaException("Estadia no encontrada"));
-        }
+        //8. Metodos de interrumpir estadias
 
+        //8.1. Interrumpir estadia. Crea cancelacion de reserva
         @Override
         public EstadiaDTOResponse interrumpirEstadia(Long id, String motivo){
 
@@ -147,51 +218,37 @@ public class EstadiaServiceImpl implements EstadiaService {
             estadia.setEstado(EstadoEstadia.INTERRUMPIDA);
             estadiaRepository.save(estadia);
 
-                CancelacionReservaDTORequest request = new CancelacionReservaDTORequest();
-                    request.setMotivo(motivo);
-                    request.setReserva_id(reserva.getId());
+            CancelacionReservaDTORequest request = new CancelacionReservaDTORequest();
+                request.setMotivo(motivo);
+                request.setReserva_id(reserva.getId());
 
-                    reserva.setEstadoReserva(EstadoReserva.PENDIENTE);//se setea el estado para poder cancelarse
-                    reservaService.cancelarReserva(request);
-                        habitacion.setEstado(EstadoHabitacion.DISPONIBLE);
-                        habitacionService.updateHabitacion(habitacion);
-                    //luego de interrumpir la estadia y de cancelar la reserva se habilita la habitacion nuevamente.
+                reserva.setEstadoReserva(EstadoReserva.PENDIENTE);//se setea el estado para poder cancelarse
+                reservaService.cancelarReserva(request);
+                    habitacion.setEstado(EstadoHabitacion.DISPONIBLE);//luego de interrumpir la estadia y de cancelar la reserva se habilita la habitacion nuevamente.
+                    habitacionService.updateHabitacion(habitacion);
+
 
             return estadiaMapper.toDto(estadia);
         }
 
-
+        //8.2. Validar parametros para interrumpir estadia
         public void validacionesInterrupcion(EstadiaEntity estadia){
             if(estadia.getEstado().equals(EstadoEstadia.COMPLETADA)){
-                throw new ConflictoDeEstadoReservaException("La estadía ya concluyó");
+                throw new ConflictoDeEstadoReservaException("La estadía a interrumpir ya concluyó");
             }else if (estadia.getPagada() == false){
                 throw new ConflictoDeEstadoReservaException("Antes de interrumpir la estadía debe abonarse");
             }else if(estadia.getEstado().equals(EstadoEstadia.INTERRUMPIDA)){
-                throw new ConflictoDeEstadoReservaException("La estadía ya fue interrumpida");
+                throw new ConflictoDeEstadoReservaException("La estadía a interrumpir ya fue interrumpida");
             }
         }
 
-        @Override
-        public EstadiaDTOResponse pagarEstadia(Long id){
-
-            EstadiaEntity estadia = getEntityById(id);
-            LocalDate checkIn = estadia.getReservaEntity().getCheckOut();
-
-            if(!checkIn.equals(LocalDate.now())){
-                if(estadia.getPagada()==true){
-                    throw new ConflictoDeEstadoReservaException("La estadia ya esta pagada");
-                }
-            }
-
-            estadia.setPagada(true);
-            return estadiaMapper.toDto(estadia);
-        }
-
+        //9. Metodos CHECK-OUT
+        //9.1. Realizar checkout
         @Override
         public EstadiaDTOResponse checkOutEstadia(Long id){
 
             EstadiaEntity estadia = getEntityById(id);
-                ReservaEntity reserva = estadia.getReservaEntity();
+            ReservaEntity reserva = estadia.getReservaEntity();
 
             validacionesCheckOut(estadia);
 
@@ -204,6 +261,7 @@ public class EstadiaServiceImpl implements EstadiaService {
             return estadiaMapper.toDto(estadia);
         }
 
+        //9.2. Validar parametros para realizar checkout
         public void validacionesCheckOut(EstadiaEntity estadia){
             if(estadia.getReservaEntity().getCheckOut().isAfter(LocalDate.now()) ){
                 throw new ConflictoDeEstadoReservaException("No se puede realizar el checkOut " +
@@ -214,62 +272,23 @@ public class EstadiaServiceImpl implements EstadiaService {
             }
         }
 
-        public List<EstadiaDTOResponse> checkOutdelDia(){
 
-            return estadiaRepository.findByActiva(true).stream()
-                    .map(estadiaMapper::toDto)
-                    .toList();
-        }
-
+        //10. Pagar estadia.
         @Override
-        public List<EstadiaDTOResponse>findByEstado(EstadoEstadia estadoEstadia){
-            return estadiaRepository.findByEstado(estadoEstadia).stream()
-                    .map(estadiaMapper::toDto)
-                    .toList();
+        public EstadiaDTOResponse pagarEstadia(Long id){
+
+            EstadiaEntity estadia = getEntityById(id);
+            LocalDate checkIn = estadia.getReservaEntity().getCheckOut();
+
+            if(!checkIn.equals(LocalDate.now())){ //Si la fecha de checkout de la estadia coincide con el dia actual
+                if(estadia.getPagada()==true){ //Si la estadia ya esta paga
+                    throw new ConflictoDeEstadoReservaException("La estadia ya esta pagada");
+                }
+            }
+
+            estadia.setPagada(true);
+            return estadiaMapper.toDto(estadia);
         }
-
-        @Override
-        public List<EstadiaDTOResponse>estadiaPorApellido(String apellido){
-
-            List<EstadiaEntity>estadias=estadiaRepository.findAll();
-
-            return estadias.stream()
-                    .filter(e -> e.getPasajeroEntity()
-                            .getDatosPersona().getApellido().contains(apellido))
-                    .map(estadiaMapper::toDto)
-                    .toList();
-        }
-
-        @Override
-        public List<EstadiaDTOResponse>estadiaPorDni(String dni){
-
-            List<EstadiaEntity>estadias=estadiaRepository.findAll();
-
-            return estadias.stream()
-                    .filter(e -> e.getPasajeroEntity()
-                            .getDatosPersona().getDni().contains(dni))
-                    .map(estadiaMapper::toDto)
-                    .toList();
-        }
-
-        @Override
-        public List<EstadiaDTOResponse>HistorialEstadiasPorHabitacion(Integer numeroHabitacion){
-
-            List<EstadiaEntity>estadias=estadiaRepository.findAll();
-
-            return estadias.stream()
-                    .filter(e -> e.getReservaEntity()
-                            .getHabitacionEntity().getNumero().equals(numeroHabitacion))
-                    .sorted(Comparator.comparing((EstadiaEntity e)->e.getReservaEntity().getCheckOut()).reversed())
-                    .map(estadiaMapper::toDto)
-                    .toList();
-        }
-
-        @Override
-        public EstadiaDTOResponse findById(Long id){
-            return estadiaMapper.toDto(getEntityById(id));
-        }
-
 
         //kpis
         @Override

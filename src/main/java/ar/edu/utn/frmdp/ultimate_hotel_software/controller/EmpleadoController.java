@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(
         name = "Empleados",
-        description = "Operaciones relacionadas con la gestión de empleados"
+        description = "Operaciones relacionadas con la gestión de empleados. Incluye operaciones CRUD y modificacion de cargo, estado y turno del empleado"
 )
 
 public class EmpleadoController {
@@ -35,7 +35,7 @@ public class EmpleadoController {
     //1. Buscar empleado por id
     @Operation(
             summary = "Buscar empleado por ID",
-            description = "Obtiene un empleado a partir de su identificador"
+            description = "Obtiene un empleado a partir de su identificador unico"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Empleado encontrado"),
@@ -96,7 +96,7 @@ public class EmpleadoController {
     //4. Eliminar empleado
     @Operation(
             summary = "Eliminar empleado",
-            description = "Elimina empleado del sistema a partir de un identificador"
+            description = "Elimina empleado del sistema a partir de un identificador unico"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Empleado eliminado"),
@@ -114,7 +114,7 @@ public class EmpleadoController {
     //5.1. Actualizacion completa
     @Operation(
             summary = "Actualizar informacion del empleado",
-            description = "Actualiza los datos de un emplaedo existente sin modificar su ID"
+            description = "Actualiza los datos de un empleado existente sin modificar su ID"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Empleado actualizado"),

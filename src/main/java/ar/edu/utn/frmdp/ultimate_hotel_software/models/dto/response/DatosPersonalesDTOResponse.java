@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@Schema(description = "DTO utilizado para mostrar datos personales")
+@Schema(description = "DTO utilizado para mostrar todos los atributos de datos personales")
 public class DatosPersonalesDTOResponse {
     @Schema(description = "Nombre del la persona")
     private String nombre;

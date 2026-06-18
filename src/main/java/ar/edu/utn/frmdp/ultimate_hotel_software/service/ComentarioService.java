@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface ComentarioService {
 
-    public ComentarioDTOResponse getById (Long id);
-    ComentarioDTOResponse createComentario(Long estadia_id, ComentarioDTORequest comentarioDTORequest);
+    ComentarioDTOResponse getById (Long id);
+    ComentarioDTOResponse createComentario(ComentarioDTORequest comentarioDTORequest);
     List<ComentarioDTOResponse> getComentariosHabitacion (Long habitacion_id);
     List<ComentarioDTOResponse> getComentarioPasajero (Long pasajero_id);
     ComentarioDTOResponse updateComentario (Long id, ComentarioDTORequest comentarioDTORequest);

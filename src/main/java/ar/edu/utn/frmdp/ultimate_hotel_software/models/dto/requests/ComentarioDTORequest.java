@@ -8,11 +8,13 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-@Schema(description = "DTO utilizado para crear comentarios")
+@Schema(description = "DTO utilizado para crear comentarios, los cuales representan la experiencia del pasajero durante su estadia. Solo contiene el texto del comentario y la estadia asociada")
 public class ComentarioDTORequest {
 
     @NotBlank(message = "El comentario no puede estar vacio")
     @Size(max = 100, message = "El comentario debe tener menos de 100 caracteres")
     @Schema(description = "Contenido del comentario")
     private String texto;
+    @Schema(description = "Identificador de la estadia asociada al comentario")
+    private Long estadiaId;
 }

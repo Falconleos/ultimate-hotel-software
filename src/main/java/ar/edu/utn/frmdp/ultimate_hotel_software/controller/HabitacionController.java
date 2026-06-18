@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(
         name = "Habitaciones",
-        description = "Operaciones relacionadas con la gestión de habitaciones"
+        description = "Operaciones relacionadas con la gestión de habitaciones. incluye operaciones CRUD, pasar una habitacion a estado MANTENIMIENTO y listar habitaciones con estado DISPONIBLE"
 )
 
 public class HabitacionController {
@@ -35,7 +35,7 @@ public class HabitacionController {
     //1. Buscar habitacion por ID
     @Operation(
             summary = "Buscar habitación por ID",
-            description = "Obtiene una habitación a partir de su identificador"
+            description = "Obtiene una habitación a partir de su identificador unico"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Habitación encontrada"),
@@ -105,7 +105,7 @@ public class HabitacionController {
     //4. Borrar habitacion
     @Operation(
             summary = "Eliminar habitación",
-            description = "Elimina una habitación del sistema"
+            description = "Elimina una habitación del sistema a partir de su identificador unico"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Habitación eliminada"),

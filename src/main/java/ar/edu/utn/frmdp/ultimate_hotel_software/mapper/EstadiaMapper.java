@@ -5,7 +5,6 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EstadiaDTORe
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EstadiaDTOResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
 @Mapper(componentModel = "spring",
         uses = {EmpleadoMapper.class,
                 ReservaMapper.class,

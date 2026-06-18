@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
-@Schema(description = "DTO utilizado para crear datos personales de las personas")
+@Schema(description = "DTO utilizado para crear datos personales de las personas. Los atributos de esta clase estan embebidos en las clases Pasajero y Empleado")
 public class DatosPersonalesDTORequest {
 
     @NotBlank(message = "El nombre es obligatorio")
