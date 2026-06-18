@@ -51,9 +51,10 @@ public class ReservaController {
     @Operation(summary = "Listar habitaciones disponibles", description = "Lista habitaciones cuyo estado sea DISPONIBLE")
     @GetMapping("/disponibilidad")
     public ResponseEntity<List<HabitacionDTOResponse>> habitacionesDisponibles(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkIn,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOut,
-            @RequestParam Integer pax) {
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkIn,
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOut,
+            @PathVariable Integer pax) {
+
         return ResponseEntity.ok(reservaService.mostrarHabitacionesDisponibles(checkIn, checkOut, pax));
     }
 
@@ -89,13 +90,13 @@ public class ReservaController {
 
     @Operation(summary = "Listar reservas para confirmar a X días", description = "Listar todas las reservas que posean una diferencia de dias hasta el dia del checkin igual a la cantidad de dias ingresada")
     @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
-    @GetMapping("/alertas-confirmacion")
-    public ResponseEntity<List<ReservaDTOResponse>> reservasParaConfirmarAxDiasDelCheckIn(@RequestParam Integer dias) {
+    @GetMapping("/alertas-confirmacion/{dias}")
+    public ResponseEntity<List<ReservaDTOResponse>> reservasParaConfirmarAxDiasDelCheckIn(
+            @PathVariable Integer dias) {
         return ResponseEntity.ok(reservaService.reservasParaConfirmarAxDiasDelCheckIn(dias));
     }
 
-    @Operation(summary = "Eliminar reserva",
-    description = "Eliminar una reserva del sistema a partir de su identificador unico")
+    @Operation(summary = "Eliminar reserva")
     @PreAuthorize("hasRole('ADMINISTRATIVO')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarReserva(@PathVariable Long id) {

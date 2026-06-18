@@ -144,13 +144,6 @@ public class ReservaServiceImpl implements ReservaService {
         return cancelacionReservaMapper.toDto(cancelacionGuardada);
     }
 
-    //4. Eliminar reserva
-    @Override
-    public void eliminar(Long id) {
-
-        ReservaEntity reserva = findEntityById(id);
-        reservaRepository.delete(reserva);
-    }
 
     //5. Actualizar reserva
     //5.1. Actualizar reserva completa en repositorio
