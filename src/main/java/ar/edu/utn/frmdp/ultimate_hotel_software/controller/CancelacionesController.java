@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(
         name = "Cancelaciones de reserva",
-        description = "Operaciones relacionadas con la gestión de cancelaciones de reserva"
+        description = "Operaciones relacionadas con la gestión de cancelaciones de reserva. Incluye busqueda de cancelacion por ID, listados de cancelaciones por apellido, y cancelaciones realizadas en el ultimo mes"
 )
 
 public class CancelacionesController {
