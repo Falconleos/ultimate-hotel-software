@@ -7,11 +7,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-@Schema(description = "DTO utilizado para crear cancelaciones de reserva")
+@Schema(description = "DTO utilizado para crear cancelaciones de reserva. ")
 
 public class CancelacionReservaDTORequest {
 
-    @Schema(description = "identificador unico de la reserva a cancelar")
+    @Schema(description = "Identificador unico de la reserva a cancelar")
     private Long reserva_id;
     @Schema(description = "Motivo del pasajero para cancelar la reserva", example = "Problemas de salud")
     private String motivo;

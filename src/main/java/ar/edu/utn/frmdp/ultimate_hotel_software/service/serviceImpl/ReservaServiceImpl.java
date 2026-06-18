@@ -239,4 +239,10 @@ public class ReservaServiceImpl implements ReservaService {
             reservaRepository.save(reserva);
         }
     }
+
+    //7.2. Buscar si existen reservas asociadas a una habitacion
+    @Override
+    public boolean existsByHabitacionEntity_Id(Long habitacionId) {
+        return reservaRepository.existsByHabitacionEntity_Id(habitacionId);
+    }
 }

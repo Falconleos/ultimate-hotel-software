@@ -43,4 +43,5 @@ import java.util.Map;
         Double recaudacionCheckInsDelDia();
 
         Map<String, Double> recaudacionEstadiasPorMesAnio(Integer year);
-}
+        boolean existsByEstadiasPorHabitacion(Long habitacionId);
+    }

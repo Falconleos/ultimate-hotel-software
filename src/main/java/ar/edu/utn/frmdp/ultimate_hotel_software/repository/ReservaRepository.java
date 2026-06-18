@@ -12,4 +12,5 @@ public interface ReservaRepository extends JpaRepository<ReservaEntity,Long> {
     List<ReservaEntity> findByActiva(Boolean activa);
     // En ReservaRepository.java
     List<ReservaEntity> findByEstadoReservaNotIn(List<EstadoReserva> estados);
+    boolean existsByHabitacionEntity_Id(Long habitacionId);
 }

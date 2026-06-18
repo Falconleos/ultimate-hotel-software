@@ -12,4 +12,5 @@
 
         List<EstadiaEntity>findByActiva(Boolean activa);
         List<EstadiaEntity>findByEstado(EstadoEstadia estadoEstadia);
+        boolean existsByReservaEntity_HabitacionEntity_Id(Long habitacionId);
     }
