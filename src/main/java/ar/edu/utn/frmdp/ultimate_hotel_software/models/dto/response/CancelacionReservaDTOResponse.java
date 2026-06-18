@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-@Schema(description = "DTO utilizado para mostrar datos de las reservas canceladas")
+@Schema(description = "DTO utilizado para mostrar datos de las reservas cancelada")
 public class CancelacionReservaDTOResponse {
     @Schema(description = "Identificador unico de la reserva cancelada",
             example = "1")

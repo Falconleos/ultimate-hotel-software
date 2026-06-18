@@ -22,12 +22,22 @@ public class CancelacionReservaServiceImpl implements CancelacionReservaService{
     private final CancelacionReservaRepository repository;
     private final CancelacionReservaMapper mapper;
 
+    //1, Buscar por ID
+    //1.1. Devuelve entidad
     @Override
-    public CancelacionReservaEntity crear(CancelacionReservaEntity cancelacion) {
-        cancelacion.setFecha(LocalDateTime.now());
-        return repository.save(cancelacion);
+    public CancelacionReservaEntity findEntityById(Long id) {
+        return repository.findById(id)
+                .orElseThrow( ()->new InvalidIdException("Id de cancelacion invalido"));
     }
 
+    //1.2. Devuelve DTOResponse
+    @Override
+    public CancelacionReservaDTOResponse findById(Long id) {
+        return mapper.toDto(findEntityById(id));
+    }
+
+    //2. Listar cancelaciones
+    //2.1. Listar todas las cancelaciones
     @Override
     public List<CancelacionReservaDTOResponse> historialCancelaciones() {
         List<CancelacionReservaEntity>cancelaciones = repository.findAll();
@@ -36,6 +46,7 @@ public class CancelacionReservaServiceImpl implements CancelacionReservaService{
                 .toList();
     }
 
+    //2.2. Listar cancelaciones de reserva por apellido
     @Override
     public List<CancelacionReservaDTOResponse> findPorApellido(String apellido) {
         List<CancelacionReservaEntity>cancelaciones = repository.findAll();
@@ -44,6 +55,14 @@ public class CancelacionReservaServiceImpl implements CancelacionReservaService{
                 .map(mapper::toDto)
                 .toList();
     }
+
+    //3. Crear cancelaciones
+    @Override
+    public CancelacionReservaEntity crear(CancelacionReservaEntity cancelacion) {
+        cancelacion.setFecha(LocalDateTime.now());
+        return repository.save(cancelacion);
+    }
+
 
     @Override
     public void depurarHistorialCancelaciones() {
@@ -56,14 +75,5 @@ public class CancelacionReservaServiceImpl implements CancelacionReservaService{
         repository.deleteAllInBatch(viejas);
     }
 
-    @Override
-    public CancelacionReservaDTOResponse findById(Long id) {
-        return mapper.toDto(findEntityById(id));
-    }
 
-    @Override
-    public CancelacionReservaEntity findEntityById(Long id) {
-        return repository.findById(id)
-                .orElseThrow( ()->new InvalidIdException("Id de cancelacion invalido"));
-    }
 }

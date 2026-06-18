@@ -9,7 +9,9 @@ import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.HabitacionDT
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.HabitacionUpdateDTO;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.EmpleadoDTOResponse;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.response.HabitacionDTOResponse;
+import ar.edu.utn.frmdp.ultimate_hotel_software.repository.EstadiaRepository;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.HabitacionRepository;
+import ar.edu.utn.frmdp.ultimate_hotel_software.repository.ReservaRepository;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.HabitacionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,8 @@ public class HabitacionServiceImpl implements HabitacionService {
 
     private final HabitacionRepository habitacionRepository;
     private final HabitacionMapper habitacionMapper;
+
+    private final ReservaRepository reservaRepository;
 
     //1. Busquedas por ID
     //1.1. Devuelve entidad
@@ -91,6 +95,11 @@ public class HabitacionServiceImpl implements HabitacionService {
         }
 
         //Falta validar que no haya reservas en la habitacion que se quiere borrar!!
+        if (reservaRepository.existsByHabitacionEntity_Id(id)) {
+            throw new HabitacionEnUsoException(
+                    "No se puede eliminar la habitación: existen reservas asociadas"
+            );
+        }
 
         habitacionRepository.delete(habitacion);
     }

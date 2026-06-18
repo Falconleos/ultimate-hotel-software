@@ -39,4 +39,5 @@ public interface ReservaService {
 
     List<HabitacionDTOResponse>mostrarHabitacionesDisponibles(LocalDate checkIn, LocalDate checkOut, Integer pax);
 
+    boolean existsByHabitacionEntity_Id(Long habitacionId);
     }

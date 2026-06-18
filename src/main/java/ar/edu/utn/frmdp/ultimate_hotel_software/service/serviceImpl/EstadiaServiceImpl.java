@@ -298,6 +298,12 @@ public class EstadiaServiceImpl implements EstadiaService {
             return estadiaMapper.toDto(estadia);
         }
 
+        //11. Buscar si existen estadias asociadas a una habitacion
+        @Override
+        public boolean existsByEstadiasPorHabitacion(Long habitacionId) {
+            return estadiaRepository.existsByReservaEntity_HabitacionEntity_Id(habitacionId);
+        }
+
         //kpis
         //11.1. Determinacion del porcentaje de ocupacion del hotel
         @Override
