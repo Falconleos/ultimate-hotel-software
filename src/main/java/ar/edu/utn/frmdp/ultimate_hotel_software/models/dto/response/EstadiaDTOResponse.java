@@ -9,12 +9,14 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@Schema(description = "DTO utilizado para mostrar estadias")
+@Schema(description = "DTO utilizado para mostrar los atributos completos de estadias")
 public class EstadiaDTOResponse {
+
+    @Schema(description = "Identificador unico del comentario",
+            example = "1")
     private Long id;
 
     @Schema(description = "Informacion de la reserva realizada")
-
     private ReservaEstadiaDTOResponse reservaEstadiaDTOResponse;
     @Schema(description = "Informacion del pasajero")
 

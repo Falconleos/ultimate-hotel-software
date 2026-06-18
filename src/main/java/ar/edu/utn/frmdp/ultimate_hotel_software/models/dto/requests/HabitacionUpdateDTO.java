@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-@Schema(description = "Informacion necesaria para modificar una habitacion")
+@Schema(description = "DTO con datos necesarios para modificar una habitacion. No incluye ID ni nro de habitacion")
 public class HabitacionUpdateDTO {
     @Schema(description = "Tipo de habitacion", example = "DOBLE",
             allowableValues = {"SIMPLE: Habitación individual", "DOBLE: Cama doble", "TRIPLE: Tres camas", "SUITE: Habitación Premium"})

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-@Schema(description = "DTO utilizado para mostrar comentarios")
+@Schema(description = "DTO utilizado para mostrar los atributos completos de comentarios")
 public class ComentarioDTOResponse {
 
     @Schema(description = "Identificador unico del comentario",
@@ -19,4 +19,7 @@ public class ComentarioDTOResponse {
     private String texto;
     @Schema(description = "Fecha de realizacion del comentario")
     private LocalDateTime fechaComentario;
+
+    @Schema(description = "Identificador de la estadia asociada al comentario")
+    private Long estadiaId;
 }

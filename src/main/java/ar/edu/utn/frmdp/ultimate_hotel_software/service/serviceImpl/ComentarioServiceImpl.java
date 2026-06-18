@@ -64,10 +64,10 @@ public class ComentarioServiceImpl implements ComentarioService {
 
     //3. Crear comentario
     @Override
-    public ComentarioDTOResponse createComentario(Long estadia_id, ComentarioDTORequest comentarioDTORequest) {
+    public ComentarioDTOResponse createComentario(ComentarioDTORequest comentarioDTORequest) {
 
         //Busca estadia para agregar comentario
-        EstadiaEntity estadia = estadiaService.getEntityById(estadia_id); //Lanza excepcion sino encuentra estadia
+        EstadiaEntity estadia = estadiaService.getEntityById(comentarioDTORequest.getEstadiaId()); //Lanza excepcion sino encuentra estadia
 
         //Mapeo comentario y completo datos del comentario
         ComentarioEntity comentarioEntity = comentarioMapper.toEntity(comentarioDTORequest);

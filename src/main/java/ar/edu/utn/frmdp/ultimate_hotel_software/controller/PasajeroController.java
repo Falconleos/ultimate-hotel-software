@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(
         name = "Pasajeros",
-        description = "Operaciones relacionadas con la gestión de pasajeros"
+        description = "Operaciones relacionadas con la gestión de pasajeros. Incluye operaciones CRUD"
 )
 
 public class PasajeroController {
@@ -32,7 +32,7 @@ public class PasajeroController {
     //1. Buscar pasajero por id
     @Operation(
             summary = "Buscar pasajero por ID",
-            description = "Obtiene un pasajero a partir de su identificador"
+            description = "Obtiene un pasajero a partir de su identificador unico"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Pasajero encontrado"),

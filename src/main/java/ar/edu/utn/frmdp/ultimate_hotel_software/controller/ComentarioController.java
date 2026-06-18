@@ -22,8 +22,8 @@ import java.util.List;
 @RequestMapping("/api/comentarios")
 @RequiredArgsConstructor
 @Tag(
-        name = "Comentarios",
-        description = "Operaciones relacionadas con la gestión de comentarios"
+        name = "Controller de comentarios (reseñas de los pasajeros sobre su estadia)",
+        description = "Operaciones relacionadas con la gestión de comentarios: Operaciones CRUD y busquedas de comentarios por cliente y por estadia"
 )
 public class ComentarioController {
 
@@ -32,7 +32,7 @@ public class ComentarioController {
     //1. Buscar comentario por id
     @Operation(
             summary = "Buscar comentario por ID",
-            description = "Obtiene un comentario a partir de su identificador"
+            description = "Obtiene un comentario a partir de su identificador unico"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Comentario encontrado"),
@@ -61,7 +61,7 @@ public class ComentarioController {
     //2.1. Listar comentarios por habitacion
     @Operation(
             summary = "Listar comentarios por habitacion",
-            description = "Obtiene comentarios a partir de un identificador de habitacion"
+            description = "Obtiene todos comentarios realizados sobre una habitacion a partir de un identificador de habitacion"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Comentarios encontrados"),
@@ -90,7 +90,7 @@ public class ComentarioController {
     //2.2. Listar comentarios por pasajero
     @Operation(
             summary = "Listar comentarios por pasajero",
-            description = "Obtiene comentarios a partir de un identificador de pasajeros"
+            description = "Obtiene todos comentarios realizados por un pasajero a partir de un identificador de pasajeros"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Comentarios encontrados"),
@@ -119,7 +119,7 @@ public class ComentarioController {
     //3. Crear comentario
     @Operation(
             summary = "Crear un comentario",
-            description = "Registra un nuevo comentario en el sistema"
+            description = "Registra un nuevo comentario en el sistema ingresando el texto del comentario y el identificador unico de la estadia (estadiaID)"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Comentario creado"),
@@ -148,16 +148,16 @@ public class ComentarioController {
                     )
             )
     })
-    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
-    @PostMapping("/{id}")
-    public ResponseEntity<ComentarioDTOResponse> createComentario(@PathVariable Long id, @RequestBody ComentarioDTORequest comentarioDTORequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(comentarioService.createComentario(id, comentarioDTORequest));
+    @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')") //Intruccion incorrecta
+    @PostMapping
+    public ResponseEntity<ComentarioDTOResponse> createComentario(@RequestBody ComentarioDTORequest comentarioDTORequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(comentarioService.createComentario(comentarioDTORequest));
     }
 
     //4. Eliminar comentario
     @Operation(
             summary = "Eliminar un comentario",
-            description = "Eliminar comentario del sistema"
+            description = "Eliminar comentario del sistema a partir de su identificador unico"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Comentario eliminado"),
@@ -188,7 +188,7 @@ public class ComentarioController {
     //5. Actualizar comentario
     @Operation(
             summary = "Actualizar comentario",
-            description = "Actualiza los datos de un comentario"
+            description = "Actualiza los datos de un comentario a partir de su identificador unico"
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Comentario actualizado"),

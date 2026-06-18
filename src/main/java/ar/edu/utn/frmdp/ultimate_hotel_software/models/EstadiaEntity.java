@@ -25,8 +25,6 @@ public class EstadiaEntity {
     @JoinColumn(name = "reserva_id")
     private ReservaEntity reservaEntity;
 
-    private EstadoEstadia estado;
-
     @ManyToOne(optional = false)
     @JoinColumn(name = "pasajero_id")
     private PasajeroEntity pasajeroEntity;
@@ -35,13 +33,11 @@ public class EstadiaEntity {
     @JoinColumn(name = "empleado_id")
     private EmpleadoEntity empleadoEntity;
 
+    private EstadoEstadia estado;
     private Double total;
     private Boolean pagada;
     private Boolean activa;
 
     @OneToMany(mappedBy = "estadia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ComentarioEntity>comentarios; //OK
-
-
-
 }
