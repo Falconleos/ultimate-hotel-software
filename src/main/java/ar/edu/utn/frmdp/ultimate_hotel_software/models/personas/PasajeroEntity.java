@@ -24,11 +24,16 @@ public class PasajeroEntity {
     @Embedded
     private DatosPersonalesEntity datosPersona;
 
-
     @OneToMany(
             mappedBy = "pasajeroEntity",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private List<EstadiaEntity> estadias = new ArrayList<>();
+
+    //------------
+    @OneToMany(mappedBy = "pasajero")
+    private List<ComentarioEntity> comentarios;
+    //------------
+
 }

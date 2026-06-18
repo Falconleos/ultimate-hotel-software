@@ -52,6 +52,7 @@ public class ReservaServiceImpl implements ReservaService {
                 .orElseThrow( ()->new ReservaNoEncontradaException("Reserva no encontrada"));
     }
 
+    //1.2. Devuelve DTOResponse
     @Override
     public ReservaDTOResponse findById(Long id) {
         return reservaMapper.toDto(findEntityById(id));
