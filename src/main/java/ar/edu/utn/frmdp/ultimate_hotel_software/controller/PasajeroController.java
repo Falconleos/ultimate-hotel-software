@@ -89,6 +89,9 @@ public class PasajeroController {
         return ResponseEntity.ok(pasajeroService.createPasajero(pasajeroDTORequest));
     }
 
+
+   //------------>>>> /*POR el momento tira error por relaciones con estadia*/
+    /*
     //4. Eliminar pasajero
     @Operation(
             summary = "Eliminar pasajero",
@@ -105,7 +108,9 @@ public class PasajeroController {
         pasajeroService.deletePasajero(id);
         return ResponseEntity.noContent().build();
     }
-    
+    */
+
+
     //5. Actualizar pasajero
     @Operation(
             summary = "Actualizar informacion del pasajero",

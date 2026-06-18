@@ -30,8 +30,8 @@ public class EstadiaController {
 
     @GetMapping
     public ResponseEntity<List<EstadiaDTOResponse>> listar(
-            @RequestParam(value = "activo", required = false) Boolean activo) {
-        List<EstadiaDTOResponse> lista = estadiaService.listar(activo);
+            @RequestParam(value = "activa", required = false) Boolean activa) {
+        List<EstadiaDTOResponse> lista = estadiaService.listar(activa);
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
 
@@ -85,14 +85,14 @@ public class EstadiaController {
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
 
-    @GetMapping("/buscar/apellido")
-    public ResponseEntity<List<EstadiaDTOResponse>> estadiaPorApellido(@RequestParam String apellido) {
+    @GetMapping("/buscar/apellido/{apellido}")
+    public ResponseEntity<List<EstadiaDTOResponse>> estadiaPorApellido(@PathVariable String apellido) {
         List<EstadiaDTOResponse> lista = estadiaService.estadiaPorApellido(apellido);
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
 
-    @GetMapping("/buscar/dni")
-    public ResponseEntity<List<EstadiaDTOResponse>> estadiaPorDni(@RequestParam String dni) {
+    @GetMapping("/buscar/dni/{dni}")
+    public ResponseEntity<List<EstadiaDTOResponse>> estadiaPorDni(@PathVariable String dni) {
         List<EstadiaDTOResponse> lista = estadiaService.estadiaPorDni(dni);
         return ResponseEntity.status(HttpStatus.OK).body(lista);
     }
@@ -106,10 +106,11 @@ public class EstadiaController {
 
     // --- Endpoints para KPIs ---
 
-    @GetMapping("/kpi/ocupacion")
+    @GetMapping("/kpi/ocupacion/{inicio}/{fin}")
     public ResponseEntity<Double> porcentajeOcupacionPorRangoFechas(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin) {
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin) {
+
         Double porcentaje = estadiaService.porcentajeOcupacionPorRangoFechas(inicio, fin);
         return ResponseEntity.status(HttpStatus.OK).body(porcentaje);
     }

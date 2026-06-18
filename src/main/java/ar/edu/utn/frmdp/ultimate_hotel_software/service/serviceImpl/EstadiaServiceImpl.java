@@ -118,10 +118,14 @@ public class EstadiaServiceImpl implements EstadiaService {
                     .toList();
         }
 
-        //6.5. Listar estadias cuyos CHECKOUT sean el dia de hoy (falta filtrar por dia)
+        //6.5. Listar estadias cuyos CHECKOUT sean el dia de hoy
         public List<EstadiaDTOResponse> checkOutdelDia(){
 
-            return estadiaRepository.findByActiva(true).stream()
+            List<EstadiaEntity>estadias = estadiaRepository.findByActiva(true).stream()
+                    .filter(estadia -> estadia.getReservaEntity().getCheckOut().equals(LocalDate.now()))
+                    .toList();
+
+            return estadias.stream()
                     .map(estadiaMapper::toDto)
                     .toList();
         }
@@ -216,6 +220,7 @@ public class EstadiaServiceImpl implements EstadiaService {
             validacionesInterrupcion(estadia);
 
             estadia.setEstado(EstadoEstadia.INTERRUMPIDA);
+            estadia.setActiva(false);
             estadiaRepository.save(estadia);
 
             CancelacionReservaDTORequest request = new CancelacionReservaDTORequest();
@@ -233,6 +238,9 @@ public class EstadiaServiceImpl implements EstadiaService {
 
         //8.2. Validar parametros para interrumpir estadia
         public void validacionesInterrupcion(EstadiaEntity estadia){
+            if(estadia.getReservaEntity().getCheckOut().equals(LocalDate.now())){
+                throw new ConflictoDeEstadoReservaException("La estadía no se puede interrumpir porque tiene el checkout hoy");
+            }
             if(estadia.getEstado().equals(EstadoEstadia.COMPLETADA)){
                 throw new ConflictoDeEstadoReservaException("La estadía a interrumpir ya concluyó");
             }else if (estadia.getPagada() == false){
@@ -305,7 +313,7 @@ public class EstadiaServiceImpl implements EstadiaService {
                                 (checkOut.equals(fechaFin))||(checkOut.isBefore(fechaFin));
                     }).count();
 
-            return (cantidadEstadiasRango * 100.0) / cantidadHabitaciones;
+            return 100 - ((cantidadEstadiasRango * 100.0) / cantidadHabitaciones);
         }
 
         @Override

@@ -240,7 +240,7 @@ public class DataInitializer implements CommandLineRunner {
                 .empleadoEntity(empleado)
                 .total(200.0)
                 .pagada(true)
-                .activa(false)
+                .activa(true)
                 .build();
         estadiaRepository.save(estadia);
 
