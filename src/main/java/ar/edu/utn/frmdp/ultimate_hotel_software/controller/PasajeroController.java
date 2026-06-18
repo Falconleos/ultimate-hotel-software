@@ -90,7 +90,7 @@ public class PasajeroController {
     }
 
 
-   //------------>>>> /*POR el momento tira error por relaciones con estadia*/
+
     /*
     //4. Eliminar pasajero
     @Operation(
@@ -127,5 +127,27 @@ public class PasajeroController {
     @PutMapping("/{id}")
     public ResponseEntity<PasajeroDTOResponse> updatePasajero(@PathVariable Long id,@RequestBody PasajeroDTORequest pasajeroDTORequest) {
         return ResponseEntity.ok(pasajeroService.updatePasajero(id, pasajeroDTORequest));
+    }
+
+    // 6. Buscar pasajero por DNI
+    @Operation(
+            summary = "Buscar pasajero por DNI",
+            description = "Obtiene un pasajero a partir de su número de DNI"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Pasajero encontrado"),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Pasajero no encontrado",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDTOResponse.class)
+                    )
+            ),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @GetMapping("/dni/{dni}")
+    public ResponseEntity<PasajeroDTOResponse> getByDni(@PathVariable String dni) {
+        return ResponseEntity.ok(pasajeroService.pasajeroPorDni(dni));
     }
 }

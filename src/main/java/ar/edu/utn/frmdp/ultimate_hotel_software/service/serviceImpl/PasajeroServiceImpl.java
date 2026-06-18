@@ -115,4 +115,14 @@ public class PasajeroServiceImpl implements PasajeroService {
 
         return pasajeroMapper.toDTO(pasajeroRepository.save(pasajero));
     }
+
+    @Override
+    public PasajeroDTOResponse pasajeroPorDni(String dni) {
+
+        PasajeroEntity pasajero = pasajeroRepository.findByDatosPersonaDni(dni)
+                .orElseThrow( ()->new PasajeroNoEncontradoException("no existe pasajero con el dni: " + dni) );
+
+        return pasajeroMapper.toDTO(pasajero);
+    }
+
 }

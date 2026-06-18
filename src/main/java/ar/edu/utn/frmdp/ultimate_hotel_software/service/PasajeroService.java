@@ -17,4 +17,5 @@ public interface PasajeroService {
     PasajeroDTOResponse createPasajero(PasajeroDTORequest pasajeroDTORequest);
     void deletePasajero (Long id);
     PasajeroDTOResponse updatePasajero(Long id, PasajeroDTORequest pasajeroDTORequest);
+    PasajeroDTOResponse pasajeroPorDni(String dni);
 }
