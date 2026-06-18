@@ -37,8 +37,6 @@ public interface ReservaService {
 
     List<ReservaDTOResponse> reservasParaConfirmarAxDiasDelCheckIn(Integer x);
 
-    void eliminar(Long id);
-
     List<HabitacionDTOResponse>mostrarHabitacionesDisponibles(LocalDate checkIn, LocalDate checkOut, Integer pax);
 
     }

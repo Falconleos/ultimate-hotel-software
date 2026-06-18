@@ -49,11 +49,12 @@ public class ReservaController {
     }
 
     @Operation(summary = "Listar habitaciones disponibles")
-    @GetMapping("/disponibilidad")
+    @GetMapping("/disponibilidad/{checkIn}/{checkOut}/{pax}") // 1. Definimos las variables en la ruta
     public ResponseEntity<List<HabitacionDTOResponse>> habitacionesDisponibles(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkIn,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOut,
-            @RequestParam Integer pax) {
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkIn,
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOut,
+            @PathVariable Integer pax) {
+
         return ResponseEntity.ok(reservaService.mostrarHabitacionesDisponibles(checkIn, checkOut, pax));
     }
 
@@ -89,16 +90,10 @@ public class ReservaController {
 
     @Operation(summary = "Listar reservas para confirmar a X días")
     @PreAuthorize("hasRole('RECEPCIONISTA') or hasRole('ADMINISTRATIVO') or hasRole('FRANQUERO')")
-    @GetMapping("/alertas-confirmacion")
-    public ResponseEntity<List<ReservaDTOResponse>> reservasParaConfirmarAxDiasDelCheckIn(@RequestParam Integer dias) {
+    @GetMapping("/alertas-confirmacion/{dias}")
+    public ResponseEntity<List<ReservaDTOResponse>> reservasParaConfirmarAxDiasDelCheckIn(
+            @PathVariable Integer dias) {
         return ResponseEntity.ok(reservaService.reservasParaConfirmarAxDiasDelCheckIn(dias));
     }
 
-    @Operation(summary = "Eliminar reserva")
-    @PreAuthorize("hasRole('ADMINISTRATIVO')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarReserva(@PathVariable Long id) {
-        reservaService.eliminar(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
 }

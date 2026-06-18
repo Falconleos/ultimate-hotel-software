@@ -1,14 +1,13 @@
 package ar.edu.utn.frmdp.ultimate_hotel_software.config;
 
 import ar.edu.utn.frmdp.ultimate_hotel_software.enums.*;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.CancelacionReservaEntity;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.EstadiaEntity;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.ReservaEntity;
-import ar.edu.utn.frmdp.ultimate_hotel_software.models.Role;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.*;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.DatosPersonalesDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.EmpleadoDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.HabitacionDTORequest;
 import ar.edu.utn.frmdp.ultimate_hotel_software.models.dto.requests.PasajeroDTORequest;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.EmpleadoEntity;
+import ar.edu.utn.frmdp.ultimate_hotel_software.models.personas.PasajeroEntity;
 import ar.edu.utn.frmdp.ultimate_hotel_software.repository.*;
 import ar.edu.utn.frmdp.ultimate_hotel_software.service.*;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +80,10 @@ public class DataInitializer implements CommandLineRunner {
                     empleadoRepository,
                     habitacionRepository,
                     pasajeroRepository);
+
+            cargarEstadiasAnio2025(reservaRepository,
+                    estadiaRepository,empleadoRepository,
+                    habitacionRepository,pasajeroRepository);
         }
 
 
@@ -337,6 +340,73 @@ public class DataInitializer implements CommandLineRunner {
                 .build();
         estadiaRepository.save(estadia);
 
+    }
+
+    public void cargarEstadiasAnio2025(ReservaRepository reservaRepository,
+                                      EstadiaRepository estadiaRepository,
+                                      EmpleadoRepository empleadoRepository,
+                                      HabitacionRepository habitacionRepository,
+                                      PasajeroRepository pasajeroRepository) {
+
+        var empleados = empleadoRepository.findAll();
+        var habitaciones = habitacionRepository.findAll();
+        var pasajeros = pasajeroRepository.findAll();
+
+        if (empleados.isEmpty() || habitaciones.isEmpty() || pasajeros.isEmpty()) {
+            throw new IllegalStateException("Se requieren datos base (empleado, habitacion, pasajero) antes de cargar estadias.");
+        }
+
+        int habIndex = 0;
+        int pasIndex = 0;
+
+        // Iterar por cada mes del año 2025
+        for (int mes = 1; mes <= 12; mes++) {
+            // Crear 2 estadias por mes
+            for (int i = 1; i <= 2; i++) {
+                // Seleccionar habitacion y pasajero de forma cíclica
+                HabitacionEntity habitacion = habitaciones.get(habIndex % habitaciones.size());
+                PasajeroEntity pasajero = pasajeros.get(pasIndex % pasajeros.size());
+                EmpleadoEntity empleado = empleados.get(0); // Usamos el primero como responsable
+
+                // Definir cantidad de pasajeros según capacidad de la habitación
+                int cantPax = habitacion.getCapacidad();
+
+                // Definir fechas: dia 5 al 10 de cada mes
+                LocalDate checkIn = LocalDate.of(2025, mes, 5);
+                LocalDate checkOut = LocalDate.of(2025, mes, 10);
+
+                // 1. Crear Reserva
+                ReservaEntity reserva = ReservaEntity.builder()
+                        .checkIn(checkIn)
+                        .checkOut(checkOut)
+                        .cantidadPax(cantPax)
+                        .estadoReserva(EstadoReserva.CONCLUIDA)
+                        .nombre(pasajero.getDatosPersona().getNombre())
+                        .apellido(pasajero.getDatosPersona().getApellido())
+                        .telefono(pasajero.getDatosPersona().getTelefono())
+                        .activa(false)
+                        .empleadoEntity(empleado)
+                        .habitacionEntity(habitacion)
+                        .total(habitacion.getPrecioPorNoche() * 5)
+                        .build();
+                reserva = reservaRepository.save(reserva);
+
+                // 2. Crear Estadia
+                EstadiaEntity estadia = EstadiaEntity.builder()
+                        .reservaEntity(reserva)
+                        .estado(EstadoEstadia.COMPLETADA)
+                        .pasajeroEntity(pasajero)
+                        .empleadoEntity(empleado)
+                        .total(reserva.getTotal())
+                        .pagada(true)
+                        .activa(false)
+                        .build();
+                estadiaRepository.save(estadia);
+
+                habIndex++;
+                pasIndex++;
+            }
+        }
     }
 
 
