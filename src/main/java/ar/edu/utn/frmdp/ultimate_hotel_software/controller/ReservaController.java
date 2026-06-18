@@ -118,7 +118,7 @@ public class ReservaController {
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
 
-    @GetMapping("/disponibilidad")
+    @GetMapping("/disponibilidad/{checkIn}/{checkOut}/{pax}")
     public ResponseEntity<List<HabitacionDTOResponse>> habitacionesDisponibles(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkIn,
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOut,
